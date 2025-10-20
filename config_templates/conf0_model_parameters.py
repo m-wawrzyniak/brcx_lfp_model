@@ -1,6 +1,7 @@
 ### Global params
 GLOBAL_SEED = 121       # Randomization seed
 GLOBAL_CX_CELL_CNT = 0  # Count of predefined Cx cells.
+GLOBAL_PRV_CELL_CNT = 0
 MODEL_NAME = 'test'
 ROOT = '/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model'
 
@@ -150,3 +151,45 @@ BD_EMPIRICAL_DICT = {
     "L6_UTPC": 0.20
 }
 REP_BD_EMP = 0.2
+
+# PRV params
+
+PRV_TC_MEAN_DELAY = 0
+PRV_TC_MEAN_TAU = 1
+
+PRV_FR_STD_FACTOR = 0.2
+PRV_FR_FACTOR = 1
+PRV_WEAK_FACTOR = 0.7
+
+# PRVTC params
+PRV_PER_VPM_CELL = 1
+
+# STIMULATION params
+STIM_PARADIGM_TYPE = 'single'
+STIM_PARADIGM_SUBTYPE = 'str200'
+
+WHISKER_STIMULATION_PARADIGMS = {
+    'rest':{
+        'r0':{'rest':('r', 500)}
+    },
+    'single':{
+        'wk200':{'prestim':('r', 200), 'single':('wk', 10), 'poststim':('r', 500-210)},
+        'str200':{'prestim':('r', 260), 'single':('str', 10), 'poststim':('r', 770-210)}
+    },
+    'ppi':{
+        's76':{'prestim':('r', 200), 'prepulse':('str', 10), 'interval':('r', 76-10), 'pulse':('wk', 10), 'poststim':('r', 500-296)},
+        's109':{'prestim':(), 'prepulse':(), 'interval':(), 'pulse':(), 'poststim':()},
+        's209':{}
+    },
+    'fdd':{
+        'f0.5':{},
+        'f1':{},
+        'f2':{},
+        'f4.8':{},
+        'f9.2':{},
+        'f13.2':{},
+        'f16.9':{},
+        'f23.6':{},
+        'f29.4':{}
+    }
+}

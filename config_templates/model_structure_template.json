@@ -27,7 +27,9 @@
             "tccx01/": null,
             "tccx02/": null
           },
-          "prv_tc/": null
+          "prv_tc/": {
+            "prvtc01/": null
+          }
         }
       }
     }

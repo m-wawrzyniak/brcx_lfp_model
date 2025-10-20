@@ -13,6 +13,8 @@ from source.src0_core.cr0_model_setup.m03_tc_cells import (tc01_population_count
 
 from source.src0_core.cr0_model_setup.m04_tc_cx_conn import (tccx01_appositions_search as tccx01, tccx02_assign_cells_to_conn as tccx02)
 
+from source.src0_core.cr0_model_setup.m06_prv_tc_conn import (prvtc01_spike_trains as prvtc01)
+
 # Create paths
 paths = ut1.__main__()
 
@@ -158,9 +160,19 @@ tc01.setup_vpm_pop(
 )
 
 # tccx02 - assign tc cells to tccx synapses
-TCCX02_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["tccx"]["tccx02"]
+TCCX02_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["tc_cx"]["tccx02"]
 TCCX02_PATH = os.path.join(TCCX02_DIR, "tccx02_synapses.json")
 tccx02.assign_tc_synapses(
     preassignment_synapses_path = TCCX01_PATH,
     assigned_synapses_path = TCCX02_PATH,
     tc_pop_path = TC01_PATH)
+
+# prvtc01 - assigning prv spike trains and tc cells
+PRVTC01_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["prv_tc"]["prvtc01"]
+PRVTC01_PATH = os.path.join(PRVTC01_DIR, "prvtc01_synapses.json")
+
+prvtc01.generate_prv_spikes(
+    stim_paradigm_type = conf0.STIM_PARADIGM_TYPE,
+    stim_paradigm_subtype = conf0.STIM_PARADIGM_SUBTYPE,
+    tc_cells_path = TC01_PATH,
+    prvtc_save_path = PRVTC01_PATH)
