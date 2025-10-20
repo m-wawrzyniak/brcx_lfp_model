@@ -46,6 +46,39 @@ def load_tree(config_file, root=None, **vars):
     return resolve(tree)
 
 
+def folder_to_json_with_files(root_path: str, json_file: str):
+    """
+    Recursively scans a folder and saves a JSON structure compatible with `create_structure`,
+    including both directories and files.
+
+    Directories -> nested dictionaries (or null if empty)
+    Files -> their relative paths as strings
+    """
+    root = Path(root_path)
+    if not root.exists() or not root.is_dir():
+        raise ValueError(f"{root} is not a valid directory")
+
+    def scan(path: Path, prefix=""):
+        tree = {}
+        for child in sorted(path.iterdir()):
+            if child.is_dir():
+                key = f"{child.name}/"
+                subtree = scan(child, prefix=prefix + child.name + "/")
+                # if directory is empty, store null instead of {}
+                tree[key] = subtree if subtree else None
+            else:
+                # store file as relative path from root
+                key = child.name
+                tree[key] = str(Path(prefix) / child.name)
+        return tree
+
+    structure = scan(root)
+
+    with open(json_file, "w") as f:
+        json.dump(structure, f, indent=2)
+
+    print(f"JSON structure with files saved to {json_file}")
+
 def __main__():
     model_structure_path = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/model_structure_template.json"
     structure = load_structure(model_structure_path)

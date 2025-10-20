@@ -27,9 +27,9 @@ San Francisco, California, 94105, USA.
  * @date 2015                                                                    
 */        
 
-load_file("/home/mateusz-wawrzyniak/PycharmProjects/som_sens_processing/m01_brcx_setup/cell_templates/L5_TTPC2_cAD_minimal/morphology.hoc")
-load_file("/home/mateusz-wawrzyniak/PycharmProjects/som_sens_processing/m01_brcx_setup/cell_templates/L5_TTPC2_cAD_minimal/biophysics.hoc")
-load_file("/home/mateusz-wawrzyniak/PycharmProjects/som_sens_processing/m01_brcx_setup/cell_templates/L5_TTPC2_cAD_minimal/synapses/synapses.hoc")
+load_file("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/morphology.hoc")
+load_file("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/biophysics.hoc")
+load_file("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/synapses/synapses.hoc")
 
 /** Main cell template */
 begintemplate cADpyr232_L5_TTPC2_8052133265

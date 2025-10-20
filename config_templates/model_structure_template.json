@@ -31,6 +31,16 @@
             "prvtc01/": null
           }
         }
+      },
+      "simulation/": {
+        "cells/": {
+          "cx/": null,
+          "tc/": null
+        },
+        "conn/": {
+          "cx_cx/": null,
+          "tc_cx/": null
+        }
       }
     }
   }

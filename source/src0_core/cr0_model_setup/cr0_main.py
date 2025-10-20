@@ -5,9 +5,13 @@ import config_templates.conf0_model_parameters as conf0
 import source.src3_utils.ut1_path_config_parser as ut1
 
 from source.src0_core.cr0_model_setup.m01_cx_cells import (cx00_prep as cx00, cx01_tissue_structure as cx01,
-                                                           cx02_population_composition as cx02, cx03_instantiate_morphologies as cx03)
+                                                           cx02_population_composition as cx02,
+                                                           cx03_instantiate_morphologies as cx03,
+                                                           cx04_summary as cx04)
 
-from source.src0_core.cr0_model_setup.m02_cx_cx_conn import (cxcx01_appositions_search as cxcx01, cxcx02_appositions_prune as cxcx02)
+from source.src0_core.cr0_model_setup.m02_cx_cx_conn import (cxcx01_appositions_search as cxcx01,
+                                                             cxcx02_appositions_prune as cxcx02,
+                                                             cxcx03_summary as cxcx03)
 
 from source.src0_core.cr0_model_setup.m03_tc_cells import (tc01_population_count as tc01)
 
@@ -26,6 +30,7 @@ for l in conf0.LAYER_COMP_TARGET.keys():
 
 # cx02 - cx me-types
 CX_ME_ASSIGNED_PATH = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx02"]
+CX_ME_SUMMARY = os.path.join(CX_ME_ASSIGNED_PATH, "me_comp_summary.json")
 cx02.assign_me_type(input_dir=CX_SOMA_POS_PATH, output_dir=CX_ME_ASSIGNED_PATH)
 #TODO: cx02.get_population_me_composition(ME_TYPES_POP_PATH)
 
@@ -45,6 +50,12 @@ for pop_file in sorted(os.listdir(CX_ME_ASSIGNED_PATH)):
     cx_cells.update(pop)
 all_cells = cx03.instantiate_morphologies(cx_cells, CELL_TEMPLATES_PATH)
 cx03.save_all_cells(all_cells, CX_FULL_POP_CSV)
+
+# cx04 - summary
+cx04.get_population_me_composition(
+    pop_files_dir=CX_ME_ASSIGNED_PATH,
+    save_path=CX_ME_SUMMARY
+)
 
 # cxcx01 - appositons search
 CXCX_SYNAPSE_SAVE_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx01"]
@@ -150,7 +161,10 @@ cxcx02.apply_plastres_pruning_03(
     save_path=PRUNED03_CXCX_PATH
 )
 
-
+#cxcx03 - creating synapse summary
+CXCX_SUMMARY_PATH = os.path.join(PRUNE03_DIR, "cxcx_summary.json")
+cxcx03.create_synapse_summary(synapses_json=PRUNED03_CXCX_PATH,
+                              summary_path=CXCX_SUMMARY_PATH)
 # tc01 - deciding on tc cells count
 TC_CELLS_INIT_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["tc"]["tc01"]
 TC01_PATH = os.path.join(TC_CELLS_INIT_DIR, 'tc01_pop.csv')
@@ -176,3 +190,5 @@ prvtc01.generate_prv_spikes(
     stim_paradigm_subtype = conf0.STIM_PARADIGM_SUBTYPE,
     tc_cells_path = TC01_PATH,
     prvtc_save_path = PRVTC01_PATH)
+
+

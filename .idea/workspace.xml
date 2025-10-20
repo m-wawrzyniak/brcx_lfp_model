@@ -4,13 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="initial commit">
-      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m05_prv_cells/PrvCell.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m06_prv_tc_conn/prvtc01_spike_trains.py" afterDir="false" />
+    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="initial model setup commit (cr0_model_setup)">
+      <change afterPath="$PROJECT_DIR$/config_templates/conf01_simulation_parameters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Ca_HVA.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/HH2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/IL_gutnick.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/IM_cortex.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/IT.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/IT2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Ih_vpm.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/ProbAMPANMDA_EMS_modified.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/ProbGABAAB_EMS_modified.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/ampa.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/cadecay.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/freq_iclamp.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/gabaa.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/gabab.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/iTampa.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/kleak.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/nrn_mechanisms/vecevent.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx04_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx03_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/cr1_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s01_environment_setup/env01_nrn_envi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s01_environment_setup/env02_nrn_params.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/CxCell.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/VPMCell.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/initc01_cx.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/initc02_tc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/CxSynapse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/TcCxSynapse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits01_cxcx.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits02_tccx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config_templates/conf0_model_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/conf0_model_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/template.hoc" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/template.hoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/template.hoc" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/template.hoc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config_templates/model_structure_template.json" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/model_structure_template.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src3_utils/ut1_path_config_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src3_utils/ut1_path_config_parser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,18 +93,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.cr0_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ut1_path_config_parser.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.cr02_main.executor": "Run",
+    "Python.cr0_main.executor": "Run",
+    "Python.cr1_main.executor": "Run",
+    "Python.env01_nrn_envi.executor": "Run",
+    "Python.inits01_cxcx.executor": "Run",
+    "Python.ut1_path_config_parser.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config_templates" />
@@ -94,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760970445591</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="initial model setup commit (cr0_model_setup)">
+      <option name="closed" value="true" />
+      <created>1760972410942</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760972410942</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +166,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="initial model setup commit (cr0_model_setup)" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial model setup commit (cr0_model_setup)" />
   </component>
 </project>
