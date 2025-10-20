@@ -1,0 +1,12 @@
+// dummy.hoc — placeholder morphology file
+create dummy_soma
+
+proc shape3d_dummy() {
+    dummy_soma {
+        pt3dclear()
+        pt3dadd(0, 0, 0, 1)
+        pt3dadd(1, 0, 0, 1)
+    }
+}
+
+shape3d_dummy()

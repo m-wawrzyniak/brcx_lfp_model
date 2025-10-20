@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/brcx_lfp_model.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/conf0_model_parameters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/morphology/C050398B-I4_-_Scale_x1.000_y0.950_z1.000_-_Clone_1.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/morphology/C050398B-I4_-_Clone_3.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_LBC_cNAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/Ca_HVA.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/morphology/dend-C170897A-P3_axon-C260897C-P4_-_Clone_4.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L23_PC_cAD_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/morphology/C310897A-I2_-_Scale_x1.000_y1.025_z1.000_-_Clone_1.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/morphology/C010398B-I4_cor_-_Clone_0.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_LBC_cNAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/Ca_HVA.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/morphology/dend-C050800E2_cor_axon-C120398A-P2_-_Scale_x1.000_y1.050_z1.000_-_Clone_71.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/.libs/libnrnmech.so" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/CaDynamics_E2.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/CaDynamics_E2.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ca_HVA.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ca_HVA.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ca_LVAst.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ca_LVAst.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ih.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Ih.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Im.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Im.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/K_Pst.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/K_Pst.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/K_Tst.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/K_Tst.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/NaTa_t.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/NaTa_t.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/NaTs2_t.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/NaTs2_t.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Nap_Et2.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/Nap_Et2.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/ProbAMPANMDA_EMS.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/ProbAMPANMDA_EMS.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/ProbGABAAB_EMS.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/ProbGABAAB_EMS.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/SK_E2.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/SK_E2.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/SKv3_1.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/SKv3_1.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/libnrnmech.so" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/makemod2c_inc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/mod_func.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/mod_func.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/special" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L4_SS_cAD_minimal/x86_64/special.nrn" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/morphology/C080998A_-_Scale_x1.000_y1.050_z1.000_-_Clone_0.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_LBC_cNAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/Ca.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/morphology/C040426.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_MC_cAC_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/Ca_HVA.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/morphology/dend-C060114A2_axon-C060114A5.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC1_cAD_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/biophysics.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/dummy.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/CaDynamics_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/Ca_HVA.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/Ca_LVAst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/Ih.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/Im.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/K_Pst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/K_Tst.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/NaTa_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/NaTs2_t.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/Nap_Et2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/ProbAMPANMDA_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/ProbGABAAB_EMS.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/SK_E2.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/mechanisms/SKv3_1.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/morphology.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/morphology/dend-C060114A7_axon-C060116A3_-_Clone_2.asc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/synapses/mtype_map.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/synapses/synapses.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/synapses/synapses.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/synapses/synconf.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/cx_cell_templates/L5_TTPC2_cAD_minimal/template.hoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config_templates/model_structure_template.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters/circuit_download.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters/layer_info.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_physiology_factsheets_simplified.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/CellTopology.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx00_prep.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx01_tissue_structure.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx02_population_composition.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx03_instantiate_morphologies.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx01_appositions_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx02_appositions_prune.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m03_tc_cells/tc01_population_count.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx01_appositions_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx02_assign_cells_to_conn.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src3_utils/ut0_random_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src3_utils/ut1_path_config_parser.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="34BjNFtFaZMNVCZjcdiu5gVNud2" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.cr0_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ut1_path_config_parser.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/config_templates" />
+      <recent name="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/source/core" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-8753aad8314d-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.25557.178" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="" />
+      <created>1760693818077</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760693818077</updated>
+    </task>
+    <servers />
+  </component>
+</project>

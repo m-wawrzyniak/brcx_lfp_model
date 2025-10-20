@@ -1,0 +1,35 @@
+{"data/": {
+    "{model_name}/": {
+      "setup/": {
+        "cells/": {
+          "cx/": {
+            "cx01/": null,
+            "cx02/": null,
+            "cx03/": null,
+            "cx04/": null
+          },
+          "tc/": {
+            "tc01/": null
+          },
+          "prv/": null
+        },
+        "conn/": {
+          "cx_cx/": {
+            "cxcx01/": null,
+            "cxcx02/": {
+              "prune00/": null,
+              "prune01/": null,
+              "prune02/": null,
+              "prune03/": null
+            }
+          },
+          "tc_cx/": {
+            "tccx01/": null,
+            "tccx02/": null
+          },
+          "prv_tc/": null
+        }
+      }
+    }
+  }
+}
