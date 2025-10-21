@@ -4,7 +4,7 @@ from source.src0_core.cr2_lfp_reconstruction.l01_electrode_setup.Electrode impor
 from source.src0_core.cr2_lfp_reconstruction.l02_lfp_computation import (lfp01_compute as lfp01,
                                                                          lfp02_visualize as lfp02)
 
-import source.src3_utils.ut1_path_config_parser as ut1
+import source.src2_utils.ut1_path_config_parser as ut1
 import config_templates.conf0_model_parameters as conf0
 import config_templates.conf02_lfp_parameters as conf02
 

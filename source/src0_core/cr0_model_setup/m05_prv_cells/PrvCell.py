@@ -1,6 +1,6 @@
 from neuron import h
 
-from source.src3_utils.ut0_random_manager import rng, np
+from source.src2_utils.ut0_random_manager import rng, np
 
 import config_templates.conf0_model_parameters as conf0
 

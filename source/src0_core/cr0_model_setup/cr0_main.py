@@ -2,9 +2,9 @@ import os
 import json
 
 import config_templates.conf0_model_parameters as conf0
-import source.src3_utils.ut1_path_config_parser as ut1
+import source.src2_utils.ut1_path_config_parser as ut1
 
-from source.src0_core.cr0_model_setup.m01_cx_cells import (cx00_prep as cx00, cx01_tissue_structure as cx01,
+from source.src0_core.cr0_model_setup.m01_cx_cells import (cx01_tissue_structure as cx01,
                                                            cx02_population_composition as cx02,
                                                            cx03_instantiate_morphologies as cx03,
                                                            cx04_summary as cx04)

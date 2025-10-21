@@ -1,6 +1,6 @@
 import h5py
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 def reconstruct_lfp_from_hdf(imem_hdf_path, electrode, out_path, sigma=None):
     """

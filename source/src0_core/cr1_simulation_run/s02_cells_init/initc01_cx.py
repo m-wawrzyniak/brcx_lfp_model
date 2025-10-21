@@ -2,7 +2,7 @@ import csv, json
 
 from source.src0_core.cr1_simulation_run.s02_cells_init.CxCell import CxCell
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 def init_cx_cells(cx_cells_csv:str, temp_dict:dict, me_comp_summary_path) -> dict[str, CxCell]:
     """

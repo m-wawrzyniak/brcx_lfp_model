@@ -1,7 +1,7 @@
 import os, h5py
 import matplotlib.pyplot as plt
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 def _plot_cell_lfp_with_morpho(cell_id, lfp_hdf_path, imem_hdf_path, electrode,
                                save_path=None, lfp_group='lfp', cell_group='cells'):

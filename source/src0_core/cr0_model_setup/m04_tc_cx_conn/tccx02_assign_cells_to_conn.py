@@ -1,6 +1,6 @@
 import json, csv
 
-from source.src3_utils.ut0_random_manager import random
+from source.src2_utils.ut0_random_manager import random
 
 def assign_tc_synapses(preassignment_synapses_path:str, assigned_synapses_path:str, tc_pop_path:str):
     """

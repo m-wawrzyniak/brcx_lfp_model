@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import config_templates.conf0_model_parameters as conf0
 
-from source.src3_utils.ut0_random_manager import np, random
+from source.src2_utils.ut0_random_manager import np, random
 
 def get_segments_binning(all_cells: dict, h_start: float, h_stop: float) -> dict:
     """

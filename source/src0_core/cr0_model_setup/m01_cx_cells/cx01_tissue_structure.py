@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from scipy.stats import qmc
 
-from source.src3_utils.ut0_random_manager import np, rng
+from source.src2_utils.ut0_random_manager import np, rng
 import config_templates.conf0_model_parameters as conf0
 
 

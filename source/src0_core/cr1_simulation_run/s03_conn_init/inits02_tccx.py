@@ -1,7 +1,7 @@
 import json, csv, os
 from neuron import h
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 from source.src0_core.cr1_simulation_run.s02_cells_init.CxCell import CxCell
 from source.src0_core.cr1_simulation_run.s02_cells_init.VPMCell import VPMCell

@@ -1,6 +1,6 @@
 import h5py
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 
 def start_recording_all_imem(cells_dict):

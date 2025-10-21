@@ -4,7 +4,7 @@ from neuron import h
 from source.src0_core.cr1_simulation_run.s02_cells_init.CxCell import CxCell
 from source.src0_core.cr1_simulation_run.s03_conn_init.CxSynapse import CxSynapse
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 
 import config_templates.conf01_simulation_parameters as conf1
 

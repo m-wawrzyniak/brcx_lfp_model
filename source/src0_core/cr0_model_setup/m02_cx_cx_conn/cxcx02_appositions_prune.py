@@ -4,7 +4,7 @@ import os
 import json
 import ast
 
-from source.src3_utils.ut0_random_manager import np, random
+from source.src2_utils.ut0_random_manager import np, random
 import config_templates.conf0_model_parameters as conf
 
 def calculate_sm(all_cells_csv:str, synapses_json:str, save_dir:str = None) -> tuple[pd.DataFrame, pd.DataFrame]:

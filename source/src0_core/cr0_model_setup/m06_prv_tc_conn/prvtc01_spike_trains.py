@@ -1,7 +1,7 @@
 import pandas as pd
 import os, json
 
-from source.src3_utils.ut0_random_manager import rng, np
+from source.src2_utils.ut0_random_manager import rng, np
 import config_templates.conf0_model_parameters as conf0
 
 from source.src0_core.cr0_model_setup.m05_prv_cells.PrvCell import PrvCell

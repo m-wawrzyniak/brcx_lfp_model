@@ -2,7 +2,7 @@ import os
 import glob
 import pandas as pd
 
-from source.src3_utils.ut0_random_manager import np
+from source.src2_utils.ut0_random_manager import np
 from source.src0_core.cr0_model_setup.m01_cx_cells.CellTopology import CellTopology
 
 
