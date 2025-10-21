@@ -3,6 +3,8 @@ GLOBAL_SYN_CNT = 0
 
 # Simulation params
 TEMP = 21
+DT = 0.25
+SIM_TIME = 80
 
 RESTING_POTENTIALS = {
     'L23_LBC_cAC': -72.6,

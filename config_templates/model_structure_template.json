@@ -41,6 +41,28 @@
           "cx_cx/": null,
           "tc_cx/": null
         }
+      },
+      "recordings/": {
+        "cells/": {
+          "cx/": null,
+          "tc/": null,
+          "prv/": null
+        },
+        "conn/": {
+          "cx_cx/": null,
+          "tc_cx/": null,
+          "prv_tc/": null
+        },
+        "lfp/": {
+          "raw/": null,
+          "reconstructed/": null
+        }
+      },
+      "visualizations/": {
+        "lfp/": {
+          "component_lfp/": null,
+          "net_lfp/": null
+        }
       }
     }
   }

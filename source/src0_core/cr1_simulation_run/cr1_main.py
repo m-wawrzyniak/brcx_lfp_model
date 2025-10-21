@@ -4,7 +4,15 @@ from source.src0_core.cr1_simulation_run.s01_environment_setup import (env01_nrn
 from source.src0_core.cr1_simulation_run.s02_cells_init import (initc01_cx as initc01,
                                                                 initc02_tc as initc02)
 from source.src0_core.cr1_simulation_run.s03_conn_init import (inits01_cxcx as inits01,
-                                                               inits02_tccx as inits02)
+                                                               inits02_tccx as inits02,
+                                                               inits03_prvtc as inits03)
+
+from source.src0_core.cr1_simulation_run.s04_simulation_handling import (sim01_run as sim01)
+
+from source.src0_core.cr1_simulation_run.s05_data_recording_saving import (rec01_setup_record as rec01,
+                                                                           rec02_record_save as rec02,
+                                                                           rec03_lfp_reconstruction_data as rec03)
+
 
 import source.src3_utils.ut1_path_config_parser as ut1
 import config_templates.conf0_model_parameters as conf0
@@ -43,13 +51,13 @@ cxcx_parameters = inits01.get_synapse_parameters(
     cx_syns_summary_csv=CXCX_SUMMARY_PATH,
     bbp_physio_file=BBP_PHYSIO_DATA
 )
-cxcx_conn = inits01.create_cxcx_synapses(
+cxcx_syns = inits01.create_cxcx_synapses(
     cx_cells=cx_cells,
     syn_params=cxcx_parameters,
     cxcx_synapses_data=CXCX_CONN_PATH
 )
 inits01.save_synapses_to_csv(
-    synapse_map=cxcx_conn,
+    synapse_map=cxcx_syns,
     save_path=CXCX_SYN_PATH
 )
 
@@ -69,4 +77,82 @@ tccx_syns = inits02.create_tccx_synapses(
 )
 inits02.save_synapses_to_csv(tccx_syns, save_path=TCCX_SYN_PATH)
 
-# TODO: p02!!!
+# inits03 - initialize prvtc synapses
+PRVTC_CONN_PATH = paths["setup"]["conn"]["prv_tc"]["prvtc01"]["prvtc01_synapses.json"]
+prvtc_syns = inits03.create_prvtc_synapses(
+    tc_cells=tc_cells,
+    prv_json_path=PRVTC_CONN_PATH
+)
+
+# rec01 - recording setup
+cx_soma_v = rec01.record_soma_v(cells=cx_cells)
+tc_soma_v = rec01.record_soma_v(cells=tc_cells)
+
+cxcx_i = rec01.record_synapses_currents(synapses=cxcx_syns)
+tccx_i = rec01.record_synapses_currents(synapses=tccx_syns)
+prvtc_i = rec01.record_synapses_currents(synapses=prvtc_syns)
+
+rec01.record_cell_spikes(
+    cells=cx_cells
+)
+rec01.record_cell_spikes(
+    cells=tc_cells
+)
+
+# rec03 - lfp data recording setup
+rec03.start_recording_all_imem(cells_dict=cx_cells)
+
+# RUN SIMULATION
+t_vec = sim01.run_simulation()
+
+# rec03 - save lfp data
+IMEM_SAVEPATH = os.path.join(paths["recordings"]["lfp"]["raw"], "cx_imem.hdf")
+rec03.save_all_imem_h5(
+    cells_dict=cx_cells,
+    filename=IMEM_SAVEPATH
+)
+
+# rec02 - save other data
+CX_V_SAVEPATH = os.path.join(paths["recordings"]["cells"]["cx"], "cx_v.csv")
+TC_V_SAVEPATH = os.path.join(paths["recordings"]["cells"]["tc"], "tc_v.csv")
+rec02.save_cell_v_csv(
+    cell_v_records=cx_soma_v,
+    time_vector=t_vec,
+    save_filepath=CX_V_SAVEPATH
+)
+rec02.save_cell_v_csv(
+    cell_v_records=tc_soma_v,
+    time_vector=t_vec,
+    save_filepath=TC_V_SAVEPATH
+)
+
+CX_SP_SAVEPATH = os.path.join(paths["recordings"]["cells"]["cx"], "cx_spikes.csv")
+TC_SP_SAVEPATH = os.path.join(paths["recordings"]["cells"]["tc"], "tc_spikes.csv")
+rec02.save_cell_spikes_csv(
+    cells=cx_cells,
+    save_filepath=CX_SP_SAVEPATH
+)
+rec02.save_cell_spikes_csv(
+    cells=tc_cells,
+    save_filepath=TC_SP_SAVEPATH
+)
+
+CXCX_I_SAVEPATH = os.path.join(paths["recordings"]["conn"]["cx_cx"], "cxcx_i.csv")
+TCCX_I_SAVEPATH = os.path.join(paths["recordings"]["conn"]["tc_cx"], "tccx_i.csv")
+PRVTC_I_SAVEPATH = os.path.join(paths["recordings"]["conn"]["prv_tc"], "prvtc_i.csv")
+rec02.save_synapses_currents_csv(
+    recordings=cxcx_i,
+    time_vector=t_vec,
+    save_filepath=CXCX_I_SAVEPATH
+)
+rec02.save_synapses_currents_csv(
+    recordings=tccx_i,
+    time_vector=t_vec,
+    save_filepath=TCCX_I_SAVEPATH
+)
+rec02.save_synapses_currents_csv(
+    recordings=prvtc_i,
+    time_vector=t_vec,
+    save_filepath=PRVTC_I_SAVEPATH
+)
+
