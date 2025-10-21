@@ -8,39 +8,40 @@ import source.src2_utils.ut1_path_config_parser as ut1
 import config_templates.conf0_model_parameters as conf0
 import config_templates.conf02_lfp_parameters as conf02
 
-MODEL_ROOT = os.path.join(conf0.ROOT, "data", conf0.MODEL_NAME)
-MODEL_CONFIG_PATH = os.path.join("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/", f"{conf0.MODEL_NAME}_structure.json")
-ut1.folder_to_json_with_files(
-    root_path=MODEL_ROOT,
-    json_file=MODEL_CONFIG_PATH
-)
-paths = ut1.load_tree(config_file=MODEL_CONFIG_PATH, root=MODEL_ROOT)
+def run():
+    MODEL_ROOT = os.path.join(conf0.ROOT, "data", conf0.MODEL_NAME)
+    MODEL_CONFIG_PATH = os.path.join("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/", f"{conf0.MODEL_NAME}_structure.json")
+    ut1.folder_to_json_with_files(
+        root_path=MODEL_ROOT,
+        json_file=MODEL_CONFIG_PATH
+    )
+    paths = ut1.load_tree(config_file=MODEL_CONFIG_PATH, root=MODEL_ROOT)
 
-# Electrode - creating electrode topology
-el = Electrode(topo_variant=conf02.ELECTRODE_VARIANT, z_offset=conf02.ELECTRODE_Z_OFFSET)
+    # Electrode - creating electrode topology
+    el = Electrode(topo_variant=conf02.ELECTRODE_VARIANT, z_offset=conf02.ELECTRODE_Z_OFFSET)
 
-# lfp01 - computing lfp
-IMEM_PATH = paths["recordings"]["lfp"]["raw"]["cx_imem.hdf"]
-RECONSTRUCTED_LFP_PATH = os.path.join(paths["recordings"]["lfp"]["reconstructed"], "component_lfp.hdf")
-lfp01.reconstruct_lfp_from_hdf(
-    imem_hdf_path=IMEM_PATH,
-    electrode=el,
-    out_path=RECONSTRUCTED_LFP_PATH
-)
-lfp01.compute_and_save_net_lfp(
-    lfp_hdf_path=RECONSTRUCTED_LFP_PATH
-)
+    # lfp01 - computing lfp
+    IMEM_PATH = paths["recordings"]["lfp"]["raw"]["cx_imem.hdf"]
+    RECONSTRUCTED_LFP_PATH = os.path.join(paths["recordings"]["lfp"]["reconstructed"], "component_lfp.hdf")
+    lfp01.reconstruct_lfp_from_hdf(
+        imem_hdf_path=IMEM_PATH,
+        electrode=el,
+        out_path=RECONSTRUCTED_LFP_PATH
+    )
+    lfp01.compute_and_save_net_lfp(
+        lfp_hdf_path=RECONSTRUCTED_LFP_PATH
+    )
 
-# lfp02 - rudimentary visualization
-LFP_COMP_VIS_SAVEDIR = paths["visualizations"]["lfp"]["component_lfp"]
-LFP_NET_VIS_SAVEPATH = os.path.join(paths["visualizations"]["lfp"]["net_lfp"], "net_lfp.jpg")
-lfp02.export_all_cells_lfp_plots(
-    lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
-    imem_hdf_path=IMEM_PATH,
-    electrode=el,
-    out_dir=LFP_COMP_VIS_SAVEDIR,
-)
-lfp02.plot_net_lfp(
-    lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
-    save_path=LFP_NET_VIS_SAVEPATH,
-    offset=0.0005)
+    # lfp02 - rudimentary visualization
+    LFP_COMP_VIS_SAVEDIR = paths["visualizations"]["lfp"]["component_lfp"]
+    LFP_NET_VIS_SAVEPATH = os.path.join(paths["visualizations"]["lfp"]["net_lfp"], "net_lfp.jpg")
+    lfp02.export_all_cells_lfp_plots(
+        lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
+        imem_hdf_path=IMEM_PATH,
+        electrode=el,
+        out_dir=LFP_COMP_VIS_SAVEDIR,
+    )
+    lfp02.plot_net_lfp(
+        lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
+        save_path=LFP_NET_VIS_SAVEPATH,
+        offset=0.0005)

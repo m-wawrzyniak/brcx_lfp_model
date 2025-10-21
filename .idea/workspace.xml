@@ -4,30 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="single simulation pipeline implemented and working. next, batch simulation">
-      <change afterPath="$PROJECT_DIR$/source/src3_model_parametrization/exp.py" afterDir="false" />
+    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="commit prior to batch-runner">
+      <change afterPath="$PROJECT_DIR$/source/src3_model_parametrization/run_batch_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src3_model_parametrization/run_single_model_wrapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx01_tissue_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx01_tissue_structure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx02_population_composition.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx02_population_composition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx03_instantiate_morphologies.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m01_cx_cells/cx03_instantiate_morphologies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx02_appositions_prune.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx02_appositions_prune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx01_appositions_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx01_appositions_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx02_assign_cells_to_conn.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m04_tc_cx_conn/tccx02_assign_cells_to_conn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m05_prv_cells/PrvCell.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m05_prv_cells/PrvCell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m06_prv_tc_conn/prvtc01_spike_trains.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m06_prv_tc_conn/prvtc01_spike_trains.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/cr1_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/cr1_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/VPMCell.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/VPMCell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/initc01_cx.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s02_cells_init/initc01_cx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits01_cxcx.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits01_cxcx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits02_tccx.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits02_tccx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s05_data_recording_saving/rec02_record_save.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s05_data_recording_saving/rec02_record_save.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s05_data_recording_saving/rec03_lfp_reconstruction_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s05_data_recording_saving/rec03_lfp_reconstruction_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/cr2_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/cr2_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/l02_lfp_computation/lfp01_compute.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/l02_lfp_computation/lfp01_compute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/l02_lfp_computation/lfp02_visualize.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/l02_lfp_computation/lfp02_visualize.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src3_utils/ut0_random_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src2_utils/ut0_random_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src3_utils/ut1_path_config_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src2_utils/ut1_path_config_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src3_model_parametrization/exp.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -67,26 +56,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.cr02_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.cr0_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.cr1_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.cr2_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.env01_nrn_envi.executor&quot;: &quot;Run&quot;,
-    &quot;Python.inits01_cxcx.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ut1_path_config_parser.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.cr02_main.executor": "Run",
+    "Python.cr0_main.executor": "Run",
+    "Python.cr1_main.executor": "Run",
+    "Python.cr2_main.executor": "Run",
+    "Python.env01_nrn_envi.executor": "Run",
+    "Python.exp.executor": "Run",
+    "Python.exp_2.executor": "Run",
+    "Python.exp_3.executor": "Run",
+    "Python.inits01_cxcx.executor": "Run",
+    "Python.ut1_path_config_parser.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "batch__runner",
+    "last_opened_file_path": "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src3_model_parametrization",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/source/src3_model_parametrization" />
       <recent name="$PROJECT_DIR$/config_templates" />
       <recent name="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m00_bbp_parameters" />
     </key>
@@ -141,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761070059673</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="commit prior to batch-runner">
+      <option name="closed" value="true" />
+      <created>1761082512224</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761082512224</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,6 +161,7 @@
     <MESSAGE value="initial model setup commit (cr0_model_setup)" />
     <MESSAGE value="almost at finish of cr01 simulation run" />
     <MESSAGE value="single simulation pipeline implemented and working. next, batch simulation" />
-    <option name="LAST_COMMIT_MESSAGE" value="single simulation pipeline implemented and working. next, batch simulation" />
+    <MESSAGE value="commit prior to batch-runner" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit prior to batch-runner" />
   </component>
 </project>
