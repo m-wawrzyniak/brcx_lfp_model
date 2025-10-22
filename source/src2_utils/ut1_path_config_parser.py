@@ -79,6 +79,13 @@ def folder_to_json_with_files(root_path: str, json_file: str):
 
     print(f"JSON structure with files saved to {json_file}")
 
+# TODO: change all os.path.join with this!
+def new_file_in_dir(dir_dict: dict, filename: str) -> Path:
+    """Return a new path in the same folder as any of the given paths in dict."""
+    example_path = next(iter(dir_dict.values()))
+    return example_path.parent / filename
+
+
 def __main__():
     model_structure_path = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/model_structure_template.json"
     structure = load_structure(model_structure_path)

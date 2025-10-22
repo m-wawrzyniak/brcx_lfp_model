@@ -4,14 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="commit prior to batch-runner">
-      <change afterPath="$PROJECT_DIR$/source/src3_model_parametrization/run_batch_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/src3_model_parametrization/run_single_model_wrapper.py" afterDir="false" />
+    <list default="true" id="d04d128e-8b6c-429c-ad18-74902c4845da" name="Changes" comment="clean batch-runner implementation">
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val0_sim_indep/val0_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val0_sim_indep/vali01_cells.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val0_sim_indep/vali02_conns.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val1_sim_dep/val1_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val1_sim_dep/vald01_cells.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/src1_validation_visualization/val1_sim_dep/vald02_conns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config_templates/conf0_model_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/conf0_model_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config_templates/model_structure_template.json" beforeDir="false" afterPath="$PROJECT_DIR$/config_templates/model_structure_template.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/cr0_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/cr1_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/cr1_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/cr2_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr2_lfp_reconstruction/cr2_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src3_model_parametrization/exp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx02_appositions_prune.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr0_model_setup/m02_cx_cx_conn/cxcx02_appositions_prune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s01_environment_setup/env01_nrn_envi.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s01_environment_setup/env01_nrn_envi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/CxSynapse.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/CxSynapse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits01_cxcx.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src0_core/cr1_simulation_run/s03_conn_init/inits01_cxcx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/src2_utils/ut1_path_config_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/src2_utils/ut1_path_config_parser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,27 +64,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.cr02_main.executor": "Run",
-    "Python.cr0_main.executor": "Run",
-    "Python.cr1_main.executor": "Run",
-    "Python.cr2_main.executor": "Run",
-    "Python.env01_nrn_envi.executor": "Run",
-    "Python.exp.executor": "Run",
-    "Python.exp_2.executor": "Run",
-    "Python.exp_3.executor": "Run",
-    "Python.inits01_cxcx.executor": "Run",
-    "Python.ut1_path_config_parser.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "batch__runner",
-    "last_opened_file_path": "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src3_model_parametrization",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.cr02_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cr0_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cr1_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cr2_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.env01_nrn_envi.executor&quot;: &quot;Run&quot;,
+    &quot;Python.exp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.exp_2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.exp_3.executor&quot;: &quot;Run&quot;,
+    &quot;Python.inits01_cxcx.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_batch_models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ut1_path_config_parser.executor&quot;: &quot;Run&quot;,
+    &quot;Python.val0_main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.val1_main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;batch__runner&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src3_model_parametrization&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/source/src3_model_parametrization" />
@@ -142,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761082512224</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="clean batch-runner implementation">
+      <option name="closed" value="true" />
+      <created>1761086209552</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761086209552</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -162,6 +181,7 @@
     <MESSAGE value="almost at finish of cr01 simulation run" />
     <MESSAGE value="single simulation pipeline implemented and working. next, batch simulation" />
     <MESSAGE value="commit prior to batch-runner" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit prior to batch-runner" />
+    <MESSAGE value="clean batch-runner implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean batch-runner implementation" />
   </component>
 </project>

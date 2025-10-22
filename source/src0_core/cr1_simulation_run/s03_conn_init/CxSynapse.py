@@ -27,7 +27,8 @@ class CxSynapse:
         nc (h.NetCon): Used for activation detection.
     """
     def __init__(self, syn_obj, netcon, pre_id, post_id, pre_me_type, post_me_type,
-                 post_loc_rel, syn_type, u_val, d_val, f_val, risetime_val, decay_val,
+                 post_loc_rel, xyz,
+                 syn_type, u_val, d_val, f_val, risetime_val, decay_val,
                  gsyn_val, late_comp_ratio,
                  syn_id = None):
 
@@ -48,6 +49,7 @@ class CxSynapse:
         self.pre_me_type = pre_me_type
         self.post_me_type = post_me_type
         self.post_loc_rel = tuple(post_loc_rel)
+        self.xyz = xyz
         self.syn_type = syn_type  # 'e' or 'i'
 
         # Sampled parameters

@@ -1,4 +1,5 @@
-{"data/": {
+{
+  "data/": {
     "{model_name}/": {
       "setup/": {
         "cells/": {
@@ -62,7 +63,32 @@
         "lfp/": {
           "component_lfp/": null,
           "net_lfp/": null
-        }
+        },
+        "sim_indep/": {
+          "cells/": {
+            "cx/": null,
+            "tc/": null,
+            "prv/": null
+          },
+          "conn/": {
+            "cx_cx/": null,
+            "tc_cx/": null,
+            "prv_tc/": null
+          }
+        },
+        "sim_dep/": {
+          "cells/": {
+            "cx/": null,
+            "tc/": null,
+            "prv/": null
+          },
+          "conn/": {
+            "cx_cx/": null,
+            "tc_cx/": null,
+            "prv_tc/": null
+          }
+        },
+        "output/": null
       }
     }
   }

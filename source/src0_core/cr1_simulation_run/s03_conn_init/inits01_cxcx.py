@@ -73,6 +73,7 @@ def _create_cxcx_synapse(pre_cell:CxCell, post_cell:CxCell,
     min_dist = float("inf")
     target_sec = None
     target_loc = 0.5
+    target_xyz = None
 
     for seg_meta in post_cell.segs_meta:
         x, y, z = seg_meta["xyz_um"]
@@ -82,6 +83,7 @@ def _create_cxcx_synapse(pre_cell:CxCell, post_cell:CxCell,
             min_dist = dist
             target_sec = sec
             target_loc = seg_meta["x"]
+            target_xyz = seg_meta["xyz_um"]
 
     if target_sec is None:
         raise RuntimeError("Could not find a section for synapse placement.")
@@ -158,7 +160,8 @@ def _create_cxcx_synapse(pre_cell:CxCell, post_cell:CxCell,
         decay_val=decay_val,
         gsyn_val=gsyn_val,
         late_comp_ratio=late_comp_ratio,
-        syn_id = syn_id
+        syn_id = syn_id,
+        xyz=target_xyz
     )
 
 def create_cxcx_synapses(cx_cells:dict[str, CxCell], syn_params:dict,
@@ -235,6 +238,9 @@ def save_synapses_to_csv(synapse_map:dict[str, CxSynapse], save_path:str):
         "post_loc_x",
         "post_loc_y",
         "post_loc_z",
+        "abs_x",
+        "abs_y",
+        "abs_z",
         "syn_type",
         "u_val",
         "d_val",
@@ -275,6 +281,8 @@ def save_synapses_to_csv(synapse_map:dict[str, CxSynapse], save_path:str):
                 post_me_type = syn_obj.post_me_type
             if hasattr(syn_obj, 'post_loc_rel'):
                 post_loc = syn_obj.post_loc_rel
+            if hasattr(syn_obj, 'xyz'):
+                xyz = syn_obj.xyz
             if hasattr(syn_obj, 'syn_type'):
                 syn_type = syn_obj.syn_type
             if hasattr(syn_obj, 'nc'):
@@ -289,6 +297,9 @@ def save_synapses_to_csv(synapse_map:dict[str, CxSynapse], save_path:str):
                 "post_loc_x": post_loc[0] if post_loc else None,
                 "post_loc_y": post_loc[1] if post_loc else None,
                 "post_loc_z": post_loc[2] if post_loc else None,
+                "abs_x": xyz[0],
+                "abs_y": xyz[1],
+                "abs_z": xyz[2],
                 "syn_type": syn_type,
                 "u_val": params["u_val"],
                 "d_val": params["d_val"],

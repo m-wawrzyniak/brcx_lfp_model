@@ -158,7 +158,7 @@ def run():
     print('s04: Applying 03 plasticity reserve pruning')
     cxcx02.apply_plastres_pruning_03(
         post02_synapse_json=PRUNED02_CXCX_PATH,
-        prune_03_params_json=os.path.join(PRUNE03_DIR, "prune_03_params.csv"),
+        prune_03_params_json=os.path.join(PRUNE03_DIR, "prune_03_params.json"),
         save_path=PRUNED03_CXCX_PATH
     )
 

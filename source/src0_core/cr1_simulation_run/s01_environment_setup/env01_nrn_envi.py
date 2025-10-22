@@ -58,11 +58,9 @@ def _load_template(template_dir:str, cx_cell_desc:str):
         h.<method> : Cell template loaded into nrn.h.
     """
     temp_path = os.path.join(template_dir, "template.hoc")
-    h.load_file(temp_path)
-    """
+    #h.load_file(temp_path)
     with suppress_stdout_stderr():
         h.load_file(temp_path)
-    """
     for method in dir(h):
         if cx_cell_desc in method:
             return getattr(h, method)

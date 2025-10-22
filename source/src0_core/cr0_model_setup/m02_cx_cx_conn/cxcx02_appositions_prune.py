@@ -436,7 +436,7 @@ def setup_03_pruning(examined_pop_csv:str, save_dir:str) -> dict:
         }
 
     # Save to JSON
-    save_path = os.path.join(save_dir, "prune_03_params.csv")
+    save_path = os.path.join(save_dir, "prune_03_params.json")
     with open(save_path, 'w') as f:
         json.dump(result, f, indent=4)
 

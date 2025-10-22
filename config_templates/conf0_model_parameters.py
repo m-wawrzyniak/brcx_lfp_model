@@ -8,8 +8,6 @@ ROOT = '/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model'
 ### m01_cx_cells params
 
 # Target layers and me-types included
-
-# TODO: This can be stored in one single metadata structure
 LAYER_COMP_TARGET = {
     "L23": ["cAC", "cNAC", "cADpyr"],
     "L4": ["cAC", "cNAC", "cADpyr"],
