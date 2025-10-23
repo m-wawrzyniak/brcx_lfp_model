@@ -46,16 +46,15 @@ LAYER_COMP_PARAMS = {
     }
 }
 
-
-GOAL_N_CELLS = 30#200
-SCALE_FACTOR = 0.1#0.5           # Scaling factor of the BrCx size. It affects only the number of cells predefined.
-GLOBAL_M = GOAL_N_CELLS//3 #50                  # Number of minicolumns at each layer
+RADIUS = 125
+GOAL_N_CELLS = 200
+SCALE_FACTOR = 0.4#0.5           # Scaling factor of the BrCx size. It affects only the number of cells predefined.
+GLOBAL_M = RADIUS//20                  # Number of minicolumns at each layer
 MIN_SOMA_DISTANCE = 10              # Minimal um distance accepted during somata positioning.
-Z_STD = 10/SCALE_FACTOR             # STD applied to z-coord during somata placement.
-X_Y_JITTER_STD = 20
+Z_STD = 10//SCALE_FACTOR             # STD applied to z-coord during somata placement.
+X_Y_JITTER_STD = 5#*(RADIUS//GLOBAL_M)
 GLOBAL_Z_RANGE = (-2000.0, 0)
 
-RADIUS = 120
 TISSUE_PARAMS = {
     'L23':{
         'start_H':-165,
@@ -84,7 +83,6 @@ TISSUE_PARAMS = {
 
 Z_BIN_SIZE = 25.0
 TC_TARGET_MTYPES = {'L4_SS', 'L5_TTPC1', 'L5_TTPC2'}
-# TODO Calculate so to get proper TC input per CX cell
 SYN_PER_TC_CELL = 45  #TODO: Decide on SYN_PER_TC_CELL.
 TCCX_SYNAPSE_SCALE = 0.002 #TODO: this has to be scale somehow
 

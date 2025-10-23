@@ -97,8 +97,8 @@ def _cxcx_conn_epsp(pre_id, post_id,
     t = h.Vector()
     t.record(h._ref_t)
 
-    v_recordings = rec01.record_soma_v(cells)
-    i_recordings = rec01.record_synapses_currents(synapses)
+    v_recordings = rec01.record_soma_v(cell_label="cx",cells=cells)
+    i_recordings = rec01.record_synapses_currents(syn_label="cxcx", synapses=synapses)
 
     print('Running simulation...')
     h.finitialize(-70)
@@ -107,8 +107,8 @@ def _cxcx_conn_epsp(pre_id, post_id,
     voltage_file = os.path.join(output_dir, f"cellv_{pre_me_type}_{post_me_type}.csv")
     syn_currents_file = os.path.join(output_dir, f"syni_{pre_me_type}_{post_me_type}.csv")
 
-    rec02.save_cell_v_csv(v_recordings, t, voltage_file)
-    rec02.save_synapses_currents_csv(i_recordings, t, syn_currents_file)
+    rec02.save_cell_v_csv("cx",v_recordings, t, voltage_file)
+    rec02.save_synapses_currents_csv("cxcx",i_recordings, t, syn_currents_file)
 
 def cxcx_conn_epsp_check(synapses_csv_path: str, cell_pop_csv,
                          cell_templates, save_dir: str,
@@ -290,8 +290,8 @@ def _tccx_conn_epsp(pre_id, post_id,
     t_vec = h.Vector()
     t_vec.record(h._ref_t)
 
-    v_recordings = rec01.record_soma_v({"VPM":pre_cell, post_id: post_cell})
-    i_recordings = rec01.record_synapses_currents(synapses)
+    v_recordings = rec01.record_soma_v("tc",{"VPM":pre_cell, post_id: post_cell})
+    i_recordings = rec01.record_synapses_currents("tccx",synapses)
 
 
     # --- Run simulation ---
@@ -306,8 +306,8 @@ def _tccx_conn_epsp(pre_id, post_id,
     voltage_file = output_dir / f"cellv_VPM_{post_me_type}.csv"
     syn_currents_file = output_dir / f"syni_VPM_{post_me_type}.csv"
 
-    rec02.save_cell_v_csv(v_recordings, t_vec, voltage_file)
-    rec02.save_synapses_currents_csv(i_recordings, t_vec, syn_currents_file)
+    rec02.save_cell_v_csv("tc",v_recordings, t_vec, voltage_file)
+    rec02.save_synapses_currents_csv("tccx",i_recordings, t_vec, syn_currents_file)
 
     print(f"EPSPs saved to {voltage_file}")
     print(f"Synaptic currents saved to {syn_currents_file}")

@@ -4,8 +4,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from collections import defaultdict
+import math
+from typing import Dict
+from pprint import pprint
 
 from source.src2_utils.ut0_random_manager import np
+
+from config_templates import conf0_model_parameters as conf0
 
 STIM_COLORS = {
     'r': 'white',
@@ -319,3 +324,141 @@ def plot_rasterplot(
     plt.tight_layout()
     plt.savefig(save_path, dpi=600, format="pdf")
     plt.close()
+
+def calc_goal_densities(layer_comp_target:dict[str, list],
+                        tissue_params:dict,
+                        goal_n_cells:int,
+                        bbp_layer_info_path:str,
+                        scale_factor:float):
+    """
+    1. Given which layers should be included in the model, and how many cells should it have,
+        calculates how many cells should be in specific cell, e.g.:
+        alpha_4 = n_cells_l4_emp / sum(n_cells_emp for all layers which should be included)
+        n_cells_l4_mod = goal_n_cells*alpha_4
+
+    2. Given goal e-types existing within a layer, calculates goal density in this layer:
+        mu_4 = sum(n_cells_l4_emp for e-type cells which will be in model) / n_cells_l4_emp_total
+        Then goal density is:
+        ro_4_mod = mu_4 * ro_4_emp
+
+    3. Given n_cells_mod and ro_mod for specific layer, gets what the radius of the column should be e.g.:
+        V_cyl_4 = n_cells_l4_mod / ro_4_mod
+        R_goal = sqrt(V_cyl_4 / pi*H)
+
+    Verification:
+        alpha_4 = 5792 /
+    """
+    # ---- load BBP e-type counts ----
+    with open(bbp_layer_info_path, "r") as f:
+        bbp = json.load(f)
+
+    # Build: layer -> {etype: count} and totals per layer
+    bbp_etypes_by_layer: Dict[str, Dict[str, float]] = {}
+    bbp_total_by_layer: Dict[str, float] = {}
+    for layer_name, payload in bbp.items():
+        et_map = payload.get("No. of neurons per electrical types", {})
+        if isinstance(et_map, dict) and et_map:
+            et_map_f = {str(k): float(v) for k, v in et_map.items()}
+            bbp_etypes_by_layer[layer_name] = et_map_f
+            bbp_total_by_layer[layer_name] = float(sum(et_map_f.values()))
+
+    included_layers = list(layer_comp_target.keys())
+    if not included_layers:
+        raise ValueError("layer_comp_target is empty—nothing to compute.")
+
+    # ---- Step 1: alpha and goal allocation from BBP totals ----
+    # Use only included layers for the denominator
+    emp_counts = {}
+    for layer in included_layers:
+        if layer not in bbp_total_by_layer:
+            raise KeyError(f"Layer '{layer}' missing in BBP file (e-type totals).")
+        emp_counts[layer] = bbp_total_by_layer[layer]
+
+    total_emp_included = sum(emp_counts.values())
+    if total_emp_included <= 0:
+        raise ValueError("Total BBP empirical counts for included layers is non-positive.")
+
+    provisional = []
+    for layer in included_layers:
+        n_emp = emp_counts[layer]
+        alpha = n_emp / total_emp_included
+        n_goal_float = goal_n_cells * alpha
+        provisional.append((layer, alpha, n_goal_float))
+
+    # Largest remainder to ensure integer sum equals goal_n_cells
+    floor_alloc = {layer: int(math.floor(nf)) for layer, _, nf in provisional}
+    assigned = sum(floor_alloc.values())
+    remaining = goal_n_cells - assigned
+    remainders = sorted(
+        [(layer, nf - math.floor(nf)) for layer, _, nf in provisional],
+        key=lambda x: x[1],
+        reverse=True,
+    )
+    for i in range(remaining):
+        floor_alloc[remainders[i % len(remainders)][0]] += 1
+
+    # ---- Step 2 & 3: mu, ro_goal, R_goal (using tissue_params D and H) ----
+    def um_to_mm(x_um: float) -> float:
+        return x_um / 1000.0
+
+    results = {}
+    for layer, alpha, _ in provisional:
+        chosen_etypes = layer_comp_target.get(layer, [])
+        et_counts = bbp_etypes_by_layer.get(layer, {})
+        total_layer_etype_emp = float(sum(et_counts.values())) if et_counts else 0.0
+
+        if not chosen_etypes or total_layer_etype_emp <= 0:
+            mu = 0.0
+        else:
+            chosen_sum = sum(et_counts.get(et, 0.0) for et in chosen_etypes)
+            mu = chosen_sum / total_layer_etype_emp
+
+        # Pull geometry/density for this layer
+        if layer not in tissue_params:
+            raise KeyError(f"Layer '{layer}' missing in tissue_params.")
+        params = tissue_params[layer]
+        H_um = float(params["H"])
+        D_th = float(params["D"])  # thousands / mm^3
+        ro_emp = D_th * 1000.0     # cells / mm^3
+        ro_goal = mu * ro_emp * scale_factor
+
+        n_goal = floor_alloc[layer]
+        H_mm = um_to_mm(H_um)
+
+        if ro_goal > 0 and H_mm > 0:
+            V_needed = n_goal / ro_goal  # mm^3
+            R_goal_mm = math.sqrt(V_needed / (math.pi * H_mm))
+            R_goal_um = 1000.0 * R_goal_mm
+        else:
+            R_goal_um = 0.0
+
+        # Save useful context (also echo the BBP empirical numbers we used)
+        results[layer] = {
+            "bbp_n_emp": emp_counts[layer],     # BBP empirical layer total (e-type sum)
+            "alpha": alpha,
+            "n_goal": int(n_goal),
+
+            "mu": float(mu),
+            "ro_emp": ro_emp,                   # cells/mm^3
+            "ro_goal": ro_goal,                 # cells/mm^3
+            "H_um": H_um,
+            "R_goal_um": R_goal_um,
+        }
+
+    results["_totals"] = {
+        "goal_n_cells": int(goal_n_cells),
+        "allocated_sum": int(sum(results[l]["n_goal"] for l in included_layers)),
+        "included_layers": included_layers,
+        "bbp_total_included": float(total_emp_included),
+    }
+    return results
+
+if __name__ == "__main__":
+    res = calc_goal_densities(
+        layer_comp_target=conf0.LAYER_COMP_TARGET,
+        tissue_params=conf0.TISSUE_PARAMS,
+        goal_n_cells=conf0.GOAL_N_CELLS,
+        bbp_layer_info_path="/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/layer_info.json",
+        scale_factor=conf0.SCALE_FACTOR
+    )
+    pprint(res)
