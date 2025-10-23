@@ -79,22 +79,31 @@ def run():
 
 
     # cxcx02 - pruning
+    CX_POP_PRE = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_pop_pre.csv")
     PRUNE00_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx02"]["prune00"]
+
     PRUNE01_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx02"]["prune01"]
     PRUNED01_CXCX_PATH = os.path.join(PRUNE01_DIR, "prune01_cxcx.json")
+    CX_POP_POST1 = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_pop_post1.csv")
 
     PRUNE02_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx02"]["prune02"]
     PRUNED02_CXCX_PATH = os.path.join(PRUNE02_DIR, "prune02_cxcx.json")
+    CX_POP_POST2 = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_pop_post2.csv")
 
-    CX_POP_INT_EXTENDED_PATH = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_int_ext.csv")
     PRUNE03_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx02"]["prune03"]
     PRUNED03_CXCX_PATH = os.path.join(PRUNE03_DIR, "prune03_cxcx.json")
+    CX_POP_POST3 = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_pop_post3.csv")
 
     # Calculating sm for m:m type prior to pruning
     cxcx02.calculate_sm(
         all_cells_csv=CX_FULL_POP_CSV,
         synapses_json=CXCX_SYNAPSE_SAVE_PATH,
         save_dir=PRUNE00_DIR
+    )
+    cxcx02.calc_b_int(
+        full_population_csv=CX_FULL_POP_CSV,
+        synapse_json=CXCX_SYNAPSE_SAVE_PATH,
+        savepath=CX_POP_PRE
     )
 
     # Calculating retention rate for each m:m used in 01 general pruning
@@ -121,6 +130,11 @@ def run():
         synapses_json=PRUNED01_CXCX_PATH,
         save_dir=PRUNE01_DIR
     )
+    cxcx02.calc_b_int(
+        full_population_csv=CX_FULL_POP_CSV,
+        synapse_json=PRUNED01_CXCX_PATH,
+        savepath=CX_POP_POST1
+    )
 
     # Calculating cutoff threshold for each m:m used in 02 multisyn pruning
     print('s04: Calculating cutoff threshold for each m:m used in 02 multisyn pruning')
@@ -143,14 +157,14 @@ def run():
     print('s04: Calculate interbouton interval for each cell as b_int = len_axon / n_syn')
     cxcx02.calc_b_int(
         full_population_csv=CX_FULL_POP_CSV,
-        post02_synapse_json=PRUNED02_CXCX_PATH,
-        save_dir=CX_POP_INT_EXTENDED_PATH
+        synapse_json=PRUNED02_CXCX_PATH,
+        savepath=CX_POP_POST2
     )
 
     # Calculating retention ratio for 03 plasticity-reserve pruning
     print('s04: Calculating retention ratio for 03 plasticity-reserve pruning')
     cxcx02.setup_03_pruning(
-        examined_pop_csv=CX_POP_INT_EXTENDED_PATH,
+        examined_pop_csv=CX_POP_POST2,
         save_dir=PRUNE03_DIR
     )
 
@@ -160,6 +174,11 @@ def run():
         post02_synapse_json=PRUNED02_CXCX_PATH,
         prune_03_params_json=os.path.join(PRUNE03_DIR, "prune_03_params.json"),
         save_path=PRUNED03_CXCX_PATH
+    )
+    cxcx02.calc_b_int(
+        full_population_csv=CX_FULL_POP_CSV,
+        synapse_json=PRUNED03_CXCX_PATH,
+        savepath=CX_POP_POST3
     )
 
     #cxcx03 - creating synapse summary

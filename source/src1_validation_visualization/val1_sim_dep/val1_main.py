@@ -8,7 +8,7 @@ import config_templates.conf0_model_parameters as conf0
 
 
 # Fetching model config file and loading paths
-MODEL_NAME = "model_run_w0.1_2025-10-22_22-47-14"
+MODEL_NAME = "model_run_w0.1_2025-10-23_16-00-49"
 
 MODEL_ROOT = os.path.join(conf0.ROOT, "data", MODEL_NAME)
 MODEL_CONFIG_PATH = os.path.join("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/",
@@ -24,7 +24,7 @@ stimulation_paradigm = conf0.WHISKER_STIMULATION_PARADIGMS[conf0.STIM_PARADIGM_T
 CX_SPIKES_CSV = paths["recordings"]["cells"]["cx"]["cx_spikes.csv"]
 TC_SPIKES_CSV = paths["recordings"]["cells"]["tc"]["tc_spikes.csv"]
 PRV_SPIKES_CSV = paths["setup"]["conn"]["prv_tc"]["prvtc01"]["prvtc01_synapses.json"]
-CX_CELLS_CSV = paths["setup"]["cells"]["cx"]["cx04"]["cx04_int_ext.csv"]
+CX_CELLS_CSV = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post2.csv"]
 RASTER_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "rasterplot.pdf")
 
 vald01.plot_rasterplot(
@@ -48,7 +48,7 @@ vald01.cx_plot_me_composition_theo(
     save_path=CX_COMP_THEO_SAVEPATH
 )
 
-CX_CELLS_CSV = paths["setup"]["cells"]["cx"]["cx04"]["cx04_int_ext.csv"]
+CX_CELLS_CSV = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post2.csv"]
 CX_ME_Z_DIST_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "cx_me_z_distribution.jpg")
 
 vald01.cx_somata_dist_z(
@@ -56,3 +56,135 @@ vald01.cx_somata_dist_z(
     save_path = CX_ME_Z_DIST_SAVEPATH
 )
 
+
+# vald02 - connections, simulation config dependent
+CXCX_CSV = paths["simulation"]["conn"]["cx_cx"]["cxcx_syns.csv"]
+CXCX_SYNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "syn_matrix_emp.jpg")
+vald02.conn_matrix_emp(
+    csv_file= CXCX_CSV,
+    save_path= CXCX_SYNMATRIX_EMP_SAVEPATH,
+    layer_comp_params= conf0.LAYER_COMP_PARAMS, #TODO wrong import
+)
+CXCX_CONNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_emp.jpg")
+vald02.conn_matrix_emp(
+    csv_file= CXCX_CSV,
+    save_path= CXCX_CONNMATRIX_EMP_SAVEPATH,
+    layer_comp_params= conf0.LAYER_COMP_PARAMS, #TODO wrong import
+    unique_connections=True
+)
+# TODO: absolute path
+BBP_PATHWAY_JSON = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json"
+CXCX_CONNMATRIX_THEO_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_theo.jpg")
+vald02.conn_matrix_theo(
+    json_file= BBP_PATHWAY_JSON,
+    save_path= CXCX_CONNMATRIX_THEO_SAVEPATH,
+    layer_comp_params= conf0.LAYER_COMP_PARAMS
+)
+
+# tccx conn matricies
+TCCX_CSV = paths["simulation"]["conn"]["tc_cx"]["tccx_syns.csv"]
+TCCX_SYNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["tc_cx"], "tccx_syn_matrix_emp.jpg")
+vald02.conn_matrix_emp_tc(
+    tccx_syns= TCCX_CSV,
+    layer_comp_params= conf0.LAYER_COMP_PARAMS,
+    savefig_path= TCCX_SYNMATRIX_EMP_SAVEPATH,
+    unique_connections= False
+)
+TCCX_CONNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["tc_cx"], "tccx_conn_matrix_emp.jpg")
+vald02.conn_matrix_emp_tc(
+    tccx_syns= TCCX_CSV,
+    layer_comp_params= conf0.LAYER_COMP_PARAMS,
+    savefig_path= TCCX_CONNMATRIX_EMP_SAVEPATH,
+    unique_connections= True
+)
+
+# vald02- pruning distributions
+
+# interbouton distance
+CX_POP_PREPRUNE = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_pre.csv"]
+HIST_PRE_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"]["bouton_int"], "intb_dist_pre.jpg")
+CX_POP_POST1 = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post1.csv"]
+HIST_POST1_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"]["bouton_int"], "intb_dist_post1.jpg")
+CX_POP_POST2 = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post2.csv"]
+HIST_POST2_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"]["bouton_int"], "intb_dist_post2.jpg")
+CX_POP_POST3 = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post3.csv"]
+HIST_POST3_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"]["bouton_int"], "intb_dist_post3.jpg")
+
+vald02.interbouton_int_histogram(
+    cx_pop_csv= CX_POP_PREPRUNE,
+    save_path= HIST_PRE_SAVEPATH
+)
+vald02.interbouton_int_histogram(
+    cx_pop_csv= CX_POP_POST1,
+    save_path= HIST_POST1_SAVEPATH
+)
+vald02.interbouton_int_histogram(
+    cx_pop_csv= CX_POP_POST2,
+    save_path= HIST_POST2_SAVEPATH
+)
+vald02.interbouton_int_histogram(
+    cx_pop_csv= CX_POP_POST3,
+    save_path= HIST_POST3_SAVEPATH
+)
+
+# synapses per connection
+SYNS_PREPRUNE_JSON = paths["setup"]["conn"]["cx_cx"]["cxcx01"]["cxcx01_appositions.json"]
+HIST_PRE_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["syns_per_conn"], "syns_per_conn_pre.jpg")
+SYNS_POST1_JSON = paths["setup"]["conn"]["cx_cx"]["cxcx02"]["prune01"]["prune01_cxcx.json"]
+HIST_POST1_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["syns_per_conn"], "syns_per_conn_post1.jpg")
+SYNS_POST2_JSON = paths["setup"]["conn"]["cx_cx"]["cxcx02"]["prune02"]["prune02_cxcx.json"]
+HIST_POST2_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["syns_per_conn"], "syns_per_conn_post2.jpg")
+SYNS_POST3_JSON = paths["setup"]["conn"]["cx_cx"]["cxcx02"]["prune03"]["prune03_cxcx.json"]
+HIST_POST3_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["syns_per_conn"], "syns_per_conn_post3.jpg")
+
+vald02.syn_per_conn_histogram(
+    synapses_json= SYNS_PREPRUNE_JSON,
+    savepath=HIST_PRE_SAVEPATH
+)
+vald02.syn_per_conn_histogram(
+    synapses_json= SYNS_POST1_JSON,
+    savepath=HIST_POST1_SAVEPATH
+)
+vald02.syn_per_conn_histogram(
+    synapses_json= SYNS_POST2_JSON,
+    savepath=HIST_POST2_SAVEPATH
+)
+vald02.syn_per_conn_histogram(
+    synapses_json= SYNS_POST3_JSON,
+    savepath=HIST_POST3_SAVEPATH
+)
+
+# connection prob. with distance
+PROB_CONN_PRE_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["conn_prob"], "conn_prob_pre.jpg")
+PROB_CONN_POST1_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["conn_prob"], "conn_prob_post1.jpg")
+PROB_CONN_POST2_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["conn_prob"], "conn_prob_post2.jpg")
+PROB_CONN_POST3_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"]["conn_prob"], "conn_prob_post3.jpg")
+
+vald02.plot_conn_prob_with_distance(
+    cx_cells_csv=CX_POP_POST3,
+    cxcx_synapses_json=SYNS_PREPRUNE_JSON,
+    bin_size=50,
+    max_dist=None,
+    savepath=PROB_CONN_PRE_SAVEPATH
+)
+vald02.plot_conn_prob_with_distance(
+    cx_cells_csv=CX_POP_POST3,
+    cxcx_synapses_json=SYNS_POST1_JSON,
+    bin_size=50,
+    max_dist=None,
+    savepath=PROB_CONN_POST1_SAVEPATH
+)
+vald02.plot_conn_prob_with_distance(
+    cx_cells_csv=CX_POP_POST3,
+    cxcx_synapses_json=SYNS_POST2_JSON,
+    bin_size=50,
+    max_dist=None,
+    savepath=PROB_CONN_POST2_SAVEPATH
+)
+vald02.plot_conn_prob_with_distance(
+    cx_cells_csv=CX_POP_POST3,
+    cxcx_synapses_json=SYNS_POST3_JSON,
+    bin_size=50,
+    max_dist=None,
+    savepath=PROB_CONN_POST3_SAVEPATH
+)

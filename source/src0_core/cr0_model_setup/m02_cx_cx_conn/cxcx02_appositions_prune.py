@@ -88,8 +88,8 @@ def calculate_sm(all_cells_csv:str, synapses_json:str, save_dir:str = None) -> t
 
 def calc_b_int(
         full_population_csv:str,
-        post02_synapse_json:str,
-        save_dir:str) -> pd.DataFrame:
+        synapse_json:str,
+        savepath:str) -> pd.DataFrame:
     """
     Calculates interbouton density used during 03.Plasticity-reserve pruning. Extends full_population_csv with 'b_int' column.
     This takes two files:
@@ -99,8 +99,8 @@ def calc_b_int(
 
     Args:
         full_population_csv (str):
-        post02_synapse_json (str):
-        save_dir (str):
+        synapse_json (str):
+        savepath (str):
     Returns:
         pd.DataFrame: Extended cortical cells DataFrame, with interbouton density.
     """
@@ -110,7 +110,7 @@ def calc_b_int(
         raise KeyError("CSV must contain 'cell_id' and 'axon_len' columns.")
 
     # Load synapse data
-    with open(post02_synapse_json, "r") as f:
+    with open(synapse_json, "r") as f:
         synapses = json.load(f)
 
     # Count number of synapses made by each pre-synaptic cell
@@ -137,7 +137,7 @@ def calc_b_int(
     df["b_int"] = interb_int_list
 
     # Save result
-    df.to_csv(save_dir, index=False)
+    df.to_csv(savepath, index=False)
 
     return df
 

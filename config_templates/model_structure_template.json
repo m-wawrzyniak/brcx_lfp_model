@@ -71,19 +71,28 @@
             "prv/": null
           },
           "conn/": {
-            "cx_cx/": null,
-            "tc_cx/": null,
+            "cx_cx/": {
+              "me_pair_epsp/": null
+            },
+            "tc_cx/": {
+              "me_pair_epsp/": null
+            },
             "prv_tc/": null
           }
         },
         "sim_dep/": {
           "cells/": {
-            "cx/": null,
+            "cx/": {
+              "bouton_int/": null
+            },
             "tc/": null,
             "prv/": null
           },
           "conn/": {
-            "cx_cx/": null,
+            "cx_cx/": {
+              "syns_per_conn/": null,
+              "conn_prob/": null
+            },
             "tc_cx/": null,
             "prv_tc/": null
           }

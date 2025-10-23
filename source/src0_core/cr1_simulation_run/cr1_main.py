@@ -32,7 +32,7 @@ def run():
 
     # initc01 - initialize cx cells
     CX_ME_SUMMARY = paths["setup"]["cells"]["cx"]["cx02"]["me_comp_summary.json"]
-    CX_CELLS = paths["setup"]["cells"]["cx"]["cx04"]["cx04_int_ext.csv"]
+    CX_CELLS = paths["setup"]["cells"]["cx"]["cx04"]["cx04_pop_post2.csv"]
     cx_cells = initc01.init_cx_cells(
         cx_cells_csv=CX_CELLS,
         temp_dict=cx_templates,

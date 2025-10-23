@@ -80,10 +80,28 @@ def folder_to_json_with_files(root_path: str, json_file: str):
     print(f"JSON structure with files saved to {json_file}")
 
 # TODO: change all os.path.join with this!
-def new_file_in_dir(dir_dict: dict, filename: str) -> Path:
-    """Return a new path in the same folder as any of the given paths in dict."""
-    example_path = next(iter(dir_dict.values()))
-    return example_path.parent / filename
+def new_file_in_dir(dir_like, filename: str) -> Path:
+    """
+    Return a new file path inside the directory represented by `dir_like`.
+    `dir_like` can be either:
+      - a dict of file paths (values are str or Path)
+      - a direct str or Path to a directory
+    """
+    def get_example_path(d):
+        """Recursively find the first non-dict path value."""
+        while isinstance(d, dict):
+            d = next(iter(d.values()))
+        return Path(d)
+
+    if isinstance(dir_like, dict):
+        example_path = get_example_path(dir_like)
+        base_dir = example_path.parent
+    elif isinstance(dir_like, (str, Path)):
+        base_dir = Path(dir_like)
+    else:
+        raise TypeError(f"Unsupported type for dir_like: {type(dir_like)}")
+
+    return base_dir / filename
 
 
 def __main__():

@@ -1,5 +1,7 @@
 from neuron import h
+
 import config_templates.conf01_simulation_parameters as conf01
+from source.src2_utils.ut0_random_manager import np
 
 class PrvTcSynapse:
     """
