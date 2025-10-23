@@ -10,13 +10,18 @@ def init_vpm_cells(vpm_cells_path:str) -> dict[str, VPMCell]:
     Returns:
         dict : In format <vpm_cell_id : VPMCell()>
     """
+    print("[initc02] Initializing tc cells.")
+
     vpm_cells = {}
 
     with open(vpm_cells_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
+        cnt = 0
         for row in reader:
+            cnt+=1
             cell_id = row["cell_id"]
-            vpm_cells[cell_id] = VPMCell(cell_id)  # Pass additional args if needed
+            vpm_cells[cell_id] = VPMCell(cell_id)
 
-    print(f"\t v03: Instantiated{len(vpm_cells)} VPMCell objects.")
+    print(f"[initc02] SUCCESS: Initialized {cnt} tc cells.")
+
     return vpm_cells

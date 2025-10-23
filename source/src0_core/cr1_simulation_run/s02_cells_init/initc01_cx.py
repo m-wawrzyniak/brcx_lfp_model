@@ -16,6 +16,7 @@ def init_cx_cells(cx_cells_csv:str, temp_dict:dict, me_comp_summary_path) -> dic
         dict: <cell_id: CxCell()>
 
     """
+    print("[initc01] Initializing cx cells.")
 
     cells = {}
     with open(me_comp_summary_path, 'r') as f:
@@ -40,5 +41,7 @@ def init_cx_cells(cx_cells_csv:str, temp_dict:dict, me_comp_summary_path) -> dic
             abb_name = "_".join(desc.split('_')[:2])
             new_cell = CxCell(cell_id=cell_id, cell_name=desc, cell_temp=temp_dict[abb_name], offset=(x, y, z), rotation=(np.pi/2, 0, rot_ang))
             cells[cell_id] = new_cell
+
+    print(f"[initc01] SUCCESS: Initialized {cnt} cx cells.")
 
     return cells

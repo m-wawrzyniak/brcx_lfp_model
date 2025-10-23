@@ -6,7 +6,7 @@ from source.src2_utils.ut0_random_manager import np
 from source.src0_core.cr1_simulation_run.s02_cells_init.CxCell import CxCell
 from source.src0_core.cr1_simulation_run.s02_cells_init.VPMCell import VPMCell
 
-def save_synapses_currents_csv(recordings:dict[str, dict], time_vector:h.Vector, save_filepath:str):
+def save_synapses_currents_csv(syn_label:str, recordings:dict[str, dict], time_vector:h.Vector, save_filepath:str):
     """
     Saves recorded synaptic currents to a CSV file.
 
@@ -16,6 +16,7 @@ def save_synapses_currents_csv(recordings:dict[str, dict], time_vector:h.Vector,
         save_filepath (str): Path where resulting *.csv file should be saved.
 
     """
+    print(f"[rec02] Saving {syn_label} synaptic current.")
     syn_ids = sorted(recordings.keys())
     num_points = len(time_vector)
 
@@ -33,9 +34,9 @@ def save_synapses_currents_csv(recordings:dict[str, dict], time_vector:h.Vector,
                 row.append(recordings[syn_id]['vec'][i])
             writer.writerow(row)
 
-    print(f"\t\t [INFO] Synaptic currents saved to {save_filepath}")
+    print(f"[rec02] SUCCESS: Saved {syn_label} synaptic current at {save_filepath}.")
 
-def save_cell_v_csv(cell_v_records:dict, time_vector:h.Vector, save_filepath:str):
+def save_cell_v_csv(cell_label:str, cell_v_records:dict, time_vector:h.Vector, save_filepath:str):
     """
     Save all recorded voltages from `cell_v_records` to CSV.
     Rows are time points (from `time_vector`), columns are cell IDs.
@@ -45,13 +46,7 @@ def save_cell_v_csv(cell_v_records:dict, time_vector:h.Vector, save_filepath:str
         time_vector (h.Vector): Recording h._ref_t
         save_filepath (str): Output CSV filename
     """
-    if not cell_v_records:
-        print("No voltages recorded.")
-        return
-
-    if time_vector is None or len(time_vector) == 0:
-        print("No time vector provided.")
-        return
+    print(f"[rec02] Saving {cell_label} cell somatic membrane potentials")
 
     times = np.array(time_vector)
     all_data = {cell_id: np.array(vec) for cell_id, vec in cell_v_records.items()}
@@ -70,13 +65,17 @@ def save_cell_v_csv(cell_v_records:dict, time_vector:h.Vector, save_filepath:str
             row = [times[i]] + [all_data[cell_id][i] for cell_id in all_data]
             writer.writerow(row)
 
-def save_cell_spikes_csv(cells:dict[str, CxCell|VPMCell], save_filepath:str):
+    print(f"[rec02] SUCCESS: Saved {cell_label} cell somatic membrane potentials at {save_filepath}")
+
+def save_cell_spikes_csv(cell_label:str, cells:dict[str, CxCell|VPMCell], save_filepath:str):
     """
     Fetches spike times of each Cell provided in the dictionary and saves them in an individual *.csv file.
     Args:
         cells (dict): <cell_id, Cell>
         save_filepath (str): Where the *.csv should be saved.
     """
+    print(f"[rec02] Saving {cell_label} cell spiking times.")
+
     with open(save_filepath, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["cell_id", "spikes"])  # header
@@ -85,3 +84,5 @@ def save_cell_spikes_csv(cells:dict[str, CxCell|VPMCell], save_filepath:str):
             times = cell_obj.get_spike_times()
             time_str = ' '.join(f"{t:.3f}" for t in times)
             writer.writerow([cell_id, time_str])
+
+    print(f"[rec02] SUCCESS: Saved {cell_label} cell spiking times at {save_filepath}.")

@@ -1,10 +1,8 @@
 from scipy.spatial import cKDTree
 
-def find_pop_appositions(all_cells: dict) -> tuple[dict, int]:
-    """
-    Finds appositions for all presynaptic → postsynaptic pairs.
-    Returns dict of synapses and total count.
-    """
+def find_pop_appositions(max_dist, all_cells: dict) -> tuple[dict, int]:
+    print(f"[cxcx01] Finding cxcx appositions with max_dist={max_dist}")
+
     syn_cnt = 0
     all_synapses = {}
 
@@ -19,7 +17,7 @@ def find_pop_appositions(all_cells: dict) -> tuple[dict, int]:
             if pre_id == post_id:  # skip self
                 continue
 
-            contacts = post_tree.query_ball_point(pre_cell['axon_pts'], r=2.0)  # TODO: make global threshold
+            contacts = post_tree.query_ball_point(pre_cell['axon_pts'], r=max_dist)
             for pre_idx, post_idxs in enumerate(contacts):
                 for post_idx in post_idxs:
                     contact_global = post_pts[post_idx]
@@ -35,5 +33,7 @@ def find_pop_appositions(all_cells: dict) -> tuple[dict, int]:
                     })
         syn_cnt += len(syns)
         all_synapses[post_id] = syns
+
+    print(f"[cxcx01] SUCCESS: cxcx appositions found with max_dist={max_dist}")
 
     return all_synapses, syn_cnt

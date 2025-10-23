@@ -12,6 +12,8 @@ def setup_vpm_pop(tccx_synapses_path:str, tc_cells_path:str, syn_per_tc_cell: in
         vpm_cells_path (str): Path where chosen VPM cells will be saved . Csv format.
         syn_per_tc_cell (int): Number of synapses a single TC cell fiber creates within cortical column.
     """
+    print("[tc01] Deciding on VPM cells count based on tccx synapse count.")
+
     if not os.path.exists(tccx_synapses_path):
         raise FileNotFoundError(f"TC-CX synapse file not found at: {tccx_synapses_path}")
 
@@ -27,4 +29,4 @@ def setup_vpm_pop(tccx_synapses_path:str, tc_cells_path:str, syn_per_tc_cell: in
         for i in range(1, n_vpm_cells + 1):
             writer.writerow([f"v_{i}"])
 
-    print(f"\t Based on number of TC-CX synapses,  {n_vpm_cells} VPM cells will be created.")
+    print(f"[tc01] SUCCESS: Deciding on VPM cells count based on tccx synapse count. {n_vpm_cells} VPM cells will be created.")

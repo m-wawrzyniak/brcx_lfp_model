@@ -1,7 +1,6 @@
 import os, sys
 from pathlib import Path
 import contextlib
-import subprocess
 from neuron import h
 
 ROOT = Path("/home/mateusz-wawrzyniak/PycharmProjects/som_sens_processing")
@@ -36,11 +35,11 @@ def suppress_stdout_stderr():
 # --- Ensure compiled mechanisms are loaded ---
 def load_mechanisms(mech_dir):
     if not (mech_dir / "x86_64").exists():
-        print(f"[neuron_env] No compiled mechanisms found in {mech_dir}/x86_64")
-        print("Compiling MOD files...")
+        print(f"\tNo compiled mechanisms found in {mech_dir}/x86_64")
+        print("\tCompiling MOD files...")
         os.system(f"cd {mech_dir} && nrnivmodl")
     h.nrn_load_dll(str(mech_dir / "x86_64" / "libnrnmech.so"))
-    print(f"[neuron_env] Mechanisms loaded from {mech_dir}/x86_64")
+    print(f"\tMechanisms loaded from {mech_dir}/x86_64")
 
     return h
 
@@ -58,13 +57,13 @@ def _load_template(template_dir:str, cx_cell_desc:str):
         h.<method> : Cell template loaded into nrn.h.
     """
     temp_path = os.path.join(template_dir, "template.hoc")
-    #h.load_file(temp_path)
     with suppress_stdout_stderr():
         h.load_file(temp_path)
     for method in dir(h):
         if cx_cell_desc in method:
+            print(f"\t OK. Template for {cx_cell_desc} loaded.")
             return getattr(h, method)
-    raise TypeError(f'Template for {cx_cell_desc} loading failed')
+    raise TypeError(f'ERR. Template for {cx_cell_desc} loading failed')
 
 def load_all_templates(cx_cell_templates_dir, just_mtype:bool=True) -> dict:
     """
@@ -92,10 +91,13 @@ def load_all_templates(cx_cell_templates_dir, just_mtype:bool=True) -> dict:
 
 # --- Initialize NEURON environment ---
 def setup_neuron_env(mech_dir = MECH_DIR):
+    print("[env01] Creating NEURON environment.")
+
     load_mechanisms(mech_dir)
     h.load_file("nrngui.hoc")
     h.load_file("import3d.hoc")
     # TODO: Change cell paths later
     cell_temps = load_all_templates(cx_cell_templates_dir=CELL_TEMP_DIR)
 
+    print("[env01] SUCCESS: NEURON environment created.")
     return h, cell_temps

@@ -8,22 +8,7 @@ import config_templates.conf0_model_parameters as conf0
 
 def nrn_positions_cyl(layer_name: str, show_info: bool = False,
                       x_y_std:float = conf0.X_Y_JITTER_STD) -> np.ndarray:
-    """
-    Using Sobol-distributed space-filling algorithm, specifies the positions of cortical cells somata.
-    Globals:
-        - TISSUE_PARAMS
-        - SCALE_FACTOR
-        - MIN_SOMA_DISTANCE
-        - GLOBAL_SEED
-        - Z_STD
-
-    Args:
-        layer_name (str): Name of the cortical layer (e.g., 'L23', 'L4', 'L5').
-        show_info (bool, optional): If True, prints debug information. Defaults to False.
-
-    Returns:
-        np.ndarray: Array of shape (N, 3), where each row is (x, y, z) position of a cell.
-    """
+    print(f"[cx01] Generating cx positions at {layer_name}")
 
     start_H = conf0.TISSUE_PARAMS[layer_name]['start_H']
     R = conf0.TISSUE_PARAMS[layer_name]['R']
@@ -85,8 +70,8 @@ def nrn_positions_cyl(layer_name: str, show_info: bool = False,
 
     nrn_pos = np.array(nrn_pos)
 
+    print(f"[cx01] SUCCESS: cx generated for {layer_name}")
     if show_info:
-        print(f"s01: Specyfing soma positions for {layer_name}...")
         print(f"\t Column volume: {v_cyl:.2f} µm³")
         print(f"\t Target total nrns: {nrn_n}")
         print(f"\t Target nrns per column: {nrn_per_col}")
@@ -96,55 +81,12 @@ def nrn_positions_cyl(layer_name: str, show_info: bool = False,
 
 def save_nrn_positions(nrn_pos: np.ndarray, file_name: str,
                        save_dir: str):
-    """
-    Takes the <nrn_pos> - np.array with x,y,z done by nrn_positions(), adds the cell_id column as the df, and transforms the df into
-    .csv file saving it at <path>
-
-    Globals:
-        GLOBAL_CX_CELL_ID
-
-    Args:
-        nrn_pos (np.array): Output from s01.nrn_positions_cyl(). Somata positions.
-        file_name (str): Name of the saved *.csv file.
-        save_dir (str): Directory where *csv should be saved.
-
-    Returns:
-        None
-    """
+    print(f"[cx01] Saving cx positions for {file_name}")
 
     df = pd.DataFrame(nrn_pos, columns=["x", "y", "z"])
     df.insert(0, "cell_id", range(conf0.GLOBAL_CX_CELL_CNT, conf0.GLOBAL_CX_CELL_CNT + len(df)))
     conf0.GLOBAL_CX_CELL_CNT += len(df)
     full_path = os.path.join(save_dir, file_name)
     df.to_csv(full_path, index=False)
-    print(f"s01: Saved {file_name} - somata positions")
 
-
-
-
-## TODO: LEGACY
-def __main__(save_dir, verbose=False):
-    """
-    1. Goes over each <l> in LAYER_COMP.
-    2. Uses nrn_positions() for each <l> - specifying the somata position at each layer.
-    3. Saves the somata positions using save_nrn_positions.
-    4. Provides FINAL_OUTPUT
-
-    Args:
-        verbose (bool): Should the component functions plot/print all the info.
-    """
-    print(f"s01_population_topology:")
-
-    for l in conf0.LAYER_COMP_TARGET.keys():
-        l_pos = nrn_positions_cyl(l, show_info=True)
-        save_nrn_positions(l_pos, save_dir=save_dir, file_name=f"cx01_{l}_soma_pos.csv")
-    #TODO: create_nrn_pos_summary()
-
-    #TODO: if verbose: show_layer_comp()
-
-# TODO:
-"""
-if __name__ == "__main__":
-    res = calc_goal_densities()
-    pprint(res)
-"""
+    print(f"[cx01] SUCCESS: Saved {file_name}")

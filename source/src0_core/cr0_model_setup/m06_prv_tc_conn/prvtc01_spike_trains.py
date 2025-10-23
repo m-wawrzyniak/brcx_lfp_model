@@ -7,10 +7,8 @@ import config_templates.conf0_model_parameters as conf0
 from source.src0_core.cr0_model_setup.m05_prv_cells.PrvCell import PrvCell
 
 def generate_prv_spikes(stim_paradigm_type, stim_paradigm_subtype, tc_cells_path, prvtc_save_path):
-    print('p01: Setup of PrV cells.')
-    ### SETUP
-    # Instantiating PrV cells
-    print('\t Instantiating PrV cells and creating deflection-response spike trains')
+    print("[prvtc01] Generating prv cells count and their spike trains based on tc cells count.")
+
     vpm_cells = pd.read_csv(tc_cells_path)
     vpm_ids = vpm_cells['cell_id'].tolist()
 
@@ -30,7 +28,6 @@ def generate_prv_spikes(stim_paradigm_type, stim_paradigm_subtype, tc_cells_path
         prv_dict['spike_times'] = list(spike_times)
 
     # Assigning VPM cells to PrV cell
-    print('\t Assigning VPM cells to each PrV cell')
     assignments = np.repeat(vpm_ids, conf0.PRV_PER_VPM_CELL)
     cell_gen.shuffle(assignments)
 
@@ -38,7 +35,6 @@ def generate_prv_spikes(stim_paradigm_type, stim_paradigm_subtype, tc_cells_path
         prv_cells[prv_id]['target_vpm'] = target_vpm
 
     # Saving synapses parametrization
-    print('\t Saving setup results.')
     prv_cells_json = {
         prv_id: {k: v for k, v in prv_dict.items() if k != 'cell_obj'}
         for prv_id, prv_dict in prv_cells.items()
@@ -46,3 +42,5 @@ def generate_prv_spikes(stim_paradigm_type, stim_paradigm_subtype, tc_cells_path
 
     with open(prvtc_save_path, 'w') as f:
         json.dump(prv_cells_json, f, indent=2)
+
+    print("[prvtc01] SUCCESS: Generating prv cells count and their spike trains based on tc cells count.")

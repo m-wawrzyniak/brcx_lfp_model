@@ -8,9 +8,6 @@ h.load_file("import3d.hoc")
 
 @contextlib.contextmanager
 def suppress_stdout_stderr():
-    """
-    While initializing the cells, a NEURON has a lot of stdout. This suppresses it.
-    """
     with open(os.devnull, 'w') as fnull:
         fd_stdout = sys.__stdout__.fileno()
         fd_stderr = sys.__stderr__.fileno()
@@ -33,30 +30,16 @@ def suppress_stdout_stderr():
 
 
 class CellTopology:
-    """
-    Stores and transforms morphology for a given cell without initializing in nrn.h.
-    Keeps per-point mapping to section objects so appositions can be linked directly
-    to the correct NEURON section when forming synapses later.
-    """
-
     def __init__(self, morph_path: str, offset:tuple=(0,0,0), rotation:tuple=(0,0,0)):
-        """
-        Args:
-            morph_path (str): Path to *.asc morphology file.
-            offset (tuple): (x, y, z) offset of the cell soma.
-            rotation (tuple): (rx, ry, rz) in radians.
-        """
         self.morph_file = morph_path
         self.offset = np.array(offset)
         self.rotation = np.array(rotation)
 
-        # Flat representations (convenience)
-        self.axon = []       # [ [x,y,z], ... ]
+        self.axon = []
         self.dendrite = []
         self.soma = []
 
-        # Per-point mapping including section
-        self.axon_pts_with_sec = []     # [ (x,y,z,sec), ... ]
+        self.axon_pts_with_sec = []
         self.dendrite_pts_with_sec = []
         self.soma_pts_with_sec = []
 
@@ -64,25 +47,17 @@ class CellTopology:
         self.axon_len = self._compute_axon_length()
 
     def _load_and_transform(self):
-        """Load morphology into NEURON like the hoc template (quiet=1), then apply transforms."""
-
-        # --- Import morphology (mirror hoc: nl.quiet = 1) ---
         importer = h.Import3d_Neurolucida3()
         importer.quiet = 1
         importer.input(self.morph_file)
 
         gui = h.Import3d_GUI(importer, 0)
-
-        # NOTE: We don't have a hoc template instance here, so we instantiate into global scope.
         gui.instantiate(None)
 
-        # Collect section types for debugging
         section_types = set()
-
-        # Walk all sections that exist now (this process assumes you don't have other cells loaded)
         for sec in h.allsec():
             sec_name = sec.name()
-            stype = sec_name.split('[')[0]  # 'soma', 'axon', 'dend', 'apic', ...
+            stype = sec_name.split('[')[0]
             section_types.add(stype)
 
             n3d = int(h.n3d(sec=sec))
@@ -97,7 +72,6 @@ class CellTopology:
                 print(f"err reading pts in sec {sec_name}: {e}")
                 continue
 
-            # Apply transformations (your existing helpers)
             pts = self._apply_rotation(pts)
             pts = self._apply_offset(pts)
 
@@ -108,7 +82,6 @@ class CellTopology:
                 self.soma.extend(pts.tolist())
                 self.soma_pts_with_sec.extend([(p[0], p[1], p[2], sec_name) for p in pts])
             elif stype in ("dend", "apic"):
-                # treat both as dendritic arbor; keep original section name with each point
                 self.dendrite.extend(pts.tolist())
                 self.dendrite_pts_with_sec.extend([(p[0], p[1], p[2], sec_name) for p in pts])
 

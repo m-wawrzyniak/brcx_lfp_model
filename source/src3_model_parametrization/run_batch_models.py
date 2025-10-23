@@ -6,6 +6,8 @@ import re
 from datetime import datetime
 import subprocess
 
+from source.src3_model_parametrization.BATCH_PARAMETERS import PARAMETER_SET_A
+
 PROJECT_ROOT = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model"
 TEMPLATE_CONFIG_DIR = os.path.join(PROJECT_ROOT, "config_templates")
 DATA_ROOT = os.path.join(PROJECT_ROOT, "data")
@@ -57,17 +59,11 @@ def run_single_model_subprocess(conf0_p, conf01_p, conf02_p):
     subprocess.run(cmd, check=True)
 
 def main():
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    timestamp = datetime.now().strftime("%m-%d_%H-%M")
+    print(f"[BATCH SIMULATION] Running batch simulation at {timestamp}")
 
     # Define parameter sweep
-    PARAM_SETS = [
-        {"MODEL_NAME": f"model_run_w0.1_{timestamp}",
-         "SIM_TIME" : 80},
-        {"MODEL_NAME": f"model_run_w0.3_{timestamp}",
-         "SIM_TIME" : 40},
-        {"MODEL_NAME": f"model_run_w0.5_{timestamp}",
-         "SIM_TIME" : 30}
-    ]
+    PARAM_SETS = PARAMETER_SET_A
 
     for params in PARAM_SETS:
         model_dir = os.path.join(DATA_ROOT, params["MODEL_NAME"], "config")

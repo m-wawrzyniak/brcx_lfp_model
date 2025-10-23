@@ -104,6 +104,8 @@ TC_BD_DIST = { # mean_bd [10^7 / mm^3], center [um from pia]
 }
 
 # CXCX params
+
+MAX_APP_DIST = 4
 NORM_BIAS_01 = 0.5 # pruning 1
 LAMBDA_02, ALPHA_02 = 1, 1 # pruning 2
 # pruning 3

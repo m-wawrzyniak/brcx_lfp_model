@@ -20,21 +20,26 @@ from source.src0_core.cr0_model_setup.m04_tc_cx_conn import (tccx01_appositions_
 from source.src0_core.cr0_model_setup.m06_prv_tc_conn import (prvtc01_spike_trains as prvtc01)
 
 def run():
-    # Create paths
+    # create paths structure
     paths = ut1.__main__()
 
     # cx01 - cx somata positions
     CX_SOMA_POS_PATH = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx01"]
     for l in conf0.LAYER_COMP_TARGET.keys():
-        l_pos = cx01.nrn_positions_cyl(l, show_info=True)
-        cx01.save_nrn_positions(l_pos, save_dir=CX_SOMA_POS_PATH, file_name=f"{l}_soma_pos.csv")
+        l_pos = cx01.nrn_positions_cyl(
+            layer_name=l,
+            show_info=True)
+        cx01.save_nrn_positions(
+            nrn_pos=l_pos,
+            save_dir=CX_SOMA_POS_PATH,
+            file_name=f"{l}_soma_pos.csv")
 
     # cx02 - cx me-types
     CX_ME_ASSIGNED_PATH = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx02"]
     CX_ME_SUMMARY = os.path.join(CX_ME_ASSIGNED_PATH, "me_comp_summary.json")
-    cx02.assign_me_type(input_dir=CX_SOMA_POS_PATH, output_dir=CX_ME_ASSIGNED_PATH)
-    #TODO: cx02.get_population_me_composition(ME_TYPES_POP_PATH)
-
+    cx02.assign_me_type(
+        input_dir=CX_SOMA_POS_PATH,
+        output_dir=CX_ME_ASSIGNED_PATH)
 
     # cx03 - cx morphology instantiation
     # TODO: PATH!
@@ -61,7 +66,9 @@ def run():
     # cxcx01 - appositons search
     CXCX_SYNAPSE_SAVE_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["cx_cx"]["cxcx01"]
     CXCX_SYNAPSE_SAVE_PATH = os.path.join(CXCX_SYNAPSE_SAVE_DIR, "cxcx01_appositions.json")
-    all_synapses, syn_cnt = cxcx01.find_pop_appositions(all_cells)
+    all_synapses, syn_cnt = cxcx01.find_pop_appositions(
+        max_dist=conf0.MAX_APP_DIST,
+        all_cells=all_cells)
     with open(CXCX_SYNAPSE_SAVE_PATH, "w") as f:
         json.dump(all_synapses, f, indent=2)
 
@@ -69,14 +76,21 @@ def run():
     # tccx01 - appositions search
     TCCX01_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["conn"]["tc_cx"]["tccx01"]
     TCCX01_PATH = os.path.join(TCCX01_DIR, "tccx01_synapses.json")
+    TCCX_BD_DIST = ut1.new_file_in_dir(paths["data"][conf0.MODEL_NAME]["visualizations"]["sim_dep"]["conn"]["tc_cx"], "tc_bouton_dist.jpg")
+    z_bin_dict = tccx01.get_segments_binning(
+        all_cells=all_cells,
+        h_start=conf0.GLOBAL_Z_RANGE[1],
+        h_stop=conf0.GLOBAL_Z_RANGE[0])
+    bd_emp = tccx01.calc_tc_bd_dist(
+        h_start=conf0.GLOBAL_Z_RANGE[1],
+        h_stop=conf0.GLOBAL_Z_RANGE[0],
+        save_path=TCCX_BD_DIST)
+    tccx01.tc_synapse_sampling(
+        z_bin_dict=z_bin_dict,
+        bd_emp=bd_emp,
+        save_path=TCCX01_PATH)
 
-    z_bin_dict = tccx01.get_segments_binning(all_cells, conf0.GLOBAL_Z_RANGE[1], conf0.GLOBAL_Z_RANGE[0])
-    bd_emp = tccx01.calc_tc_bd_dist(conf0.GLOBAL_Z_RANGE[1], conf0.GLOBAL_Z_RANGE[0])
-    tccx01.tc_synapse_sampling(z_bin_dict, bd_emp, save_path=TCCX01_PATH)
-
-    # TODO: cleanup needed
     del all_cells
-
 
     # cxcx02 - pruning
     CX_POP_PRE = os.path.join(paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx04"], "cx04_pop_pre.csv")
@@ -109,7 +123,6 @@ def run():
     # Calculating retention rate for each m:m used in 01 general pruning
     # TODO: PATH!!
     BBP_PATHWAY_INFO = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json"
-    print('s04: Calculating retention rate for each m:m used in 01 general pruning')
     cxcx02.setup_01_pruning(
         model_type_sm_csv=os.path.join(PRUNE00_DIR, 'types_sm.csv'),
         goal_type_sm_json=BBP_PATHWAY_INFO,
@@ -117,14 +130,12 @@ def run():
     )
 
     # Applying 01 general pruning
-    print('s04: Applying 01 general pruning')
     cxcx02.apply_general_pruning_01(
         prune_01_params_csv=os.path.join(PRUNE01_DIR, "prune_01_params.csv"),
         init_synapse_json=CXCX_SYNAPSE_SAVE_PATH,
         output_json=PRUNED01_CXCX_PATH)
 
     # Calculating sm for m:m type post 01 general pruning
-    print('s04: Calculating sm for m:m type post 01 general pruning')
     cxcx02.calculate_sm(
         all_cells_csv=CX_FULL_POP_CSV,
         synapses_json=PRUNED01_CXCX_PATH,
@@ -137,7 +148,6 @@ def run():
     )
 
     # Calculating cutoff threshold for each m:m used in 02 multisyn pruning
-    print('s04: Calculating cutoff threshold for each m:m used in 02 multisyn pruning')
     cxcx02.setup_02_pruning(
         model_type_sm_csv=os.path.join(PRUNE01_DIR, 'types_sm.csv'),
         goal_type_sm_json=BBP_PATHWAY_INFO,
@@ -145,7 +155,6 @@ def run():
     )
 
     # Applying 02 multisyn pruning
-    print('s04: Applying 02 multisyn pruning')
     cxcx02.apply_multisyn_pruning_02(
         prune_02_params_csv=os.path.join(PRUNE02_DIR, "prune_02_params.csv"),
         all_cells_csv=CX_FULL_POP_CSV,
@@ -154,7 +163,6 @@ def run():
     )
 
     # Calculate interbouton interval for each cell as b_int = len_axon / n_syn
-    print('s04: Calculate interbouton interval for each cell as b_int = len_axon / n_syn')
     cxcx02.calc_b_int(
         full_population_csv=CX_FULL_POP_CSV,
         synapse_json=PRUNED02_CXCX_PATH,
@@ -162,14 +170,12 @@ def run():
     )
 
     # Calculating retention ratio for 03 plasticity-reserve pruning
-    print('s04: Calculating retention ratio for 03 plasticity-reserve pruning')
     cxcx02.setup_03_pruning(
         examined_pop_csv=CX_POP_POST2,
         save_dir=PRUNE03_DIR
     )
 
     # Applying 03 plasticity reserve pruning
-    print('s04: Applying 03 plasticity reserve pruning')
     cxcx02.apply_plastres_pruning_03(
         post02_synapse_json=PRUNED02_CXCX_PATH,
         prune_03_params_json=os.path.join(PRUNE03_DIR, "prune_03_params.json"),
@@ -185,6 +191,7 @@ def run():
     CXCX_SUMMARY_PATH = os.path.join(PRUNE03_DIR, "cxcx_summary.json")
     cxcx03.create_synapse_summary(synapses_json=PRUNED03_CXCX_PATH,
                                   summary_path=CXCX_SUMMARY_PATH)
+
     # tc01 - deciding on tc cells count
     TC_CELLS_INIT_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["tc"]["tc01"]
     TC01_PATH = os.path.join(TC_CELLS_INIT_DIR, 'tc01_pop.csv')

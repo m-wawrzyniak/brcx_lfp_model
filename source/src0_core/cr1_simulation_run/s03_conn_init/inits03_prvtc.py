@@ -16,7 +16,8 @@ def create_prvtc_synapses(tc_cells:dict, prv_json_path:str):
     prv_json_path : str
         Path to JSON file containing PrV cell spike_times and target_vpm.
     """
-    print('\t p02: Creating PrV-TC synapses...')
+    print("[inits03] Creating prvtc synapses.")
+
     # Load PrV JSON
     with open(prv_json_path, 'r') as f:
         prv_cells_data = json.load(f)
@@ -30,7 +31,7 @@ def create_prvtc_synapses(tc_cells:dict, prv_json_path:str):
 
         # Get the target VPM cell
         if target_vpm_id not in tc_cells:
-            raise KeyError(f"Target VPM cell {target_vpm_id} not found in vpm_cells")
+            raise KeyError(f"Warning: Target VPM cell {target_vpm_id} not found in vpm_cells")
 
         vpm_cell = tc_cells[target_vpm_id]
 
@@ -55,6 +56,6 @@ def create_prvtc_synapses(tc_cells:dict, prv_json_path:str):
 
         prv_vpm_synapses[prv_id] = prvtc_syn
 
-    print(f"\t\t PrV-TC synapses (n={syn_cnt}) created.")
+    print(f"[inits03] SUCCESS: Created prvtc synapses. Count = {syn_cnt}")
 
     return prv_vpm_synapses

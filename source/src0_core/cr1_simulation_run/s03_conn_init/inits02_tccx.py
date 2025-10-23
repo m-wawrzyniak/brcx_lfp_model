@@ -98,6 +98,8 @@ def create_tccx_synapses(tc_cells: dict[str, VPMCell], cx_cells: dict[str, CxCel
     Returns:
         dict: <syn_id: TcCxSynapse>
     """
+    print("[inits02] Creating tccx synapses.")
+
     with open(tccx_synapses_data, 'r') as f:
         syn_defs = json.load(f)
 
@@ -107,14 +109,13 @@ def create_tccx_synapses(tc_cells: dict[str, VPMCell], cx_cells: dict[str, CxCel
 
     for post_id, pre_list in syn_defs.items():
         if post_int % 3 == 0 or post_int == n_post:
-            print(f'\t\t TC-CX cells connected: {post_int / n_post:.1%}')
+            print(f'\t tccx cells connected: {post_int / n_post:.1%}')
         post_int += 1
 
         post_cell = cx_cells[str(post_id)]
 
         for pre_dict in pre_list:
             pre_id = pre_dict['pre_id']
-            post_sec_name = pre_dict.get('post_sec', None)
             post_loc_raw = pre_dict.get('post_loc', (0.0, 0.0, 0.0))
 
             # Ensure post_loc is a numeric tuple (x, y, z)
@@ -137,8 +138,9 @@ def create_tccx_synapses(tc_cells: dict[str, VPMCell], cx_cells: dict[str, CxCel
                 )
                 synapse_map[syn_obj.syn_id] = syn_obj
             except Exception as e:
-                print(f"\t\t [Error] Failed to create synapse {pre_id}:{post_id}: {e}")
+                print(f"\t ERR: Failed to create synapse {pre_id}:{post_id}: {e}")
 
+    print("[inits02] SUCCESS: Created all tccx synapses.")
     return synapse_map
 
 def save_synapses_to_csv(synapse_map:dict[str, TcCxSynapse], save_path:str):
@@ -149,6 +151,8 @@ def save_synapses_to_csv(synapse_map:dict[str, TcCxSynapse], save_path:str):
         synapse_map (dict): <syn_id, TcCxSynapse>. Result from create_tccx_synapses().
         save_path (str): Path where resulting *csv should be saved.
     """
+    print("[inits02] Saving tccx synapses with electrophysiological parameters.")
+
     fieldnames = [
         "syn_id",
         "pre_id",
@@ -172,9 +176,10 @@ def save_synapses_to_csv(synapse_map:dict[str, TcCxSynapse], save_path:str):
     with open(save_path, mode='w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-
+        cnt = 0
         for syn_id, syn_obj in synapse_map.items():
             # Extract parameters
+            cnt+=1
             params = syn_obj.get_params()
 
             # Recover IDs and types (you might want to store these in syn_obj on creation)
@@ -223,3 +228,5 @@ def save_synapses_to_csv(synapse_map:dict[str, TcCxSynapse], save_path:str):
                 "weight": syn_weight
             }
             writer.writerow(row)
+
+    print(f"[inits02] SUCCESS: Saved tccx synapses with electrophysiological parameters. Count = {cnt}")

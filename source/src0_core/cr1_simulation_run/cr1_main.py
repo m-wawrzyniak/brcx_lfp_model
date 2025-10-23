@@ -23,7 +23,10 @@ def run():
         root_path=MODEL_ROOT,
         json_file=MODEL_CONFIG_PATH
     )
-    paths = ut1.load_tree(config_file=MODEL_CONFIG_PATH, root=MODEL_ROOT)
+    paths = ut1.load_tree(
+        config_file=MODEL_CONFIG_PATH,
+        root=MODEL_ROOT
+    )
 
     # env1 - loading nrn mechanisms and cell templates
     h, cx_templates = env01.setup_neuron_env()
@@ -75,7 +78,10 @@ def run():
         cx_cells=cx_cells,
         tccx_synapses_data=TCCX_CONN_PATH
     )
-    inits02.save_synapses_to_csv(tccx_syns, save_path=TCCX_SYN_PATH)
+    inits02.save_synapses_to_csv(
+        synapse_map=tccx_syns,
+        save_path=TCCX_SYN_PATH
+    )
 
     # inits03 - initialize prvtc synapses
     PRVTC_CONN_PATH = paths["setup"]["conn"]["prv_tc"]["prvtc01"]["prvtc01_synapses.json"]
@@ -85,17 +91,34 @@ def run():
     )
 
     # rec01 - recording setup
-    cx_soma_v = rec01.record_soma_v(cells=cx_cells)
-    tc_soma_v = rec01.record_soma_v(cells=tc_cells)
+    cx_soma_v = rec01.record_soma_v(
+        cell_label="cx",
+        cells=cx_cells
+    )
+    tc_soma_v = rec01.record_soma_v(
+        cell_label="cx",
+        cells=tc_cells
+    )
 
-    cxcx_i = rec01.record_synapses_currents(synapses=cxcx_syns)
-    tccx_i = rec01.record_synapses_currents(synapses=tccx_syns)
-    prvtc_i = rec01.record_synapses_currents(synapses=prvtc_syns)
+    cxcx_i = rec01.record_synapses_currents(
+        syn_label="cxcx",
+        synapses=cxcx_syns
+    )
+    tccx_i = rec01.record_synapses_currents(
+        syn_label="tccx",
+        synapses=tccx_syns
+    )
+    prvtc_i = rec01.record_synapses_currents(
+        syn_label="prvcx",
+        synapses=prvtc_syns
+    )
 
     rec01.record_cell_spikes(
+        cell_label="cx",
         cells=cx_cells
     )
     rec01.record_cell_spikes(
+        cell_label="tc",
         cells=tc_cells
     )
 
@@ -116,11 +139,13 @@ def run():
     CX_V_SAVEPATH = os.path.join(paths["recordings"]["cells"]["cx"], "cx_v.csv")
     TC_V_SAVEPATH = os.path.join(paths["recordings"]["cells"]["tc"], "tc_v.csv")
     rec02.save_cell_v_csv(
+        cell_label="cx",
         cell_v_records=cx_soma_v,
         time_vector=t_vec,
         save_filepath=CX_V_SAVEPATH
     )
     rec02.save_cell_v_csv(
+        cell_label="tc",
         cell_v_records=tc_soma_v,
         time_vector=t_vec,
         save_filepath=TC_V_SAVEPATH
@@ -129,10 +154,12 @@ def run():
     CX_SP_SAVEPATH = os.path.join(paths["recordings"]["cells"]["cx"], "cx_spikes.csv")
     TC_SP_SAVEPATH = os.path.join(paths["recordings"]["cells"]["tc"], "tc_spikes.csv")
     rec02.save_cell_spikes_csv(
+        cell_label="cx",
         cells=cx_cells,
         save_filepath=CX_SP_SAVEPATH
     )
     rec02.save_cell_spikes_csv(
+        cell_label="tc",
         cells=tc_cells,
         save_filepath=TC_SP_SAVEPATH
     )
@@ -141,16 +168,19 @@ def run():
     TCCX_I_SAVEPATH = os.path.join(paths["recordings"]["conn"]["tc_cx"], "tccx_i.csv")
     PRVTC_I_SAVEPATH = os.path.join(paths["recordings"]["conn"]["prv_tc"], "prvtc_i.csv")
     rec02.save_synapses_currents_csv(
+        syn_label="cxcx",
         recordings=cxcx_i,
         time_vector=t_vec,
         save_filepath=CXCX_I_SAVEPATH
     )
     rec02.save_synapses_currents_csv(
+        syn_label="tccx",
         recordings=tccx_i,
         time_vector=t_vec,
         save_filepath=TCCX_I_SAVEPATH
     )
     rec02.save_synapses_currents_csv(
+        syn_label="prvtc",
         recordings=prvtc_i,
         time_vector=t_vec,
         save_filepath=PRVTC_I_SAVEPATH

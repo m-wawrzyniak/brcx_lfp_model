@@ -8,14 +8,17 @@ def start_recording_all_imem(cells_dict):
     Iterate over dict of {cell_id: CxCell} and start recording i_mem for each.
     Returns nothing; recordings are stored inside each CxCell.
     """
+    print("[rec03] Setting up recording of transmembrane currents at cx cells.")
     for cid, cell in cells_dict.items():
         cell.start_recording_imem()
+    print("[rec03] SUCCESS: Setting up recording of transmembrane currents at cx cells.")
 
 
 def save_all_imem_h5(cells_dict, filename):
     """
     Save transmembrane currents from all cells into an HDF5 file.
     """
+    print("[rec03] Saving transmembrane currents of cx cells.")
     with h5py.File(filename, "w") as f:
         # take time vector from first cell
         first_cell = next(iter(cells_dict.values()))
@@ -41,3 +44,4 @@ def save_all_imem_h5(cells_dict, filename):
                 x, y, z = m["xyz_um"]
                 meta_arr[i] = (x, y, z, m["area_cm2"], m["length_um"], m["stype"])
             grp.create_dataset("meta", data=meta_arr)
+    print(f"[rec03] SUCCESS: Saved transmembrane currents of cx cells at {filename}.")

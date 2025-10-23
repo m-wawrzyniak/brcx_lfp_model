@@ -25,6 +25,8 @@ def calculate_sm(all_cells_csv:str, synapses_json:str, save_dir:str = None) -> t
             - the number of such connections
     """
 
+    print(f"[cxcx02] Calculating mean no. synapses per connection for me:me type combinations for {synapses_json}")
+
     # Load cell info
     cell_df = pd.read_csv(all_cells_csv)
     cell_id_to_mtype = dict(zip(cell_df['cell_id'], cell_df['desc']))
@@ -84,6 +86,8 @@ def calculate_sm(all_cells_csv:str, synapses_json:str, save_dir:str = None) -> t
         type_sm_str = type_sm.map(lambda x: f"{x[0]},{x[1]}")
         type_sm_str.to_csv(types_path)
 
+    print("[cxcx02] SUCCESS: Calculating mean no. synapses per connection for me:me type combinations")
+
     return connections_sm, type_sm
 
 def calc_b_int(
@@ -104,6 +108,9 @@ def calc_b_int(
     Returns:
         pd.DataFrame: Extended cortical cells DataFrame, with interbouton density.
     """
+
+    print(f"[cxcx02] Calculating interbouton density for {synapse_json}")
+
     # Load population position data
     df = pd.read_csv(full_population_csv)
     if 'cell_id' not in df.columns or 'axon_len' not in df.columns:
@@ -139,6 +146,8 @@ def calc_b_int(
     # Save result
     df.to_csv(savepath, index=False)
 
+    print(f"[cxcx02] SUCCESS: Calculating interbouton density for {synapse_json}")
+
     return df
 
 def setup_01_pruning(model_type_sm_csv:str, goal_type_sm_json:str,
@@ -154,6 +163,7 @@ def setup_01_pruning(model_type_sm_csv:str, goal_type_sm_json:str,
     Returns:
         pd.DataFrame: Matrix where each column and row is me_type. Each cell has three parameters (p_goal, p_mod, f)
     """
+    print("[cxcx02] Creating synapse metrics used for General Pruning (01)")
 
     model_sm = pd.read_csv(model_type_sm_csv, index_col=0)
     with open(goal_type_sm_json, 'r') as f:
@@ -205,13 +215,13 @@ def setup_01_pruning(model_type_sm_csv:str, goal_type_sm_json:str,
         pruning_df_str = pruning_df.map(lambda x: f"{x[0]},{x[1]},{x[2]}")
         pruning_df_str.to_csv(prune_01_path)
 
+    print("[cxcx02] SUCCESS: Creating synapse metrics used for General Pruning (01)")
     return pruning_df
 
 def apply_general_pruning_01(
     prune_01_params_csv:str,
     init_synapse_json:str,
-    output_json:str,
-    verbose:bool = True) -> dict:
+    output_json:str) -> dict:
     """
     Applies general pruning to synapse data using survival factors (f1) per m-type:m-type pair.
 
@@ -225,6 +235,8 @@ def apply_general_pruning_01(
     Returns:
         dict: Pruned synapse dictionary (post_id -> list of synapses)
     """
+
+    print("[cxcx02] Applying General Pruning (01)")
 
     # Load pruning factors DataFrame (cell values are stringified tuples)
     pruning_df = pd.read_csv(prune_01_params_csv, index_col=0)
@@ -265,9 +277,8 @@ def apply_general_pruning_01(
     with open(output_json, "w") as f:
         json.dump(pruned_synapses_by_post, f, indent=2)
 
-    if verbose:
-        total_syn = sum(len(v) for v in pruned_synapses_by_post.values())
-        print(f"\t General pruning complete. Kept {total_syn} synapses.")
+    total_syn = sum(len(v) for v in pruned_synapses_by_post.values())
+    print(f"[cxcx02] SUCCESS: Complete General Pruning (01). Kept {total_syn} synapses.")
 
     return pruned_synapses_by_post
 
@@ -287,6 +298,7 @@ def setup_02_pruning(model_type_sm_csv:str, goal_type_sm_json:str,
     Returns:
         pd.DataFrame: Parameters used for 02.Multisynaptic pruning
     """
+    print("[cxcx02] Creating synapse metrics used for Multisynaptic Pruning (02)")
 
     model_sm = pd.read_csv(model_type_sm_csv, index_col=0)
     with open(goal_type_sm_json, 'r') as f:
@@ -312,6 +324,8 @@ def setup_02_pruning(model_type_sm_csv:str, goal_type_sm_json:str,
 
     if save_dir is not None:
         mu_df.to_csv(os.path.join(save_dir, "prune_02_params.csv"))
+
+    print("[cxcx02] SUCCESS: Creating synapse metrics used for Multisynaptic Pruning (02)")
 
     return mu_df
 
@@ -340,6 +354,8 @@ def apply_multisyn_pruning_02(
     Returns:
         defaultdict: Pruned synapse data (same structure as input JSON).
     """
+
+    print("[cxcx02] Applying Multisynaptic Pruning (02).")
 
     # Load cell → m_type mapping
     cell_df = pd.read_csv(all_cells_csv)
@@ -386,7 +402,8 @@ def apply_multisyn_pruning_02(
     if save_path is not None:
         with open(save_path, 'w') as f:
             json.dump(pruned_syn_data, f, indent=2)
-    print(f"\t Multisynaptic pruning complete. Kept {syn_cnt} synapses.")
+
+    print(f"[cxcx02] Applying Multisynaptic Pruning (02) complete. Kept {syn_cnt} synapses.")
     return pruned_syn_data
 
 def setup_03_pruning(examined_pop_csv:str, save_dir:str) -> dict:
@@ -406,6 +423,8 @@ def setup_03_pruning(examined_pop_csv:str, save_dir:str) -> dict:
         examined_pop_csv (str): Cortical population *csv with calculated b_int.
         save_path (str): Resulting pruned synapses *json.
     """
+    print("[cxcx02] Creating synapse metrics used for Plasticity-Reserve Pruning (03)")
+
     df = pd.read_csv(examined_pop_csv)
 
     if "lay_m_type" not in df.columns or "b_int" not in df.columns:
@@ -440,6 +459,8 @@ def setup_03_pruning(examined_pop_csv:str, save_dir:str) -> dict:
     with open(save_path, 'w') as f:
         json.dump(result, f, indent=4)
 
+    print("[cxcx02] SUCCESS: Creating synapse metrics used for Plasticity-Reserve Pruning (03)")
+
     return result
 
 def apply_plastres_pruning_03(
@@ -454,6 +475,8 @@ def apply_plastres_pruning_03(
         prune_03_params_json (str): Calculated parameters in json for third pruning.
         save_path (str): Save path.
     """
+    print("[cxcx02] Applying Plasticity-Reserve Pruning (03).")
+
     # Load pruning parameters
     with open(prune_03_params_json, "r") as f:
         retain_info = json.load(f)
@@ -483,5 +506,5 @@ def apply_plastres_pruning_03(
     with open(save_path, "w") as f:
         json.dump(pruned_synapses_by_post, f, indent=2)
 
-    print(f"\t Plasticity-reserve pruning complete. Kept {syn_cnt} synapses.")
+    print(f"[cxcx02] Applying Plasticity-Reserve Pruning (03) complete. Kept {syn_cnt} synapses.")
     return pruned_synapses_by_post

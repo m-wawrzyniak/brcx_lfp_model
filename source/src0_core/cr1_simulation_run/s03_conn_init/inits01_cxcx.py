@@ -1,4 +1,4 @@
-import csv, json, os
+import csv, json
 from neuron import h
 
 from source.src0_core.cr1_simulation_run.s02_cells_init.CxCell import CxCell
@@ -22,6 +22,8 @@ def get_synapse_parameters(cx_syns_summary_csv:str ,
         dict : <conn_type: dict_with_params>, where conn_type e.g. L4_SS_cAD:L23_LBC_cNAC.
 
     """
+    print("[inits01] Fetching cxcx parameters based on (Markram, 2015) models.")
+
     # Load files
     with open(cx_syns_summary_csv, 'r') as f:
         summary_data = json.load(f)
@@ -55,7 +57,9 @@ def get_synapse_parameters(cx_syns_summary_csv:str ,
                 syn_type = 'i'
             res_dict[conn_type]['type'] = syn_type
         else:
-            print(f"Warning: No physiology data for connection {conn_type}")
+            print(f"\t Warning: No physiology data for connection {conn_type}")
+
+    print("[inits01] SUCCESS: Fetching cxcx parameters based on (Markram, 2015) models.")
 
     return res_dict
 
@@ -125,12 +129,12 @@ def _create_cxcx_synapse(pre_cell:CxCell, post_cell:CxCell,
     if syn_type == 'e':
         syn.Use, syn.Dep, syn.Fac = u_val, d_val, f_val
         syn.tau_r_AMPA, syn.tau_d_AMPA = risetime_val, decay_val
-        syn.gmax = gsyn_val/6  # TODO what if gsyn is cumulative for a WHOLE CONNECTION, not singular synapse
+        syn.gmax = gsyn_val
         syn.NMDA_ratio = late_comp_ratio
     else:
         syn.Use, syn.Dep, syn.Fac = u_val, d_val, f_val
         syn.tau_r_GABAA, syn.tau_d_GABAA = risetime_val, decay_val
-        syn.gmax = gsyn_val/6
+        syn.gmax = gsyn_val
         syn.GABAB_ratio = late_comp_ratio
 
     nc = h.NetCon(pre_hcell.soma[0](0.5)._ref_v, syn, sec=pre_hcell.soma[0])
@@ -138,7 +142,6 @@ def _create_cxcx_synapse(pre_cell:CxCell, post_cell:CxCell,
     nc.delay = syn_params.get('latency_mean', 1.0)
 
     # Choose weight
-    # TODO: NEW WEIGHTS SYSTEM
     pre_index = conf1.CELL_ORDER_MAP[pre_cell.cell_name]
     post_index = conf1.CELL_ORDER_MAP[post_cell.cell_name]
     nc.weight[0] = conf1.WEIGHT_MATRIX[pre_index][post_index]
@@ -179,6 +182,8 @@ def create_cxcx_synapses(cx_cells:dict[str, CxCell], syn_params:dict,
         dict : Synapse dictionary <syn_id: CxSynapse()>
 
     """
+    print("[inits01] Creating cxcx synapses.")
+
     with open(cxcx_synapses_data, 'r') as f:
         syn_defs = json.load(f)
 
@@ -188,7 +193,7 @@ def create_cxcx_synapses(cx_cells:dict[str, CxCell], syn_params:dict,
 
     for post_id, pre_list in syn_defs.items():
         if (post_int+1)%3 == 0 or (post_int+1)==n_post:
-            print(f'\t\t IntraCX post-cell connected: {post_int / n_post:.1%}')
+            print(f'\t IntraCX post-cell connected: {post_int / n_post:.1%}')
         post_int += 1
 
         for pre_dict in pre_list:
@@ -202,7 +207,7 @@ def create_cxcx_synapses(cx_cells:dict[str, CxCell], syn_params:dict,
 
             conn_key = f"{pre_short}:{post_short}"
             if conn_key not in syn_params:
-                print(f"\t\t [Warning] No synaptic parameters found for {conn_key}. Skipping synapse {pre_id}:{post_id}.")
+                print(f"\t Warning: no synaptic parameters found for {conn_key}. Skipping synapse {pre_id}:{post_id}.")
                 continue
 
             params = syn_params[conn_key]
@@ -216,7 +221,9 @@ def create_cxcx_synapses(cx_cells:dict[str, CxCell], syn_params:dict,
                 synapse_map[syn_obj.syn_id] = syn_obj
 
             except Exception as e:
-                print(f"[Error] Failed to create synapse {pre_id}:{post_id}: {e}")
+                print(f"ERR: Failed to create synapse {pre_id}:{post_id}: {e}")
+
+    print("[inits01] SUCCESS: Creating cxcx synapses.")
 
     return synapse_map
 
@@ -229,6 +236,8 @@ def save_synapses_to_csv(synapse_map:dict[str, CxSynapse], save_path:str):
         save_path (str): Where the resulting *csv should be saved.
 
     """
+    print("[inits01] Saving cxcx synapses with electrophysiological parameters.")
+
     fieldnames = [
         "syn_id",
         "pre_id",
@@ -312,4 +321,5 @@ def save_synapses_to_csv(synapse_map:dict[str, CxSynapse], save_path:str):
             }
             writer.writerow(row)
 
+    print("[inits01] SUCCESS: Saving cxcx synapses with electrophysiological parameters.")
 

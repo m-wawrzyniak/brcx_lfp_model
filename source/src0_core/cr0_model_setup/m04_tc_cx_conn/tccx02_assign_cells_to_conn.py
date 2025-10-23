@@ -12,6 +12,8 @@ def assign_tc_synapses(preassignment_synapses_path:str, assigned_synapses_path:s
         assigned_synapses_path (str): Output json file with assigned precell.
 
     """
+    print("[tccx02] Assigning tccx synapses to tc cells.")
+
     # Load VPM cells
     with open(tc_pop_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -40,4 +42,4 @@ def assign_tc_synapses(preassignment_synapses_path:str, assigned_synapses_path:s
     with open(assigned_synapses_path, 'w') as f:
         json.dump(updated_syn_data, f, indent=2)
 
-    print(f"\t Saved updated VPM-assigned synapses")
+    print("[tccx02] SUCCESS: Assigning tccx synapses to tc cells.")
