@@ -41,7 +41,7 @@ def run(model_name):
         save_path=CX_COMP_EMP_SAVEPATH
     )
     vald01.cx_plot_me_composition_theo(
-        layer_comp_params=conf0.LAYER_COMP_PARAMS, #TODO: im not sure, i think it gets it from a different module
+        layer_comp_params=conf0.LAYER_COMP_PARAMS,
         save_path=CX_COMP_THEO_SAVEPATH
     )
 
@@ -60,17 +60,16 @@ def run(model_name):
     vald02.conn_matrix_emp(
         csv_file= CXCX_CSV,
         save_path= CXCX_SYNMATRIX_EMP_SAVEPATH,
-        layer_comp_params= conf0.LAYER_COMP_PARAMS, #TODO wrong import
+        layer_comp_params= conf0.LAYER_COMP_PARAMS,
     )
     CXCX_CONNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_emp.jpg")
     vald02.conn_matrix_emp(
         csv_file= CXCX_CSV,
         save_path= CXCX_CONNMATRIX_EMP_SAVEPATH,
-        layer_comp_params= conf0.LAYER_COMP_PARAMS, #TODO wrong import
+        layer_comp_params= conf0.LAYER_COMP_PARAMS,
         unique_connections=True
     )
-    # TODO: absolute path
-    BBP_PATHWAY_JSON = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json"
+    BBP_PATHWAY_JSON = os.path.join(conf0.ROOT, "source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json")
     CXCX_CONNMATRIX_THEO_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_theo.jpg")
     vald02.conn_matrix_theo(
         json_file= BBP_PATHWAY_JSON,

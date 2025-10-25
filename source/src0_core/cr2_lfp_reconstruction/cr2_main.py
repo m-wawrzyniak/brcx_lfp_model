@@ -18,7 +18,7 @@ def run():
     paths = ut1.load_tree(config_file=MODEL_CONFIG_PATH, root=MODEL_ROOT)
 
     # Electrode - creating electrode topology
-    el = Electrode(topo_variant=conf02.ELECTRODE_VARIANT, z_offset=conf02.ELECTRODE_Z_OFFSET)
+    el = Electrode(topo_variant=conf02.ELECTRODE_VARIANT, z_offset=conf02.ELECTRODE_Z_OFFSET, cross_species_scale=conf02.CROSS_SPECIES_SCALE)
 
     # lfp01 - computing lfp
     IMEM_PATH = paths["recordings"]["lfp"]["raw"]["cx_imem.hdf"]
@@ -44,4 +44,4 @@ def run():
     lfp02.plot_net_lfp(
         lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
         save_path=LFP_NET_VIS_SAVEPATH,
-        offset=0.0005)
+        offset=0.002)

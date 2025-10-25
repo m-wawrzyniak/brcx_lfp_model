@@ -1,9 +1,19 @@
+from pathlib import Path
+
+def get_project_root():
+    path = Path(__file__).resolve()
+    for parent in path.parents:
+        if (parent / ".git").exists() or (parent / "source").exists():
+            return parent
+    return str(path.parents[-1])
+
 ### Global params
 GLOBAL_SEED = 121       # Randomization seed
 GLOBAL_CX_CELL_CNT = 0  # Count of predefined Cx cells.
 GLOBAL_PRV_CELL_CNT = 0
 MODEL_NAME = 'test'
-ROOT = '/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model'
+ROOT = get_project_root()
+print(ROOT)
 
 ### m01_cx_cells params
 
@@ -83,8 +93,8 @@ TISSUE_PARAMS = {
 
 Z_BIN_SIZE = 25.0
 TC_TARGET_MTYPES = {'L4_SS', 'L5_TTPC1', 'L5_TTPC2'}
-SYN_PER_TC_CELL = 45  #TODO: Decide on SYN_PER_TC_CELL.
-TCCX_SYNAPSE_SCALE = 0.002 #TODO: this has to be scale somehow
+SYN_PER_TC_CELL = 45
+TCCX_SYNAPSE_SCALE = 0.002
 
 TC_BD_DIST = { # mean_bd [10^7 / mm^3], center [um from pia]
     'L3_4 cluster': {
@@ -158,6 +168,7 @@ PRV_TC_MEAN_TAU = 1
 PRV_FR_STD_FACTOR = 0.2
 PRV_FR_FACTOR = 1
 PRV_WEAK_FACTOR = 0.7
+PRV_REST_RATIO = 0.8
 
 # PRVTC params
 PRV_PER_VPM_CELL = 1

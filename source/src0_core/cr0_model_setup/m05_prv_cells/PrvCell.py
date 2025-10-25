@@ -22,9 +22,10 @@ class PrvCell:
     gid_prv = 0
     fr_fact = conf0.PRV_FR_FACTOR
     fr_std = conf0.PRV_FR_STD_FACTOR
+    rest_fact = conf0.PRV_REST_RATIO
     param_dists = {
         'stim_on_fr': (2.65*50*fr_fact, fr_std*1.6*50*fr_fact),  # FRs were defined for 20ms window, so to get in Hz, has to be multiplied
-        'rest_fr': (11.90*fr_fact, fr_std*12.7*fr_fact)
+        'rest_fr': (11.90*fr_fact*rest_fact, fr_std*12.7*fr_fact*rest_fact)
     }
 
     def __init__(self, rgen, cell_id=None):

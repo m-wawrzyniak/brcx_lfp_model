@@ -2,33 +2,50 @@ import os
 import sys
 import shutil
 import importlib.util
-import re
+import ast
 from datetime import datetime
 import subprocess
+import astor
 
 from source.src3_model_parametrization import BATCH_PARAMETERS
+from config_templates import conf0_model_parameters as default_conf
 
-PROJECT_ROOT = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model"
+PROJECT_ROOT = default_conf.ROOT
 TEMPLATE_CONFIG_DIR = os.path.join(PROJECT_ROOT, "config_templates")
 DATA_ROOT = os.path.join(PROJECT_ROOT, "data")
 
 def create_run_config(base_config_dir: str, model_dir: str, overrides: dict):
-    """Copy config templates into per-model folder and apply overrides."""
+    """Copy config templates into per-model folder and apply overrides safely."""
     os.makedirs(model_dir, exist_ok=True)
+
     for fname in os.listdir(base_config_dir):
         if not fname.endswith(".py"):
             continue
         src = os.path.join(base_config_dir, fname)
         dst = os.path.join(model_dir, fname)
         shutil.copy(src, dst)
-        # Apply overrides (simple key=value replacement)
-        with open(dst, "r+") as f:
-            text = f.read()
-            for key, val in overrides.items():
-                text = re.sub(rf"^{key}\s*=.*$", f"{key} = {repr(val)}", text, flags=re.MULTILINE)
-            f.seek(0)
-            f.write(text)
-            f.truncate()
+
+        if not overrides:
+            continue
+
+        # Safely apply overrides
+        with open(dst, "r") as f:
+            tree = ast.parse(f.read(), filename=dst)
+
+        class ConfigTransformer(ast.NodeTransformer):
+            def visit_Assign(self, node):
+                if isinstance(node.targets[0], ast.Name):
+                    key = node.targets[0].id
+                    if key in overrides:
+                        # Replace value safely
+                        node.value = ast.parse(repr(overrides[key])).body[0].value
+                return node
+
+        tree = ConfigTransformer().visit(tree)
+        ast.fix_missing_locations(tree)
+
+        with open(dst, "w") as f:
+            f.write(astor.to_source(tree))
 
 def load_conf_module(conf_path: str, module_name: str):
     """
@@ -63,7 +80,7 @@ def main():
     print(f"[BATCH SIMULATION] Running batch simulation at {timestamp}")
 
     # Define parameter sweep
-    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_B
+    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_A
 
     for params in PARAM_SETS:
         model_dir = os.path.join(DATA_ROOT, params["MODEL_NAME"], "config")

@@ -47,8 +47,7 @@ def run():
     # inits01 - initialize cxcx synapses
     CXCX_SUMMARY_PATH = paths["setup"]["conn"]["cx_cx"]["cxcx02"]["prune03"]["cxcx_summary.json"]
     CXCX_CONN_PATH = paths["setup"]["conn"]["cx_cx"]["cxcx02"]["prune03"]["prune03_cxcx.json"]
-    # TODO: GLOBAL PATH
-    BBP_PHYSIO_DATA = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_physiology_factsheets_simplified.json"
+    BBP_PHYSIO_DATA = os.path.join(conf0.ROOT, "source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_physiology_factsheets_simplified.json")
     CXCX_SYN_PATH = os.path.join(paths["simulation"]["conn"]["cx_cx"], "cxcx_syns.csv")
     cxcx_parameters = inits01.get_synapse_parameters(
         cx_syns_summary_csv=CXCX_SUMMARY_PATH,

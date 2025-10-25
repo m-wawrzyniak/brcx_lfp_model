@@ -52,29 +52,37 @@ def _plot_cell_lfp_with_morpho(cell_id, lfp_hdf_path, imem_hdf_path, electrode,
 
     # Left: morphology + electrode sites (xz-plane)
     ax0 = axes[0]
-    if soma_coords.size > 0:
-        ax0.scatter(soma_coords[:,0], soma_coords[:,1], c='green', s=30, label='Soma')
     if dend_coords.size > 0:
-        ax0.scatter(dend_coords[:,0], dend_coords[:,1], c='blue', s=10, label='Dendrites')
+        ax0.scatter(dend_coords[:,0], dend_coords[:,1], c='blue', s=5, label='Dendrite')
     if axon_coords.size > 0:
-        ax0.scatter(axon_coords[:,0], axon_coords[:,1], c='red', s=10, label='Axon')
+        ax0.scatter(axon_coords[:,0], axon_coords[:,1], c='red', s=5, label='Axon')
+    if soma_coords.size > 0:
+        ax0.scatter(soma_coords[:,0], soma_coords[:,1], c='green', s=15, label='Soma')
 
-    ax0.scatter(site_xz[:,0], site_xz[:,1], c='black', s=40, marker='x', label='Electrodes')
+    ax0.scatter(site_xz[:,0], site_xz[:,1], c='black', s=40, marker='x', label='Electrode sites')
+    x_off, y_off = 10, 10
     for i, pos in enumerate(site_xz):
-        ax0.text(pos[0], pos[1], site_ids[i], fontsize=8, color='black')
-
+        ax0.text(pos[0]+x_off, pos[1]+y_off, site_ids[i], fontsize=8, color='black')
+    ax0.grid(
+        True,  # turn grid on
+        which='both',  # 'major', 'minor', or 'both'
+        linestyle='--',  # dashed lines
+        linewidth=0.5,  # line thickness
+        color='gray',  # line color
+        alpha=0.7  # transparency
+    )
     ax0.set_xlabel("x [µm]")
     ax0.set_ylabel("z [µm]")
-    ax0.set_title(f"Cell {cell_id} morphology (xz-plane)")
+    ax0.set_title(f"Cortical cell {cell_id} morphology (xz-plane)")
     ax0.legend(fontsize=8)
 
     # Right: LFP traces
     ax1 = axes[1]
     for i, sid in enumerate(site_ids):
-        ax1.plot(tvec, lfp_data[i, :], label=sid)
+        ax1.plot(tvec[5:], lfp_data[i, 5:], label=sid)
     ax1.set_xlabel("Time [ms]")
     ax1.set_ylabel("LFP [a.u.]")
-    ax1.set_title(f"LFP traces for cell {cell_id}")
+    ax1.set_title(f"LFP traces for cortical cell {cell_id}")
     ax1.legend(fontsize=7, loc='upper right')
 
     plt.tight_layout()
@@ -114,7 +122,7 @@ def export_all_cells_lfp_plots(lfp_hdf_path, imem_hdf_path, electrode, out_dir,
         percent = (i / n_cells) * 100
         print(f"\t \t l02: LFP component plotted: {percent:.1f}%")
 
-def plot_net_lfp(lfp_hdf_path, offset=50.0, save_path=None):
+def plot_net_lfp(lfp_hdf_path, offset, save_path=None):
     """
     Plot net LFP (summed over all cortical cells) with offset traces per site.
 
@@ -138,10 +146,11 @@ def plot_net_lfp(lfp_hdf_path, offset=50.0, save_path=None):
         plt.plot(time, trace, label=sid)
 
     plt.xlabel("Time [ms]")
-    plt.ylabel("LFP + offset")
-    plt.title("Net LFP (all cortical cells summed)")
+    plt.ylabel("LFP with spatial offset")
+    plt.title("Net LFP at electrode sites")
     plt.legend(loc="upper right", fontsize=8)
-    plt.ylim(-0.002, 0.006)
+    plt.ylim(-0.001, 0.023)
+    plt.yticks([])
     plt.tight_layout()
 
     if save_path:

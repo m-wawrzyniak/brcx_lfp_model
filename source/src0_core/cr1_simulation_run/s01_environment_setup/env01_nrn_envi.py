@@ -3,9 +3,10 @@ from pathlib import Path
 import contextlib
 from neuron import h
 
-ROOT = Path("/home/mateusz-wawrzyniak/PycharmProjects/som_sens_processing")
-MECH_DIR = Path("/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/nrn_mechanisms")
-CELL_TEMP_DIR = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/cx_cell_templates"
+from config_templates import conf0_model_parameters as conf0
+
+MECH_DIR = Path(os.path.join(conf0.ROOT, "config_templates/nrn_mechanisms"))
+CELL_TEMP_DIR = os.path.join(conf0.ROOT, "config_templates/cx_cell_templates")
 
 @contextlib.contextmanager
 def suppress_stdout_stderr():
@@ -91,6 +92,8 @@ def load_all_templates(cx_cell_templates_dir, just_mtype:bool=True) -> dict:
 
 # --- Initialize NEURON environment ---
 def setup_neuron_env(mech_dir = MECH_DIR):
+    print(f"root: {conf0.ROOT}")
+    print(f"cell temp: {CELL_TEMP_DIR}")
     print("[env01] Creating NEURON environment.")
 
     load_mechanisms(mech_dir)

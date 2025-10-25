@@ -78,7 +78,6 @@ def folder_to_json_with_files(root_path: str, json_file: str):
         json.dump(structure, f, indent=2)
 
 
-# TODO: change all os.path.join with this!
 def new_file_in_dir(dir_like, filename: str) -> Path:
     """
     Return a new file path inside the directory represented by `dir_like`.

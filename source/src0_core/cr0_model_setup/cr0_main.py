@@ -42,8 +42,7 @@ def run():
         output_dir=CX_ME_ASSIGNED_PATH)
 
     # cx03 - cx morphology instantiation
-    # TODO: PATH!
-    CELL_TEMPLATES_PATH = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/config_templates/cx_cell_templates"
+    CELL_TEMPLATES_PATH = os.path.join(conf0.ROOT, "config_templates/cx_cell_templates")
     CX_FULL_POP_DIR = paths["data"][conf0.MODEL_NAME]["setup"]["cells"]["cx"]["cx03"]
     CX_FULL_POP_CSV = os.path.join(CX_FULL_POP_DIR, "cx03_full_pop.csv")
 
@@ -121,8 +120,7 @@ def run():
     )
 
     # Calculating retention rate for each m:m used in 01 general pruning
-    # TODO: PATH!!
-    BBP_PATHWAY_INFO = "/home/mateusz-wawrzyniak/PycharmProjects/brcx_lfp_model/source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json"
+    BBP_PATHWAY_INFO = os.path.join(conf0.ROOT, "source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json")
     cxcx02.setup_01_pruning(
         model_type_sm_csv=os.path.join(PRUNE00_DIR, 'types_sm.csv'),
         goal_type_sm_json=BBP_PATHWAY_INFO,

@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from matplotlib.ticker import MaxNLocator
 from collections import defaultdict
 import math
 from typing import Dict
@@ -19,16 +20,11 @@ STIM_COLORS = {
 }
 
 def cx_plot_me_composition_emp(json_path, save_path=None):
-    """
-    Loads JSON with layer/population info and creates one figure with pie charts
-    for L23, L4, L5, and population. Excitatory (PC, TTPC, SS) are reddish shades,
-    inhibitory are bluish shades. Each slice is progressively deeper in color.
-    """
     # load data
     with open(json_path, "r") as f:
         data = json.load(f)
 
-    layers = ["L23", "L4", "L5", "population"]
+    layers = ["L23", "L4", "L5", "Whole population"]
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     axes = axes.flatten()
@@ -65,20 +61,39 @@ def cx_plot_me_composition_emp(json_path, save_path=None):
                 ordered_sizes.append(val)
                 colors.append(col)
 
+        # custom autopct to make percentages bold
+        def bold_autopct(pct):
+            return f"{pct:.1f}%"
+
+        # adjust pctdistance for whole population to reduce overlap
+        pctdist = 0.7 if layer == "Whole population" else 0.6
+
         wedges, texts, autotexts = ax.pie(
             ordered_sizes,
             labels=ordered_labels,
-            autopct="%.1f%%",
+            autopct=bold_autopct,
             startangle=90,
             colors=colors,
-            textprops={"fontsize": 8}
+            wedgeprops={'edgecolor':'black', 'linewidth':0.5},  # black contour
+            textprops={"fontsize": 8},
+            labeldistance=1.05,
+            pctdistance=pctdist
         )
-        ax.set_title(f"{layer} (n={data[layer]['tot_n_cells']})", fontsize=12)
+
+        # rotate labels for readability
+        for t in texts:
+            t.set_rotation(30)  # adjust angle as needed
+
+        # bold percentages
+        for at in autotexts:
+            at.set_fontweight('bold')
+
+        ax.set_title(f"{layer} (n_cells={data[layer]['tot_n_cells']})", fontsize=12)
 
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path, dpi=200)
+        plt.savefig(save_path, dpi=300)
         plt.close()
     else:
         plt.show()
@@ -90,6 +105,10 @@ def cx_plot_me_composition_theo(layer_comp_params, save_path=None):
     based on target ratios. Excitatory (PC, TTPC, SS) are reddish shades,
     inhibitory are bluish shades. Each slice is progressively deeper in color.
     """
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib import cm
+
     layers = ["L23", "L4", "L5"]
     layer_comp_params = dict(layer_comp_params)
 
@@ -137,19 +156,38 @@ def cx_plot_me_composition_theo(layer_comp_params, save_path=None):
                 ordered_sizes.append(val)
                 colors.append(col)
 
+        # bold percentages
+        def bold_autopct(pct):
+            return f"{pct:.1f}%"
+
+        # adjust pctdistance for whole population to reduce overlap
+        pctdist = 0.7 if layer == "population" else 0.6
+
         wedges, texts, autotexts = ax.pie(
             ordered_sizes,
             labels=ordered_labels,
-            autopct="%.1f%%",
+            autopct=bold_autopct,
             startangle=90,
             colors=colors,
-            textprops={"fontsize": 8}
+            wedgeprops={'edgecolor':'black', 'linewidth':0.5},  # black contour
+            textprops={"fontsize": 8},
+            labeldistance=1.05,
+            pctdistance=pctdist
         )
+
+        # rotate labels for readability
+        for t in texts:
+            t.set_rotation(30)
+
+        # bold percentages
+        for at in autotexts:
+            at.set_fontweight('bold')
+
         ax.set_title(f"{layer} target composition", fontsize=12)
 
     plt.tight_layout()
     if save_path:
-        plt.savefig(save_path, dpi=200)
+        plt.savefig(save_path, dpi=300)
         plt.close()
     else:
         plt.show()
@@ -190,6 +228,7 @@ def cx_somata_dist_z(cx_cells_path: str, save_path, n_bins:int = 40):
     fig, axes = plt.subplots(1, n_desc, figsize=(2.2 * n_desc, 6), sharey=True)
     if n_desc == 1:
         axes = [axes]
+    fig.suptitle("Somata location distribution for all me-types", fontsize=14, y=1.02)
 
     # Plot
     for i, (ax, desc, color) in enumerate(zip(axes, desc_names, colors)):
@@ -208,6 +247,9 @@ def cx_somata_dist_z(cx_cells_path: str, save_path, n_bins:int = 40):
             ax.tick_params(axis='y', left=False, labelleft=False)
         ax.tick_params(axis='x', labelsize=8)
 
+        # Make x-axis ticks integers only
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
     # Layout tuning
     plt.subplots_adjust(wspace=0.05, bottom=0.1, top=0.9)
     plt.tight_layout()
@@ -220,7 +262,7 @@ def cx_somata_dist_z(cx_cells_path: str, save_path, n_bins:int = 40):
 
 def plot_rasterplot(
         save_path: Path,
-        paradigm:dict,
+        paradigm: dict,
         cx_spikes_csv: str,
         vpm_spikes_csv: str,
         prv_spikes_json: str,
@@ -287,25 +329,26 @@ def plot_rasterplot(
     # --- Plot CX spikes grouped by desc ---
     y_pos = 0
     yticks, ylabels = [], []
+    spike_height = 1.0  # slightly taller spikes
     for desc in sorted(cx_grouped.keys()):
         color = color_map[desc]
         for cell_id, spikes in sorted(cx_grouped[desc], key=lambda x: x[0]):
-            ax.vlines(spikes, y_pos + 0.5, y_pos + 1.5, color=color)
-            yticks.append(y_pos + 1)
+            ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color=color)
+            yticks.append(y_pos + 0.5 + spike_height / 2)
             ylabels.append(str(cell_id))
             y_pos += 1
 
     # --- Plot VPM spikes (red) ---
     for i, spikes in enumerate(vpm_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 1.5, color='red')
-        yticks.append(y_pos + 1)
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color='red')
+        yticks.append(y_pos + 0.5 + spike_height / 2)
         ylabels.append(vpm_ids[i])
         y_pos += 1
 
     # --- Plot PRV spikes (green) ---
     for i, spikes in enumerate(prv_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 1.5, color='green')
-        yticks.append(y_pos + 1)
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color='green')
+        yticks.append(y_pos + 0.5 + spike_height / 2)
         ylabels.append(prv_ids[i])
         y_pos += 1
 
@@ -314,8 +357,11 @@ def plot_rasterplot(
     ax.set_yticklabels(ylabels, fontsize=6)
     ax.set_xlabel("Time (ms)")
     ax.set_ylabel("Cell ID")
-    ax.set_title("Raster plot with stimulation phases")
+    ax.set_title("Rasterplot based on model activity during whisker stimulation")
     ax.set_ylim(0.5, total_cells + 0.5)
+
+    # Vertical grid at major ticks
+    ax.grid(axis='x', which='major', linestyle='--', color='gray', alpha=0.5)
 
     # Legend for cortical cell groups
     handles = [plt.Line2D([0], [0], color=color_map[desc], lw=2) for desc in sorted(cx_grouped.keys())]
@@ -324,6 +370,7 @@ def plot_rasterplot(
     plt.tight_layout()
     plt.savefig(save_path, dpi=600, format="pdf")
     plt.close()
+
 
 def calc_goal_densities(layer_comp_target:dict[str, list],
                         tissue_params:dict,

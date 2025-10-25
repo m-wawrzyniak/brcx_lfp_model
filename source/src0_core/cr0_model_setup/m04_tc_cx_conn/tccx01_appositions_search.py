@@ -64,7 +64,7 @@ def calc_tc_bd_dist(h_start:float, h_stop:float, save_path) -> np.ndarray:
     plt.plot(result[:, 0], result[:, 1], drawstyle='steps-mid')
     plt.xlabel("Depth from pia [um]")
     plt.ylabel("Bouton Density [$10^7 / mm^3$]")
-    plt.title("Approximate TC Bouton Density")
+    plt.title("Empirical TC-CX bouton density distribution with respect to cortical depth")
     plt.grid(True)
     plt.tight_layout()
     save_path = os.path.join(save_path)
