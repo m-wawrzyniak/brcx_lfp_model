@@ -176,6 +176,7 @@ PRV_PER_VPM_CELL = 1
 # STIMULATION params
 STIM_PARADIGM_TYPE = 'single'
 STIM_PARADIGM_SUBTYPE = 'str200'
+STIM_PARADIGM_SUBTYPE_INVIVO = 'strong'
 
 WHISKER_STIMULATION_PARADIGMS = {
     'rest':{
@@ -183,7 +184,7 @@ WHISKER_STIMULATION_PARADIGMS = {
     },
     'single':{
         'wk200':{'prestim':('r', 200), 'single':('wk', 10), 'poststim':('r', 500-210)},
-        'str200':{'prestim':('r', 260), 'single':('str', 10), 'poststim':('r', 770-210)}
+        'str200':{'prestim':('r', 500), 'single':('str', 10), 'poststim':('r', 770-510)}
     },
     'ppi':{
         's76':{'prestim':('r', 200), 'prepulse':('str', 10), 'interval':('r', 76-10), 'pulse':('wk', 10), 'poststim':('r', 500-296)},

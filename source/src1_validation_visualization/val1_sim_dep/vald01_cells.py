@@ -20,12 +20,18 @@ STIM_COLORS = {
 }
 
 def cx_plot_me_composition_emp(json_path, save_path=None):
-    # load data
+    """
+    Loads JSON with layer/population info and creates one figure with pie charts
+    for L23, L4, L5, and the whole population. Excitatory (PC, TTPC, SS) are reddish shades,
+    inhibitory are bluish shades. Each slice is progressively deeper in color.
+
+    Aggregates me_types by removing the layer prefix (e.g. 'L4_TTPC2' → 'TTPC2').
+    """
+    # Load data
     with open(json_path, "r") as f:
         data = json.load(f)
 
-    layers = ["L23", "L4", "L5", "Whole population"]
-
+    layers = ["L23", "L4", "L5", "population"]
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     axes = axes.flatten()
 
@@ -33,114 +39,24 @@ def cx_plot_me_composition_emp(json_path, save_path=None):
         ax = axes[i]
         layer_data = data[layer]["me_types"]
 
-        labels = list(layer_data.keys())
-        sizes = list(layer_data.values())
+        # Group by removing layer prefix (keep everything after first underscore)
+        grouped = {}
+        for lbl, val in layer_data.items():
+            suffix = lbl.split("_", 1)[-1] if "_" in lbl else lbl  # 'L4_TTPC2' → 'TTPC2'
+            grouped[suffix] = grouped.get(suffix, 0) + val
 
-        # split into excitatory and inhibitory
-        excitatory = [(lbl, val) for lbl, val in zip(labels, sizes)
-                      if any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
-        inhibitory = [(lbl, val) for lbl, val in zip(labels, sizes)
-                      if not any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
+        # Split into excitatory and inhibitory based on suffix
+        excitatory = [(lbl, val) for lbl, val in grouped.items() if any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
+        inhibitory = [(lbl, val) for lbl, val in grouped.items() if not any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
 
-        # create progressive red shades for excitatory
+        # Sort for consistent color ordering
+        excitatory = sorted(excitatory)
+        inhibitory = sorted(inhibitory)
+
+        # Create progressive shades
         colors = []
         ordered_labels = []
         ordered_sizes = []
-
-        if excitatory:
-            reds = cm.Reds(np.linspace(0.5, 0.9, len(excitatory)))  # lighter → deeper red
-            for (lbl, val), col in zip(excitatory, reds):
-                ordered_labels.append(lbl)
-                ordered_sizes.append(val)
-                colors.append(col)
-
-        if inhibitory:
-            blues = cm.Blues(np.linspace(0.5, 0.9, len(inhibitory)))  # lighter → deeper blue
-            for (lbl, val), col in zip(inhibitory, blues):
-                ordered_labels.append(lbl)
-                ordered_sizes.append(val)
-                colors.append(col)
-
-        # custom autopct to make percentages bold
-        def bold_autopct(pct):
-            return f"{pct:.1f}%"
-
-        # adjust pctdistance for whole population to reduce overlap
-        pctdist = 0.7 if layer == "Whole population" else 0.6
-
-        wedges, texts, autotexts = ax.pie(
-            ordered_sizes,
-            labels=ordered_labels,
-            autopct=bold_autopct,
-            startangle=90,
-            colors=colors,
-            wedgeprops={'edgecolor':'black', 'linewidth':0.5},  # black contour
-            textprops={"fontsize": 8},
-            labeldistance=1.05,
-            pctdistance=pctdist
-        )
-
-        # rotate labels for readability
-        for t in texts:
-            t.set_rotation(30)  # adjust angle as needed
-
-        # bold percentages
-        for at in autotexts:
-            at.set_fontweight('bold')
-
-        ax.set_title(f"{layer} (n_cells={data[layer]['tot_n_cells']})", fontsize=12)
-
-    plt.tight_layout()
-
-    if save_path:
-        plt.savefig(save_path, dpi=300)
-        plt.close()
-    else:
-        plt.show()
-
-
-def cx_plot_me_composition_theo(layer_comp_params, save_path=None):
-    """
-    Creates one figure with pie charts for L23, L4, L5, and population
-    based on target ratios. Excitatory (PC, TTPC, SS) are reddish shades,
-    inhibitory are bluish shades. Each slice is progressively deeper in color.
-    """
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib import cm
-
-    layers = ["L23", "L4", "L5"]
-    layer_comp_params = dict(layer_comp_params)
-
-    # add population by averaging across layers
-    population = {}
-    for layer in layers:
-        for k, v in layer_comp_params[layer].items():
-            population[k] = population.get(k, 0) + v
-    # normalize to sum=1
-    total = sum(population.values())
-    for k in population:
-        population[k] /= total
-    layer_comp_params["population"] = population
-
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-    axes = axes.flatten()
-
-    for i, layer in enumerate(["L23", "L4", "L5", "population"]):
-        ax = axes[i]
-        layer_data = layer_comp_params[layer]
-
-        labels = list(layer_data.keys())
-        sizes = list(layer_data.values())
-
-        # split into excitatory and inhibitory
-        excitatory = [(lbl, val) for lbl, val in zip(labels, sizes)
-                      if any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
-        inhibitory = [(lbl, val) for lbl, val in zip(labels, sizes)
-                      if not any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
-
-        # create progressive red/blue shades
-        colors, ordered_labels, ordered_sizes = [], [], []
 
         if excitatory:
             reds = cm.Reds(np.linspace(0.5, 0.9, len(excitatory)))
@@ -156,41 +72,97 @@ def cx_plot_me_composition_theo(layer_comp_params, save_path=None):
                 ordered_sizes.append(val)
                 colors.append(col)
 
-        # bold percentages
-        def bold_autopct(pct):
-            return f"{pct:.1f}%"
-
-        # adjust pctdistance for whole population to reduce overlap
-        pctdist = 0.7 if layer == "population" else 0.6
-
+        # Plot pie chart
         wedges, texts, autotexts = ax.pie(
             ordered_sizes,
             labels=ordered_labels,
-            autopct=bold_autopct,
+            autopct="%.1f%%",
             startangle=90,
             colors=colors,
-            wedgeprops={'edgecolor':'black', 'linewidth':0.5},  # black contour
-            textprops={"fontsize": 8},
-            labeldistance=1.05,
-            pctdistance=pctdist
+            textprops={"fontsize": 8}
         )
 
-        # rotate labels for readability
-        for t in texts:
-            t.set_rotation(30)
-
-        # bold percentages
-        for at in autotexts:
-            at.set_fontweight('bold')
-
-        ax.set_title(f"{layer} target composition", fontsize=12)
+        ax.set_title(f"{layer} (n_cells={data[layer]['tot_n_cells']})", fontsize=12)
 
     plt.tight_layout()
+
     if save_path:
         plt.savefig(save_path, dpi=300)
         plt.close()
     else:
         plt.show()
+
+
+
+def cx_plot_me_composition_theo(layer_comp_params, save_path=None):
+    """
+    Creates one figure with pie charts for L23, L4, L5, and population based on target ratios.
+    Excitatory (PC, TTPC, SS) are reddish shades, inhibitory are bluish shades.
+    Each slice is progressively deeper in color.
+    """
+    layers = ["L23", "L4", "L5"]
+    layer_comp_params = dict(layer_comp_params)
+
+    # add population by averaging across layers
+    population = {}
+    for layer in layers:
+        for k, v in layer_comp_params[layer].items():
+            population[k] = population.get(k, 0) + v
+
+    # normalize to sum=1
+    total = sum(population.values())
+    for k in population:
+        population[k] /= total
+
+    layer_comp_params["population"] = population
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    axes = axes.flatten()
+
+    for i, layer in enumerate(["L23", "L4", "L5", "population"]):
+        ax = axes[i]
+        layer_data = layer_comp_params[layer]
+        labels = list(layer_data.keys())
+        sizes = list(layer_data.values())
+
+        # split into excitatory and inhibitory
+        excitatory = [(lbl, val) for lbl, val in zip(labels, sizes) if any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
+        inhibitory = [(lbl, val) for lbl, val in zip(labels, sizes) if not any(exc in lbl for exc in ["PC", "TTPC", "SS"])]
+
+        # create progressive red/blue shades
+        colors, ordered_labels, ordered_sizes = [], [], []
+        if excitatory:
+            reds = cm.Reds(np.linspace(0.5, 0.9, len(excitatory)))
+            for (lbl, val), col in zip(excitatory, reds):
+                ordered_labels.append(lbl)
+                ordered_sizes.append(val)
+                colors.append(col)
+        if inhibitory:
+            blues = cm.Blues(np.linspace(0.5, 0.9, len(inhibitory)))
+            for (lbl, val), col in zip(inhibitory, blues):
+                ordered_labels.append(lbl)
+                ordered_sizes.append(val)
+                colors.append(col)
+
+        wedges, texts, autotexts = ax.pie(
+            ordered_sizes,
+            labels=ordered_labels,
+            autopct="%.1f%%",
+            startangle=90,
+            colors=colors,
+            textprops={"fontsize": 8}
+        )
+
+        ax.set_title(f"{layer} target composition", fontsize=12)
+
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=300)
+        plt.close()
+    else:
+        plt.show()
+
 
 
 def cx_somata_dist_z(cx_cells_path: str, save_path, n_bins:int = 40):

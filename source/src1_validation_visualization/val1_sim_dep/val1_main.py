@@ -34,8 +34,8 @@ def run(model_name):
     )
 
     CX_ME_SUMMARY_PATH = paths["setup"]["cells"]["cx"]["cx02"]["me_comp_summary.json"]
-    CX_COMP_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "cx_composition_emp.jpg")
-    CX_COMP_THEO_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "cx_composition_theo.jpg")
+    CX_COMP_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "cx_composition_emp.png")
+    CX_COMP_THEO_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["cells"]["cx"], "cx_composition_theo.png")
     vald01.cx_plot_me_composition_emp(
         json_path=CX_ME_SUMMARY_PATH,
         save_path=CX_COMP_EMP_SAVEPATH

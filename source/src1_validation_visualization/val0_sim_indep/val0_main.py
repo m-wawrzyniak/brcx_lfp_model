@@ -42,7 +42,7 @@ def run(model_name):
         tc_cell=tc_cell
     )
     # cx morpho distribution along z-axis
-    CX_Z_DIST_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["cx"], "cx_morpho_distribution.jpg")
+    CX_Z_DIST_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["cx"], "cx_morpho_distribution")
     vali01.plot_dend_axon_z_dist(
         cell_templates_path=env01.CELL_TEMP_DIR,
         outdir=CX_Z_DIST_SAVEDIR

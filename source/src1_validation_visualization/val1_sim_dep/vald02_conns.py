@@ -10,29 +10,40 @@ from itertools import product
 from source.src2_utils.ut0_random_manager import np
 
 def conn_matrix_emp(csv_file, save_path, layer_comp_params, unique_connections=False):
+    """
+    Plot cortico-cortical connectivity matrix with connection counts and global ratios (% of all connections).
+
+    Args:
+        csv_file (str): Path to CSV file with columns ['pre_id', 'post_id', 'pre_me_type', 'post_me_type'].
+        save_path (str | None): Path to save figure; if None, display interactively.
+        layer_comp_params (dict): e.g. {"L23": {"exc": ..., "inh": ...}, "L5": {...}}
+        unique_connections (bool): Whether to count only unique pre→post pairs.
+    """
     # Read CSV
     df = pd.read_csv(csv_file)
 
-    # If counting unique connections, drop duplicates based on pre_id + post_id
+    # Drop duplicates if requested
     if unique_connections:
         df = df.drop_duplicates(subset=['pre_id', 'post_id'])
 
-    # Generate all full cell types
+    # Generate list of all cell types (layer + subtype)
     cell_types = [f"{layer}_{ctype}" for layer, types in layer_comp_params.items() for ctype in types.keys()]
 
     # Initialize matrices
     conn_matrix_ratio = pd.DataFrame(0.0, index=cell_types, columns=cell_types)
     conn_matrix_count = pd.DataFrame(0, index=cell_types, columns=cell_types, dtype=int)
 
-    # Compute counts and ratios
+    # Global total number of connections
+    total_all = len(df)
+
+    # Compute connection counts and global ratios
     for pre_type in cell_types:
-        total_possible = len(df[df['pre_me_type'] == pre_type])
         for post_type in cell_types:
             actual = len(df[(df['pre_me_type'] == pre_type) & (df['post_me_type'] == post_type)])
             conn_matrix_count.loc[pre_type, post_type] = actual
-            conn_matrix_ratio.loc[pre_type, post_type] = 100 * actual / total_possible if total_possible > 0 else 0.0
+            conn_matrix_ratio.loc[pre_type, post_type] = 100 * actual / total_all if total_all > 0 else 0.0
 
-    # Create combined labels for heatmap: count \n ratio%
+    # Create combined labels for heatmap: "count\nratio%"
     labels = conn_matrix_count.astype(str) + "\n" + conn_matrix_ratio.round(2).astype(str) + "%"
 
     # Plot heatmap
@@ -43,25 +54,21 @@ def conn_matrix_emp(csv_file, save_path, layer_comp_params, unique_connections=F
         fmt="",
         cmap="viridis",
         cbar_kws={'label': 'Connection ratio (%)'},
-        linewidths=0.5,         # adds grid lines between cells
-        linecolor='black',      # darker borders
-        square=True             # make cells square
+        linewidths=0.5,
+        linecolor='black',
+        square=True
     )
 
     # Titles and labels
-    if unique_connections:
-        title = "Cortico-cortical connectivity matrix: connection count and row-wise ratio (%)"
-    else:
-        title = "Cortico-cortical connectivity matrix: synapse count and row-wise ratio (%)"
+    title = "Cortico-cortical connectivity matrix: count and global ratio (%)"
     ax.set_title(title, fontsize=13, pad=20)
     ax.set_xlabel("Post-synaptic cell type", fontsize=12, labelpad=10)
     ax.set_ylabel("Pre-synaptic cell type", fontsize=12, labelpad=10)
 
-    # Rotate bottom tick labels for readability
+    # Rotate tick labels
     plt.xticks(rotation=45, ha='right')
     plt.yticks(rotation=0)
 
-    # Tight layout to keep everything visible and centered
     plt.tight_layout()
 
     # Save or show
@@ -90,7 +97,7 @@ def conn_matrix_theo(json_file, layer_comp_params, save_path=None):
         pre, post = pair.split(":")
         if pre in cell_types and post in cell_types:
             conn_matrix_count.loc[pre, post] = values.get("total_synapse_count", 0)
-            conn_matrix_ratio.loc[pre, post] = 100 * values.get("connection_probability", 0.0)  # Convert to %
+            conn_matrix_ratio.loc[pre, post] = values.get("connection_probability", 0.0)  # Convert to %
 
     # Create combined labels: count \n ratio%
     labels = conn_matrix_count.astype(str) + "\n" + conn_matrix_ratio.round(2).astype(str) + "%"
@@ -228,13 +235,13 @@ def interbouton_int_histogram(cx_pop_csv:Path, bins:int = 30, save_path= None):
     plot_title = title_map.get(file_name, file_name)  # fallback to filename if not in map
 
     plt.figure(figsize=(8, 5))
-    plt.hist(data, bins=bins, edgecolor='black')
+    bins_edges = np.linspace(0, 100, bins + 1)  # 30 bins between 0 and 100
+    plt.hist(data, bins=bins_edges, edgecolor='black')
+    plt.xlim(0, 100)
     plt.grid(True)
-    plt.xlim(0, 100)  # limit x-axis to 0-100
-    plt.xlabel("Interbouton interval (um)")
+    plt.xlabel("Interbouton interval (µm)")
     plt.ylabel("No. cells")
     plt.title(f"Distribution of interbouton interval ({plot_title})")
-    plt.grid(True)
     plt.tight_layout()
 
     plt.savefig(save_path)
@@ -358,19 +365,29 @@ def plot_conn_prob_with_distance(cx_cells_csv, cxcx_synapses_json, savepath,
     bins = df["bin_start"].values
     probs = df["conn_prob"].values
 
-    # Use bar plot for histogram
+    title_map = {
+        "conn_prob_pre.jpg": "pre-pruning",
+        "conn_prob_post1.jpg": "after General Pruning (01)",
+        "conn_prob_post2.jpg": "after Multisynapse Pruning (02)",
+        "conn_prob_post3.jpg": "after Plasticity-Reserve Pruning (03)"
+    }
+
+    savepath = Path(savepath)  # make sure it's a Path object
+
+    # determine descriptive title
+    plot_title = title_map.get(savepath.name, savepath.name)
+
     plt.figure(figsize=(8, 4))
     plt.bar(bins, probs, width=bin_size, edgecolor='black', align='edge')
     plt.xlabel("Distance between somata (µm)")
     plt.ylabel("Connection probability")
-    plt.title("Connection Probability vs Distance")
+    plt.title(f"Cortical cell connection probability v. distance, {plot_title}")
     plt.xlim(0, 1000)
     plt.ylim(0, 1)
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.grid(True, linestyle='--', alpha=0.6, axis='y')
     plt.tight_layout()
 
-    # Save figure
     plt.savefig(savepath, dpi=300)
     if show:
         plt.show()

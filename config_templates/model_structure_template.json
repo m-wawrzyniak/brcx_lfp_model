@@ -57,12 +57,24 @@
         "lfp/": {
           "raw/": null,
           "reconstructed/": null
+        },
+        "invivo_lfp/":{
+          "invivo_exported/": null,
+          "trimmed/": null,
+          "baselined/": null,
+          "filtered/": null
         }
       },
       "visualizations/": {
         "lfp/": {
           "component_lfp/": null,
           "net_lfp/": null
+        },
+        "invivo_lfp/": {
+          "invivo_exported/": null,
+          "trimmed/": null,
+          "baselined/": null,
+          "filtered/": null
         },
         "sim_indep/": {
           "cells/": {

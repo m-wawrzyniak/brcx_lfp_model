@@ -164,6 +164,10 @@ def conn_epsp_plot(me_pair_epsp_dir: str):
     Args:
         me_pair_epsp_dir (str): Root directory containing pair subdirectories.
     """
+    import os
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
     me_pair_epsp_dir = os.path.abspath(me_pair_epsp_dir)
     for pair_name in os.listdir(me_pair_epsp_dir):
         pair_dir = os.path.join(me_pair_epsp_dir, pair_name)
@@ -191,30 +195,46 @@ def conn_epsp_plot(me_pair_epsp_dir: str):
         pre_id = cellv_df.columns[1]
         post_id = cellv_df.columns[2]
 
+        # Parse pair name for title
+        parts = pair_name.split("_")
+        if len(parts) >= 4:
+            pre_me = "_".join(parts[1:4])
+            post_me = "_".join(parts[4:])
+            title = f"PSP for connection type: [{pre_me} → {post_me}]"
+        else:
+            title = f"PSP: {pair_name}"
+
         # Plot
         fig, axes = plt.subplots(3, 1, figsize=(8, 8), sharex=True)
-        fig.suptitle(pair_name.replace("_", " "), fontsize=12)
+        fig.suptitle(title, fontsize=12)
 
-        axes[0].plot(time, pre_v, color='tab:blue')
-        axes[0].set_ylabel(f"Pre-cell V (mV)\n[{pre_id}]")
+        # --- Presynaptic ---
+        axes[0].plot(time, pre_v, color='tab:blue', linewidth=1)
+        axes[0].set_ylabel(f"Presynaptic cell potential [mV]\n(cell_id={pre_id})")
+        axes[0].set_ylim(-100, 50)
+        axes[0].tick_params(labelbottom=False)
         axes[0].grid(True, alpha=0.3)
 
-        axes[1].plot(time, post_v, color='tab:orange')
-        axes[1].set_ylabel(f"Post-cell V (mV)\n[{post_id}]")
+        # --- Postsynaptic ---
+        axes[1].plot(time, post_v, color='tab:orange', linewidth=1)
+        axes[1].set_ylabel(f"Postsynaptic cell potential [mV]\n(cell_id={post_id})")
+        axes[1].tick_params(labelbottom=False)
         axes[1].grid(True, alpha=0.3)
 
+        # --- Synaptic currents ---
         for col in syni_df.columns[1:]:
-            axes[2].plot(syni_df.iloc[:, 0], syni_df[col], label=col)
-        axes[2].set_xlabel("Time (ms)")
-        axes[2].set_ylabel("Synaptic I (nA)")
-        axes[2].legend(fontsize=8, ncol=2, loc='upper right', frameon=False)
+            axes[2].plot(syni_df.iloc[:, 0], syni_df[col], linewidth=0.75)
+        axes[2].set_xlabel("Time [ms]")
+        axes[2].set_ylabel("Synaptic currents [nA]")
         axes[2].grid(True, alpha=0.3)
 
-        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        # No legend this time
+
+        plt.tight_layout(rect=[0, 0, 1, 0.96])  # adjusted since no legend space needed
 
         # Save
         out_path = os.path.join(pair_dir, "epsp_plot.png")
-        plt.savefig(out_path, dpi=200)
+        plt.savefig(out_path, dpi=300)
         plt.close(fig)
         print(f"[SAVED] {out_path}")
 
