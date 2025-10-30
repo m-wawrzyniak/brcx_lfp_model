@@ -240,6 +240,7 @@ def plot_rasterplot(
         prv_spikes_json: str,
         cell_pop_path: str
 ):
+    # --- Load cortical spikes ---
     cx_spikes_raw, cx_ids = [], []
     with open(cx_spikes_csv, 'r') as f:
         next(f)
@@ -256,7 +257,7 @@ def plot_rasterplot(
         for line in f:
             cell_id, spikes_str = line.strip().split(',', 1)
             spikes = list(map(float, spikes_str.split())) if spikes_str else []
-            vpm_ids.append(cell_id)
+            vpm_ids.append(str(cell_id))
             vpm_spikes.append(spikes)
 
     # --- Load PRV spikes ---
@@ -265,31 +266,47 @@ def plot_rasterplot(
         prv_data = json.load(f)
         for prv_id, data in prv_data.items():
             spikes = data.get("spike_times", [])
-            prv_ids.append(prv_id)
+            prv_ids.append(str(prv_id))
             prv_spikes.append(spikes)
 
-    # --- Load cortical cell population metadata ---
+    # --- Load cortical metadata ---
     cell_meta = pd.read_csv(cell_pop_path)
     cx_id_to_desc = dict(zip(cell_meta["cell_id"], cell_meta["desc"]))
 
-    # Group CX spikes by desc
+    # --- Group cortical spikes by full ME-type ---
     cx_grouped = defaultdict(list)
     for cell_id, spikes in zip(cx_ids, cx_spikes_raw):
         desc = cx_id_to_desc.get(cell_id, "Unknown")
         cx_grouped[desc].append((cell_id, spikes))
 
-    # Assign colors to desc groups
+    all_desc_sorted = sorted(cx_grouped.keys())
+
+    # --- Layer-based color map for cortical cells ---
+    layer_colors = {
+        "L23": plt.cm.Blues,
+        "L4": plt.cm.YlOrBr,
+        "L5": plt.cm.Purples,
+    }
     color_map = {}
-    cmap = plt.get_cmap("tab20")
-    for i, desc in enumerate(sorted(cx_grouped.keys())):
-        color_map[desc] = cmap(i % cmap.N)
+    for layer in ["L23", "L4", "L5"]:
+        layer_descs = [d for d in all_desc_sorted if d.startswith(layer)]
+        n = len(layer_descs)
+        if n > 0:
+            for i, desc in enumerate(layer_descs):
+                color_map[desc] = layer_colors[layer](0.4 + 0.6 * (i / max(1, n - 1)))
+
+    # Assign colors for VPM and PRV
+    for desc in vpm_ids:
+        color_map[desc] = "red"
+    for desc in prv_ids:
+        color_map[desc] = "green"
 
     # --- Prepare plot ---
     total_cells = len(cx_ids) + len(vpm_ids) + len(prv_ids)
-    fig_height = max(8, total_cells * 0.05)   # auto-scale height
+    fig_height = max(8, total_cells * 0.05)
     fig, ax = plt.subplots(figsize=(12, fig_height))
 
-    # --- Add background for stimulation phases ---
+    # --- Background for stimulation phases ---
     x_start = 0
     for phase, (phase_type, duration) in paradigm.items():
         if duration == 0:
@@ -298,46 +315,62 @@ def plot_rasterplot(
         ax.axvspan(x_start, x_end, color=STIM_COLORS.get(phase_type, 'gray'), alpha=0.3)
         x_start = x_end
 
-    # --- Plot CX spikes grouped by desc ---
+    # --- Plot cortical spikes ---
     y_pos = 0
-    yticks, ylabels = [], []
-    spike_height = 1.0  # slightly taller spikes
-    for desc in sorted(cx_grouped.keys()):
-        color = color_map[desc]
-        for cell_id, spikes in sorted(cx_grouped[desc], key=lambda x: x[0]):
-            ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color=color)
-            yticks.append(y_pos + 0.5 + spike_height / 2)
-            ylabels.append(str(cell_id))
+    pop_boundaries = []
+    spike_height = 1  # thicker spikes
+
+    population_labels = []
+
+    for desc in all_desc_sorted:
+        color = color_map.get(desc, "black")
+        group = sorted(cx_grouped[desc], key=lambda x: x[0])
+        start_y = y_pos
+        for cell_id, spikes in group:
+            ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color=color, linewidth=1.6)
             y_pos += 1
+        end_y = y_pos
+        pop_boundaries.append(end_y)
+        population_labels.append((desc, (start_y + end_y)/2))
 
-    # --- Plot VPM spikes (red) ---
-    for i, spikes in enumerate(vpm_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color='red')
-        yticks.append(y_pos + 0.5 + spike_height / 2)
-        ylabels.append(vpm_ids[i])
+    # --- VPM spikes ---
+    start_y = y_pos
+    for desc, spikes in zip(vpm_ids, vpm_spikes):
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="red", linewidth=1.2)
         y_pos += 1
+    end_y = y_pos
+    pop_boundaries.append(end_y)
+    population_labels.append(("VPM", (start_y + end_y)/2))
 
-    # --- Plot PRV spikes (green) ---
-    for i, spikes in enumerate(prv_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color='green')
-        yticks.append(y_pos + 0.5 + spike_height / 2)
-        ylabels.append(prv_ids[i])
+    # --- PRV spikes ---
+    start_y = y_pos
+    for desc, spikes in zip(prv_ids, prv_spikes):
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="green", linewidth=1.2)
         y_pos += 1
+    end_y = y_pos
+    pop_boundaries.append(end_y)
+    population_labels.append(("PRV", (start_y + end_y)/2))
+
+    # --- Draw horizontal separators ---
+    for boundary in pop_boundaries[:-1]:
+        ax.axhline(boundary + 0.5, color='black', linewidth=0.5, alpha=0.6)
+
+    # --- Right-aligned population labels ---
+    x_max = max([max(spikes) if spikes else 0 for spikes_list in [cx_spikes_raw, vpm_spikes, prv_spikes] for spikes in spikes_list]) * 1.02
+    for label, y_center in population_labels:
+        ax.text(x_max, y_center, label, ha='right', va='center', fontsize=8)
 
     # --- Final touches ---
-    ax.set_yticks(yticks)
-    ax.set_yticklabels(ylabels, fontsize=6)
+    ax.set_yticks([])
     ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Cell ID")
-    ax.set_title("Rasterplot based on model activity during whisker stimulation")
+    ax.set_ylabel("")
+    ax.set_title("Rasterplot — Model activity during whisker stimulation")
     ax.set_ylim(0.5, total_cells + 0.5)
+    ax.grid(axis='x', which='major', linestyle='--', color='gray', alpha=0.4)
 
-    # Vertical grid at major ticks
-    ax.grid(axis='x', which='major', linestyle='--', color='gray', alpha=0.5)
-
-    # Legend for cortical cell groups
-    handles = [plt.Line2D([0], [0], color=color_map[desc], lw=2) for desc in sorted(cx_grouped.keys())]
-    ax.legend(handles, sorted(cx_grouped.keys()), title="Cortical cell types", bbox_to_anchor=(1.05, 1), loc='upper left')
+    # --- Legend for cortical ME-types only ---
+    handles = [plt.Line2D([0], [0], color=color_map[desc], lw=4, label=desc) for desc in all_desc_sorted]
+    ax.legend(handles=handles, title="Cortical cell types", bbox_to_anchor=(1.05, 1), loc='upper left')
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=600, format="pdf")

@@ -211,7 +211,7 @@ def conn_epsp_plot(me_pair_epsp_dir: str):
         # --- Presynaptic ---
         axes[0].plot(time, pre_v, color='tab:blue', linewidth=1)
         axes[0].set_ylabel(f"Presynaptic cell potential [mV]\n(cell_id={pre_id})")
-        axes[0].set_ylim(-100, 50)
+        axes[0].set_ylim(-110, 60)
         axes[0].tick_params(labelbottom=False)
         axes[0].grid(True, alpha=0.3)
 

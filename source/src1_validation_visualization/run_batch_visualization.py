@@ -64,7 +64,7 @@ def run_validation_subprocess(conf0_p, conf01_p, conf02_p,
 def main(run_sim_dep=True, run_sim_indep=True):
     timestamp = datetime.now().strftime("%m-%d_%H-%M")
     print(f"[BATCH VALIDATION] Running batch validation at {timestamp}")
-    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_A
+    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_B
 
     for params in PARAM_SETS:
         model_name = params["MODEL_NAME"]
@@ -80,4 +80,4 @@ def main(run_sim_dep=True, run_sim_indep=True):
 
 
 if __name__ == "__main__":
-    main(run_sim_indep=False, run_sim_dep=False)
+    main(run_sim_indep=False, run_sim_dep=True)

@@ -8,7 +8,7 @@ from source.src0_core.cr0_model_setup.m01_cx_cells.CellTopology import CellTopol
 
 from source.src2_utils.ut0_random_manager import np
 
-def _run_single_iclamp_cx(cell_type, cell_templates, tstop=1800, delay=600, dur=600, amp=1.5):
+def _run_single_iclamp_cx(cell_type, cell_templates, tstop=1800, delay=600, dur=600, amp=1):
     """
     Run single-cell simulation with IClamp at soma.
     Returns time vector, voltage vector, and current vector.
@@ -49,16 +49,23 @@ def run_iclamp_cx(save_dir, cell_templates, tstop=1500, delay=500, dur=500, amp=
             gridspec_kw={'height_ratios': [5, 1]}
         )
 
+        # Determine tick positions every 100 ms
+        xticks = np.arange(0, tstop + 100, 100)
+
         # --- Somatic membrane potential ---
         ax1.plot(t, v, linewidth=1, color='black')
         ax1.set_ylabel("Somata membrane potential [mV]", fontsize=11)
         ax1.set_ylim(-100, 40)
         ax1.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
-        ax1.set_xticklabels([])  # remove x-tick labels
-        ax1.tick_params(axis='x', length=0)
         ax1.set_title(f"Cortical {cell_type} response to injected current at the somata", fontsize=13, pad=15)
 
-        # Align y-label position
+        # Vertical dashed lines every 100 ms
+        for x in xticks:
+            ax1.axvline(x=x, color='gray', linestyle='--', linewidth=0.5, alpha=0.4)
+
+        # Remove x-tick labels and ticks
+        ax1.set_xticks([])
+        ax1.tick_params(axis='x', length=0)
         ax1.yaxis.set_label_coords(-0.08, 0.5)
 
         # --- Injected current ---
@@ -67,6 +74,9 @@ def run_iclamp_cx(save_dir, cell_templates, tstop=1500, delay=500, dur=500, amp=
         ax2.set_ylabel("Current injected [nA]", fontsize=11)
         ax2.set_ylim(-0.5, 2.5)
         ax2.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+
+        # Set x-ticks every 100 ms on the bottom plot
+        ax2.set_xticks(xticks)
 
         # Align y-label position
         ax2.yaxis.set_label_coords(-0.08, 0.5)
@@ -80,7 +90,8 @@ def run_iclamp_cx(save_dir, cell_templates, tstop=1500, delay=500, dur=500, amp=
 
 
 
-def _run_single_iclamp_tc(tc_cell, tstop=1500, delay=500, dur=500, amp=3, v_init=-70):
+
+def _run_single_iclamp_tc(tc_cell, tstop, delay, dur, amp, v_init):
     """Run IClamp stimulation on a VPMCell (variant = follower/initiator)."""
 
     # Inject current at soma
@@ -103,7 +114,7 @@ def _run_single_iclamp_tc(tc_cell, tstop=1500, delay=500, dur=500, amp=3, v_init
 
     return list(t_vec), list(v_vec), list(i_vec), tc_cell.get_spike_times()
 
-def run_iclamp_tc(save_dir, **kwargs):
+def run_iclamp_tc(save_dir, tc_cell, tstop=1500, delay=500, dur=500, amp=1.5, v_init=-70):
     """
     Runs IClamp simulation for a thalamic relay (TC) cell and saves
     the membrane potential and injected current plots.
@@ -112,7 +123,7 @@ def run_iclamp_tc(save_dir, **kwargs):
     """
     os.makedirs(save_dir, exist_ok=True)
 
-    t, v, i, spikes = _run_single_iclamp_tc(**kwargs)
+    t, v, i, spikes = _run_single_iclamp_tc(tc_cell=tc_cell, tstop=tstop, delay=delay, dur=dur, amp=amp, v_init=v_init)
 
     # Create figure
     fig, (ax1, ax2) = plt.subplots(
@@ -123,7 +134,7 @@ def run_iclamp_tc(save_dir, **kwargs):
     # --- Somatic membrane potential ---
     ax1.plot(t, v, linewidth=1, color='black')
     ax1.set_ylabel("Somata membrane potential [mV]", fontsize=11)
-    ax1.set_ylim(-120, 60)
+    ax1.set_ylim(-130, 90)
     ax1.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
     ax1.set_xticklabels([])  # hide x-ticks for top plot
     ax1.tick_params(axis='x', length=0)
@@ -134,6 +145,7 @@ def run_iclamp_tc(save_dir, **kwargs):
     ax1.yaxis.set_label_coords(-0.08, 0.5)
 
     # --- Injected current ---
+
     ax2.plot(t, i, color='red', linewidth=1)
     ax2.set_xlabel("Time [ms]", fontsize=11)
     ax2.set_ylabel("Current injected [nA]", fontsize=11)

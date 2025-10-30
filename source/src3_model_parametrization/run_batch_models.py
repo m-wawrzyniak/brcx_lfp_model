@@ -64,14 +64,18 @@ def load_conf_module(conf_path: str, module_name: str):
 
 
 
-def run_single_model_subprocess(conf0_p, conf01_p, conf02_p):
+def run_single_model_subprocess(conf0_p, conf01_p, conf02_p,
+                                run_cr0=True, run_cr1=True, run_cr2=True):
     """Run a single simulation in a separate Python process to isolate NEURON."""
     cmd = [
         "python",  # or sys.executable to be safe
         os.path.join(PROJECT_ROOT, "source/src3_model_parametrization/run_single_model_wrapper.py"),
         "--conf0", conf0_p,
         "--conf1", conf01_p,
-        "--conf2", conf02_p
+        "--conf2", conf02_p,
+        "--run_cr0", str(int(run_cr0)),
+        "--run_cr1", str(int(run_cr1)),
+        "--run_cr2", str(int(run_cr2))
     ]
     subprocess.run(cmd, check=True)
 
@@ -80,7 +84,7 @@ def main():
     print(f"[BATCH SIMULATION] Running batch simulation at {timestamp}")
 
     # Define parameter sweep
-    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_A
+    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_B
 
     for params in PARAM_SETS:
         model_dir = os.path.join(DATA_ROOT, params["MODEL_NAME"], "config")
@@ -90,7 +94,7 @@ def main():
         conf01_p = os.path.join(model_dir, "conf01_simulation_parameters.py")
         conf02_p = os.path.join(model_dir, "conf02_lfp_parameters.py")
 
-        run_single_model_subprocess(conf0_p, conf01_p, conf02_p)
+        run_single_model_subprocess(conf0_p, conf01_p, conf02_p, run_cr0=False, run_cr1=False)
 
 if __name__ == "__main__":
     main()

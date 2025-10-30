@@ -6,6 +6,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--conf0", required=True)
 parser.add_argument("--conf1", required=True)
 parser.add_argument("--conf2", required=True)
+parser.add_argument("--run_cr0", required=True)
+parser.add_argument("--run_cr1", required=True)
+parser.add_argument("--run_cr2", required=True)
 args = parser.parse_args()
 
 def load_conf_module(conf_path: str, module_name: str):
@@ -24,6 +27,10 @@ from source.src0_core.cr0_model_setup import cr0_main as cr0
 from source.src0_core.cr1_simulation_run import cr1_main as cr1
 from source.src0_core.cr2_lfp_reconstruction import cr2_main as cr2
 
-cr0.run()
-cr1.run()
-cr2.run()
+run_cr0 = bool(int(args.run_cr0))
+run_cr1 = bool(int(args.run_cr1))
+run_cr2 = bool(int(args.run_cr2))
+
+if run_cr0: cr0.run()
+if run_cr1: cr1.run()
+if run_cr2: cr2.run()

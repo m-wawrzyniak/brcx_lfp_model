@@ -126,7 +126,7 @@ def run(model_name):
     # PLOTS
     chosen_plot_func = vali02.plot_comparison_lfp
     invivo_offset = 40
-    model_offset = 0.002
+    model_offset = 0.008
     title_invivo = "LFP registered in-vivo:"
     title_model = "LFP reconstructed:"
 
@@ -173,5 +173,27 @@ def run(model_name):
         title=f"{title_model} band-pass filtered",
         save_path=MODEL_LFP_PLOT_FILT,
         offset=model_offset
+    )
+
+    # ADDITIONAL INTERESTING RESPONSE:
+    INIT_LFP_RESPONSE = ut1.new_file_in_dir(paths["visualizations"]["invivo_lfp"], "init_lfp.csv")
+    INIT_LFP_RESPONSE_PLOT = ut1.new_file_in_dir(paths["visualizations"]["invivo_lfp"], "init_lfp.jpg")
+    vali02.manual_lfp_signal_processing(
+        lfp_csv=MODEL_LFP_CSV,
+        save_path=INIT_LFP_RESPONSE,
+        trim_range=(10, 160),
+        baseline_window=(10, 50),
+        lp_cutoff=paradigm_stand_dict['lp_freq'],
+        hp_cutoff=paradigm_stand_dict['hp_freq'],
+        order=4,
+        fs=1000/conf01.DT
+    )
+
+    chosen_plot_func(
+        lfp_signals_csv=INIT_LFP_RESPONSE,
+        title=f"LFP during the initialization of the cortical cells, at the beginning of the simulation",
+        save_path=INIT_LFP_RESPONSE_PLOT,
+        offset=model_offset,
+        make_dashed=False
     )
 

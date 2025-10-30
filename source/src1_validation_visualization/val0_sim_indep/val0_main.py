@@ -38,8 +38,8 @@ def run(model_name):
     TC_ICLAMP_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["tc"], "tc_iclamp.jpg")
     tc_cell = VPMCell(cell_id="VPM_1")
     vali01.run_iclamp_tc(
+        tc_cell=tc_cell,
         save_dir=TC_ICLAMP_SAVEDIR,
-        tc_cell=tc_cell
     )
     # cx morpho distribution along z-axis
     CX_Z_DIST_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["cx"], "cx_morpho_distribution")

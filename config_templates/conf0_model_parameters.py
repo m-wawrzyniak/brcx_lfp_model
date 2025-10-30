@@ -62,7 +62,7 @@ SCALE_FACTOR = 0.4#0.5           # Scaling factor of the BrCx size. It affects o
 GLOBAL_M = RADIUS//20                  # Number of minicolumns at each layer
 MIN_SOMA_DISTANCE = 10              # Minimal um distance accepted during somata positioning.
 Z_STD = 10//SCALE_FACTOR             # STD applied to z-coord during somata placement.
-X_Y_JITTER_STD = 5#*(RADIUS//GLOBAL_M)
+X_Y_JITTER_STD = 5
 GLOBAL_Z_RANGE = (-2000.0, 0)
 
 TISSUE_PARAMS = {

@@ -231,10 +231,80 @@ def bandpass_filter_signal(lfp_csv, lp_cutoff: float, hp_cutoff: float | None,
 
     return filtered_df
 
-def plot_comparison_lfp(lfp_signals_csv, title, offset=0.002,save_path=None):
+def manual_lfp_signal_processing(
+    lfp_csv: str,
+    save_path: str,
+    trim_range: tuple[float, float],      # (t_start, t_end) in ms
+    baseline_window: tuple[float, float], # (t0, t1) in ms
+    lp_cutoff: float,
+    hp_cutoff: float | None,
+    order: int,
+    fs: float
+) -> pd.DataFrame:
+    """
+    Trim, baseline-correct, and bandpass filter an LFP CSV signal.
+
+    Args:
+        lfp_csv: Path to input CSV with 'time' column.
+        save_path: Path to save processed CSV.
+        trim_range: Tuple of (start_time, end_time) in ms.
+        baseline_window: Time window to compute baseline mean (before trimming if desired).
+        lp_cutoff: Low-pass cutoff frequency (Hz).
+        hp_cutoff: High-pass cutoff frequency (Hz). None = low-pass only.
+        order: Filter order.
+        fs: Sampling frequency (Hz).
+    Returns:
+        Processed DataFrame.
+    """
+    # --- Load CSV ---
+    df = pd.read_csv(lfp_csv)
+    if 'time' not in df.columns:
+        raise ValueError("CSV must contain a 'time' column.")
+
+    # --- Trim signal ---
+    t_start, t_end = trim_range
+    mask = (df['time'] >= t_start) & (df['time'] <= t_end)
+    df_trimmed = df.loc[mask].copy()
+    df_trimmed['time'] = df_trimmed['time'] - t_start
+
+    # --- Baseline correction ---
+    baseline_mask = (df_trimmed['time'] >= baseline_window[0]) & (df_trimmed['time'] <= baseline_window[1])
+    baseline_data = df_trimmed.loc[baseline_mask]
+    baseline_means = baseline_data.drop(columns='time').mean()
+    for col in baseline_means.index:
+        df_trimmed[col] = df_trimmed[col] - baseline_means[col]
+
+    # --- Bandpass / low-pass filter ---
+    nyq = 0.5 * fs
+    if hp_cutoff is None:
+        high = min(lp_cutoff / nyq, 0.99)
+        sos = butter(order, high, btype='low', output='sos')
+    else:
+        low = max(hp_cutoff / nyq, 1e-6)
+        high = min(lp_cutoff / nyq, 0.99)
+        sos = butter(order, [low, high], btype='band', output='sos')
+
+    signal_cols = [c for c in df_trimmed.columns if c != 'time']
+    for col in signal_cols:
+        x = df_trimmed[col].to_numpy(dtype=float)
+        if np.isnan(x).any():
+            nans = np.isnan(x)
+            not_nans = ~nans
+            x[nans] = np.interp(np.flatnonzero(nans), np.flatnonzero(not_nans), x[not_nans])
+        df_trimmed[col] = sosfiltfilt(sos, x)
+
+    # --- Save processed CSV ---
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    df_trimmed.to_csv(save_path, index=False)
+    print(f"Processed LFP saved to: {save_path}")
+
+    return df_trimmed
+
+def plot_comparison_lfp(lfp_signals_csv, title, offset=0.010, save_path=None, make_dashed=True):
     """
     Plots LFP traces from CSV with vertical offsets and inverted site order
-    (earlier sites appear at the top).
+    (earlier sites appear at the top). Adds vertical dashed lines every 100 ms
+    and a solid red line at 0 ms.
 
     Args:
         lfp_signals_csv: Path to CSV file with LFP data (columns: time, site_0, site_1, ...).
@@ -261,6 +331,15 @@ def plot_comparison_lfp(lfp_signals_csv, title, offset=0.002,save_path=None):
         trace = df[col] + i * offset
         plt.plot(time, trace, label=col)
 
+    # --- Vertical dashed lines every 100 ms ---
+    if make_dashed:
+        t_min, t_max = time.iloc[0], time.iloc[-1]
+        for tline in range(int(t_min // 100) * 100, int(t_max) + 100, 100):
+            plt.axvline(tline, linestyle='--', color='gray', linewidth=0.5)
+
+        # --- Solid reddish line at 0 ms ---
+        plt.axvline(0, linestyle='-', color='#ff5555', linewidth=1.5)
+
     # Formatting
     plt.xlabel("Time [ms]")
     plt.ylabel("LFP (offset traces)")
@@ -276,3 +355,4 @@ def plot_comparison_lfp(lfp_signals_csv, title, offset=0.002,save_path=None):
         print(f"\t \t l02: LFP plotted and saved to {save_path}")
     else:
         plt.show()
+

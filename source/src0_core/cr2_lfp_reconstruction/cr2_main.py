@@ -41,7 +41,9 @@ def run():
         electrode=el,
         out_dir=LFP_COMP_VIS_SAVEDIR,
     )
+    stimulation_paradigm = conf0.WHISKER_STIMULATION_PARADIGMS[conf0.STIM_PARADIGM_TYPE][conf0.STIM_PARADIGM_SUBTYPE]
     lfp02.plot_net_lfp(
         lfp_hdf_path=RECONSTRUCTED_LFP_PATH,
         save_path=LFP_NET_VIS_SAVEPATH,
-        offset=0.002)
+        stim_paradigm=stimulation_paradigm,
+        offset=0.01)

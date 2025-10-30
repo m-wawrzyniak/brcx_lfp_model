@@ -57,11 +57,13 @@ def run(model_name):
     # vald02 - connections, simulation config dependent
     CXCX_CSV = paths["simulation"]["conn"]["cx_cx"]["cxcx_syns.csv"]
     CXCX_SYNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "syn_matrix_emp.jpg")
-    vald02.conn_matrix_emp(
+    vald02.conn_matrix_mean_syn(
         csv_file= CXCX_CSV,
         save_path= CXCX_SYNMATRIX_EMP_SAVEPATH,
         layer_comp_params= conf0.LAYER_COMP_PARAMS,
     )
+
+    """
     CXCX_CONNMATRIX_EMP_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_emp.jpg")
     vald02.conn_matrix_emp(
         csv_file= CXCX_CSV,
@@ -69,6 +71,8 @@ def run(model_name):
         layer_comp_params= conf0.LAYER_COMP_PARAMS,
         unique_connections=True
     )
+    """
+
     BBP_PATHWAY_JSON = os.path.join(conf0.ROOT, "source/src0_core/cr0_model_setup/m00_bbp_parameters/pathways_anatomy_factsheets_simplified.json")
     CXCX_CONNMATRIX_THEO_SAVEPATH = ut1.new_file_in_dir(paths["visualizations"]["sim_dep"]["conn"]["cx_cx"], "conn_matrix_theo.jpg")
     vald02.conn_matrix_theo(
@@ -160,27 +164,27 @@ def run(model_name):
         cx_cells_csv=CX_POP_POST3,
         cxcx_synapses_json=SYNS_PREPRUNE_JSON,
         bin_size=50,
-        max_dist=None,
+        max_dist=1000,
         savepath=PROB_CONN_PRE_SAVEPATH
     )
     vald02.plot_conn_prob_with_distance(
         cx_cells_csv=CX_POP_POST3,
         cxcx_synapses_json=SYNS_POST1_JSON,
         bin_size=50,
-        max_dist=None,
+        max_dist=1000,
         savepath=PROB_CONN_POST1_SAVEPATH
     )
     vald02.plot_conn_prob_with_distance(
         cx_cells_csv=CX_POP_POST3,
         cxcx_synapses_json=SYNS_POST2_JSON,
         bin_size=50,
-        max_dist=None,
+        max_dist=1000,
         savepath=PROB_CONN_POST2_SAVEPATH
     )
     vald02.plot_conn_prob_with_distance(
         cx_cells_csv=CX_POP_POST3,
         cxcx_synapses_json=SYNS_POST3_JSON,
         bin_size=50,
-        max_dist=None,
+        max_dist=1000,
         savepath=PROB_CONN_POST3_SAVEPATH
     )

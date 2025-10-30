@@ -9,66 +9,72 @@ from itertools import product
 
 from source.src2_utils.ut0_random_manager import np
 
-def conn_matrix_emp(csv_file, save_path, layer_comp_params, unique_connections=False):
+def conn_matrix_mean_syn(csv_file, save_path, layer_comp_params):
     """
-    Plot cortico-cortical connectivity matrix with connection counts and global ratios (% of all connections).
+    Plot cortico-cortical connectivity matrix showing the MEAN number of synapses per connection type,
+    aggregated by layer + m-type (ignoring e-type).
 
     Args:
         csv_file (str): Path to CSV file with columns ['pre_id', 'post_id', 'pre_me_type', 'post_me_type'].
-        save_path (str | None): Path to save figure; if None, display interactively.
+        save_path: Path to save figure; if None, display interactively.
         layer_comp_params (dict): e.g. {"L23": {"exc": ..., "inh": ...}, "L5": {...}}
-        unique_connections (bool): Whether to count only unique pre→post pairs.
     """
-    # Read CSV
+    # Load CSV
     df = pd.read_csv(csv_file)
 
-    # Drop duplicates if requested
-    if unique_connections:
-        df = df.drop_duplicates(subset=['pre_id', 'post_id'])
+    # Helper: collapse full type (layer_mtype_etype) -> layer_mtype
+    def collapse_type(full_type):
+        parts = full_type.split("_")
+        if len(parts) >= 3:
+            return "_".join(parts[:-1])  # remove last (etype)
+        else:
+            return full_type  # fallback
 
-    # Generate list of all cell types (layer + subtype)
-    cell_types = [f"{layer}_{ctype}" for layer, types in layer_comp_params.items() for ctype in types.keys()]
+    # Add collapsed columns
+    df["pre_collapsed"] = df["pre_me_type"].apply(collapse_type)
+    df["post_collapsed"] = df["post_me_type"].apply(collapse_type)
 
-    # Initialize matrices
-    conn_matrix_ratio = pd.DataFrame(0.0, index=cell_types, columns=cell_types)
-    conn_matrix_count = pd.DataFrame(0, index=cell_types, columns=cell_types, dtype=int)
+    # Generate all unique collapsed types
+    cell_types = sorted(df["pre_collapsed"].unique().tolist() + df["post_collapsed"].unique().tolist())
+    cell_types = sorted(set(cell_types))
 
-    # Global total number of connections
-    total_all = len(df)
+    # Initialize matrix
+    conn_matrix_mean = pd.DataFrame(0.0, index=cell_types, columns=cell_types)
 
-    # Compute connection counts and global ratios
+    # Compute mean synapses per connection (aggregated)
     for pre_type in cell_types:
         for post_type in cell_types:
-            actual = len(df[(df['pre_me_type'] == pre_type) & (df['post_me_type'] == post_type)])
-            conn_matrix_count.loc[pre_type, post_type] = actual
-            conn_matrix_ratio.loc[pre_type, post_type] = 100 * actual / total_all if total_all > 0 else 0.0
+            sub = df[(df["pre_collapsed"] == pre_type) & (df["post_collapsed"] == post_type)]
 
-    # Create combined labels for heatmap: "count\nratio%"
-    labels = conn_matrix_count.astype(str) + "\n" + conn_matrix_ratio.round(2).astype(str) + "%"
+            if len(sub) == 0:
+                mean_syn = 0.0
+            else:
+                # Count unique pairs (pre→post)
+                n_unique_conns = sub[["pre_id", "post_id"]].drop_duplicates().shape[0]
+                mean_syn = len(sub) / n_unique_conns if n_unique_conns > 0 else 0.0
+
+            conn_matrix_mean.loc[pre_type, post_type] = mean_syn
 
     # Plot heatmap
     plt.figure(figsize=(12, 10))
     ax = sns.heatmap(
-        conn_matrix_ratio,
-        annot=labels,
-        fmt="",
+        conn_matrix_mean,
+        annot=True,
+        fmt=".2f",
         cmap="viridis",
-        cbar_kws={'label': 'Connection ratio (%)'},
+        cbar_kws={'label': 'Mean synapses per connection'},
         linewidths=0.5,
         linecolor='black',
         square=True
     )
 
-    # Titles and labels
-    title = "Cortico-cortical connectivity matrix: count and global ratio (%)"
-    ax.set_title(title, fontsize=13, pad=20)
+    ax.set_title("Empirical cortico-cortical connectivity (mean synapses per connection, collapsed e-types)",
+                 fontsize=13, pad=20)
     ax.set_xlabel("Post-synaptic cell type", fontsize=12, labelpad=10)
     ax.set_ylabel("Pre-synaptic cell type", fontsize=12, labelpad=10)
 
-    # Rotate tick labels
     plt.xticks(rotation=45, ha='right')
     plt.yticks(rotation=0)
-
     plt.tight_layout()
 
     # Save or show
@@ -78,54 +84,60 @@ def conn_matrix_emp(csv_file, save_path, layer_comp_params, unique_connections=F
     else:
         plt.show()
 
-
 def conn_matrix_theo(json_file, layer_comp_params, save_path=None):
+    """
+    Plot theoretical cortico-cortical connectivity matrix based on
+    the mean number of synapses per connection type.
+
+    Args:
+        json_file (str): Path to JSON file containing entries like:
+                         { "pre:post": { "mean_number_of_synapse_per_connection": float }, ... }
+        layer_comp_params (dict): e.g. {"L23": {"exc": ..., "inh": ...}, "L5": {...}}
+        save_path (str | None): Path to save figure; if None, display interactively.
+    """
     # Load JSON
     with open(json_file, "r") as f:
         data = json.load(f)
 
     # Generate all full cell types (sorted for consistent axis order)
-    cell_types = [f"{layer}_{'_'.join(ctype.split('_')[:-1])}" for layer, types in layer_comp_params.items() for ctype in types.keys()]
-    cell_types = sorted(cell_types)
+    cell_types = [f"{layer}_{'_'.join(ctype.split('_')[:-1])}"
+                  for layer, types in layer_comp_params.items()
+                  for ctype in types.keys()]
+    cell_types = sorted(set(cell_types))
 
-    # Initialize matrices
-    conn_matrix_ratio = pd.DataFrame(0.0, index=cell_types, columns=cell_types)
-    conn_matrix_count = pd.DataFrame(0, index=cell_types, columns=cell_types, dtype=int)
+    # Initialize matrix
+    conn_matrix_mean = pd.DataFrame(0.0, index=cell_types, columns=cell_types)
 
     # Fill in values from JSON
     for pair, values in data.items():
         pre, post = pair.split(":")
         if pre in cell_types and post in cell_types:
-            conn_matrix_count.loc[pre, post] = values.get("total_synapse_count", 0)
-            conn_matrix_ratio.loc[pre, post] = values.get("connection_probability", 0.0)  # Convert to %
-
-    # Create combined labels: count \n ratio%
-    labels = conn_matrix_count.astype(str) + "\n" + conn_matrix_ratio.round(2).astype(str) + "%"
+            conn_matrix_mean.loc[pre, post] = values.get("mean_number_of_synapse_per_connection", 0.0)
 
     # Plot heatmap
     plt.figure(figsize=(12, 10))
     ax = sns.heatmap(
-        conn_matrix_ratio,
-        annot=labels,
-        fmt="",
+        conn_matrix_mean,
+        annot=True,
+        fmt=".2f",
         cmap="viridis",
-        cbar_kws={'label': 'Connection probability (%)'},
+        cbar_kws={'label': 'Mean synapses per connection'},
         linewidths=0.5,
         linecolor='black',
         square=True
     )
 
     # Titles and labels
-    title = "Target cortico-cortical connectivity matrix: synapses count and row-wise ratio (%)"
+    title = "Target cortico-cortical connectivity matrix: mean synapses per connection"
     ax.set_title(title, fontsize=13, pad=20)
     ax.set_xlabel("Post-synaptic cell type", fontsize=12, labelpad=10)
     ax.set_ylabel("Pre-synaptic cell type", fontsize=12, labelpad=10)
 
-    # Rotate bottom tick labels for readability
+    # Rotate tick labels for readability
     plt.xticks(rotation=45, ha='right')
     plt.yticks(rotation=0)
 
-    # Center and fit layout
+    # Layout
     plt.tight_layout()
 
     # Save or show
@@ -134,6 +146,7 @@ def conn_matrix_theo(json_file, layer_comp_params, save_path=None):
         plt.close()
     else:
         plt.show()
+
         
 def conn_matrix_emp_tc(tccx_syns: str,
                        layer_comp_params,
@@ -179,14 +192,17 @@ def conn_matrix_emp_tc(tccx_syns: str,
         annot=labels,
         fmt="",
         cmap="viridis",
-        cbar_kws={'label': 'Connection ratio (%)'},
+        cbar_kws={'label': 'Connection ratio (%)' if unique_connections else "Synapses fraction (%)"},
         linewidths=0.5,
         linecolor='black',
         square=True
     )
 
     # Titles and labels
-    title = "Thalamocortical connectivity matrix: synapses and row-wise ratio (%)"
+    if unique_connections==False:
+        title = "Thalamocortical connectivity matrix: synapses and row-wise ratio (%)"
+    else:
+        title = "Thalamocortical connectivity matrix: connections and row-wise ratio (%)"
     ax.set_title(title, fontsize=13, pad=20)
     ax.set_xlabel("Post-synaptic cell type", fontsize=12, labelpad=10)
     ax.set_ylabel("Pre-synaptic cell type", fontsize=12, labelpad=10)
@@ -207,58 +223,92 @@ def conn_matrix_emp_tc(tccx_syns: str,
 
     return matrix_count, matrix_ratio
 
-def interbouton_int_histogram(cx_pop_csv:Path, bins:int = 30, save_path= None):
+def interbouton_int_histogram(cx_pop_csv: Path, bins: int = 20, save_path=None):
     """
-    Creates a histogram of b_int for the cells in examined_pop_csv. Saves *.png.
+    Creates a normalized histogram (probability distribution) of b_int for the cells in cx_pop_csv.
+    Saves *.png.
 
     Args:
-        cx_pop_csv (str): Path to csv with cortical cells with already calculated b_int.
-        bins (int): Number of bins in the histogram.
+        cx_pop_csv (Path): Path to CSV with cortical cells containing 'b_int'.
+        bins (int): Number of bins in the histogram (default=20).
     """
 
     df = pd.read_csv(cx_pop_csv)
     if "b_int" not in df.columns:
-        raise KeyError("'interb_int' column not found in the CSV.")
+        raise KeyError("'b_int' column not found in the CSV.")
 
     data = df["b_int"].replace([np.inf, -np.inf], np.nan).dropna()
 
-    # map filenames to descriptive titles
+    # Map filenames to descriptive titles and colors
     title_map = {
-        "intb_dist_pre.jpg": "pre-pruning",
-        "intb_dist_post1.jpg": "after General Pruning (01)",
-        "intb_dist_post2.jpg": "after Multisynapse Pruning (02)",
-        "intb_dist_post3.jpg": "after Plasticity-Reserve Pruning (03)"
+        "cx04_pop_pre.csv": "pre-pruning",
+        "cx04_pop_post1.csv": "after General Pruning [01]",
+        "cx04_pop_post2.csv": "after Multisynapse Pruning [02]",
+        "cx04_pop_post3.csv": "after Plasticity-Reserve Pruning [03]"
     }
 
-    # get the descriptive title
-    file_name = cx_pop_csv.name  # or Path(cx_pop_csv).name if needed
-    plot_title = title_map.get(file_name, file_name)  # fallback to filename if not in map
+    color_map = {
+        "cx04_pop_pre.csv": "red",
+        "cx04_pop_post1.csv": "orange",
+        "cx04_pop_post2.csv": "gold",    # softer yellow for visibility
+        "cx04_pop_post3.csv": "green"
+    }
+
+    # Get descriptive title and color
+    file_name = cx_pop_csv.name
+    plot_title = title_map.get(file_name, file_name)
+    color = color_map.get(file_name, "gray")
 
     plt.figure(figsize=(8, 5))
-    bins_edges = np.linspace(0, 100, bins + 1)  # 30 bins between 0 and 100
-    plt.hist(data, bins=bins_edges, edgecolor='black')
+    bin_edges = np.linspace(0, 100, bins + 1)  # 20 bins between 0 and 100 µm
+    plt.hist(
+        data,
+        bins=bin_edges,
+        density=True,              # normalize histogram
+        edgecolor="black",
+        color=color,
+        alpha=0.8
+    )
+
+    # Axis settings
     plt.xlim(0, 100)
-    plt.grid(True)
+    plt.xticks(np.arange(0, 101, 10))
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
     plt.xlabel("Interbouton interval (µm)")
-    plt.ylabel("No. cells")
+    plt.ylabel("P")
     plt.title(f"Distribution of interbouton interval ({plot_title})")
     plt.tight_layout()
 
-    plt.savefig(save_path)
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches="tight")
+    plt.close()
+
 
 def syn_per_conn_histogram(synapses_json: Path, savepath):
     """
-    Creates a histogram of synapses per connection for all connections. Saves it as PNG.
+    Creates a normalized histogram (PMF) of synapses per connection for all connections.
+    Saves it as PNG.
     """
-    # Map filenames to descriptive titles
+
+    # Map filenames to descriptive titles and colors
     title_map = {
         "cxcx01_appositions.json": "pre-pruning",
-        "prune01_cxcx.json": "after General Pruning (01)",
-        "prune02_cxcx.json": "after Multisynapse Pruning (02)",
-        "prune03_cxcx.json": "after Plasticity-Reserve Pruning (03)"
+        "prune01_cxcx.json": "after General Pruning [01]",
+        "prune02_cxcx.json": "after Multisynapse Pruning [02]",
+        "prune03_cxcx.json": "after Plasticity-Reserve Pruning [03]"
     }
 
-    main_title = f"Corticocortical synapses per connection distribution ({title_map.get(synapses_json.name, synapses_json.name)})"
+    color_map = {
+        "cxcx01_appositions.json": "red",
+        "prune01_cxcx.json": "orange",
+        "prune02_cxcx.json": "gold",
+        "prune03_cxcx.json": "green"
+    }
+
+    # Determine title and color
+    file_name = synapses_json.name
+    main_title = f"Corticocortical synapses per connection distribution ({title_map.get(file_name, file_name)})"
+    color = color_map.get(file_name, "gray")
 
     # Load JSON
     with open(synapses_json, "r") as f:
@@ -277,21 +327,29 @@ def syn_per_conn_histogram(synapses_json: Path, savepath):
 
     # Plot histogram
     plt.figure(figsize=(8, 5))
-    bins = np.arange(0, 21, 1)  # bin edges 0–20
-    plt.hist(synapse_nums, bins=bins, edgecolor='black', density=True, align='left')
-    plt.xlabel("Synapses per connection")
-    plt.ylabel("Probability (PMF)")
-    plt.title(main_title)
+    bins = np.arange(0, 21, 1)  # 1-synapse bins (0–20)
+    plt.hist(
+        synapse_nums,
+        bins=bins,
+        edgecolor='black',
+        density=True,
+        align='left',
+        color=color,
+        alpha=0.8
+    )
 
-    # Axis limits and ticks
+    # Axis settings
+    plt.xlabel("Synapses per connection")
+    plt.ylabel("P")
+    plt.title(main_title)
     plt.xlim(0, 20)
-    plt.xticks(np.arange(0, 21, 2.5))
+    plt.xticks(np.arange(0, 21, 2))
     plt.ylim(0, 0.15)
     plt.yticks(np.arange(0, 0.151, 0.025))
-    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
 
     plt.tight_layout()
-    plt.savefig(savepath, dpi=300)
+    plt.savefig(savepath, dpi=300, bbox_inches='tight')
     plt.close()
 
 def _conn_prob_with_distance(cx_cells_csv, cxcx_synapses_json, bin_size=10, max_dist=None):
@@ -365,30 +423,46 @@ def plot_conn_prob_with_distance(cx_cells_csv, cxcx_synapses_json, savepath,
     bins = df["bin_start"].values
     probs = df["conn_prob"].values
 
+    # --- Title and color maps ---
     title_map = {
         "conn_prob_pre.jpg": "pre-pruning",
-        "conn_prob_post1.jpg": "after General Pruning (01)",
-        "conn_prob_post2.jpg": "after Multisynapse Pruning (02)",
-        "conn_prob_post3.jpg": "after Plasticity-Reserve Pruning (03)"
+        "conn_prob_post1.jpg": "after General Pruning [01]",
+        "conn_prob_post2.jpg": "after Multisynapse Pruning [02]",
+        "conn_prob_post3.jpg": "after Plasticity-Reserve Pruning [03]"
     }
 
-    savepath = Path(savepath)  # make sure it's a Path object
+    color_map = {
+        "conn_prob_pre.jpg": "red",
+        "conn_prob_post1.jpg": "orange",
+        "conn_prob_post2.jpg": "gold",
+        "conn_prob_post3.jpg": "green"
+    }
 
-    # determine descriptive title
+    savepath = Path(savepath)
     plot_title = title_map.get(savepath.name, savepath.name)
+    color = color_map.get(savepath.name, "gray")
 
+    # --- Plot ---
     plt.figure(figsize=(8, 4))
-    plt.bar(bins, probs, width=bin_size, edgecolor='black', align='edge')
+    plt.bar(
+        bins, probs, width=bin_size,
+        edgecolor='black', align='edge',
+        color=color, alpha=0.8
+    )
     plt.xlabel("Distance between somata (µm)")
     plt.ylabel("Connection probability")
-    plt.title(f"Cortical cell connection probability v. distance, {plot_title}")
-    plt.xlim(0, 1000)
+    plt.title(f"Cortical cell connection probability vs. distance ({plot_title})")
+
+    # Axis styling
+    plt.xlim(0, max_dist)
+    plt.xticks(np.arange(0, max_dist + 1, 100))
     plt.ylim(0, 1)
     plt.yticks(np.arange(0, 1.1, 0.1))
-    plt.grid(True, linestyle='--', alpha=0.6, axis='y')
-    plt.tight_layout()
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, axis='y')
 
-    plt.savefig(savepath, dpi=300)
+    plt.tight_layout()
+    plt.savefig(savepath, dpi=300, bbox_inches='tight')
+
     if show:
         plt.show()
     plt.close()

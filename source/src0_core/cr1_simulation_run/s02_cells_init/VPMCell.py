@@ -19,7 +19,6 @@ class VPMCell:
         self.bio_parameters (dict): All biophysics parameters assigned to this cell.
         self.tree (h.SectionList): All sections.
         self.soma (h.Section): Soma of h.cell
-        self.dend (h.Section) Single dendrite section.
         self.kleak (h.PointProcess): Potassium leak at soma.
     """
     bio_parameters_dist = {
