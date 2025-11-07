@@ -84,7 +84,7 @@ def main():
     print(f"[BATCH SIMULATION] Running batch simulation at {timestamp}")
 
     # Define parameter sweep
-    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_B
+    PARAM_SETS = BATCH_PARAMETERS.PARAMETER_SET_A
 
     for params in PARAM_SETS:
         model_dir = os.path.join(DATA_ROOT, params["MODEL_NAME"], "config")
@@ -94,7 +94,7 @@ def main():
         conf01_p = os.path.join(model_dir, "conf01_simulation_parameters.py")
         conf02_p = os.path.join(model_dir, "conf02_lfp_parameters.py")
 
-        run_single_model_subprocess(conf0_p, conf01_p, conf02_p, run_cr0=False, run_cr1=False)
+        run_single_model_subprocess(conf0_p, conf01_p, conf02_p, run_cr0=True, run_cr1=True)
 
 if __name__ == "__main__":
     main()

@@ -135,12 +135,18 @@ def run(model_name):
     chosen_plot_func(
         lfp_signals_csv = TRIMMED_INVIVO,
         title = f"{title_invivo} peristimulus trimming applied",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=INVIVO_LFP_PLOT_TRIMMED,
         offset=invivo_offset
     )
     chosen_plot_func(
         lfp_signals_csv=TRIMMED_MODEL,
         title=f"{title_model} peristimulus trimming applied",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=MODEL_LFP_PLOT_TRIMMED,
         offset=model_offset
     )
@@ -150,12 +156,18 @@ def run(model_name):
     chosen_plot_func(
         lfp_signals_csv = BASELINED_INVIVO,
         title=f"{title_invivo} constant offset corrected",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=INVIVO_LFP_PLOT_BASED,
         offset=invivo_offset
     )
     chosen_plot_func(
         lfp_signals_csv=BASELINED_MODEL,
         title=f"{title_model} constant offset corrected",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=MODEL_LFP_PLOT_BASED,
         offset=model_offset
     )
@@ -165,12 +177,18 @@ def run(model_name):
     chosen_plot_func(
         lfp_signals_csv = FILT_INVIVO,
         title=f"{title_invivo} band-pass filtered",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=INVIVO_LFP_PLOT_FILT,
         offset=invivo_offset
     )
     chosen_plot_func(
         lfp_signals_csv=FILT_MODEL,
         title=f"{title_model} band-pass filtered",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=MODEL_LFP_PLOT_FILT,
         offset=model_offset
     )
@@ -186,12 +204,15 @@ def run(model_name):
         lp_cutoff=paradigm_stand_dict['lp_freq'],
         hp_cutoff=paradigm_stand_dict['hp_freq'],
         order=4,
-        fs=1000/conf01.DT
+        fs=1000/conf01.DT,
     )
 
     chosen_plot_func(
         lfp_signals_csv=INIT_LFP_RESPONSE,
         title=f"LFP during the initialization of the cortical cells, at the beginning of the simulation",
+        el_variant=conf02.ELECTRODE_VARIANT,
+        el_z_offset=conf02.ELECTRODE_Z_OFFSET,
+        cross_corr=conf02.CROSS_SPECIES_SCALE,
         save_path=INIT_LFP_RESPONSE_PLOT,
         offset=model_offset,
         make_dashed=False

@@ -60,7 +60,6 @@ def run(model_name):
     vald02.conn_matrix_mean_syn(
         csv_file= CXCX_CSV,
         save_path= CXCX_SYNMATRIX_EMP_SAVEPATH,
-        layer_comp_params= conf0.LAYER_COMP_PARAMS,
     )
 
     """

@@ -1,7 +1,9 @@
 import os, h5py
 import matplotlib.pyplot as plt
-
+from matplotlib import cm
 from source.src2_utils.ut0_random_manager import np
+
+from source.src0_core.cr2_lfp_reconstruction.l01_electrode_setup.Electrode import Electrode
 
 def _plot_cell_lfp_with_morpho(cell_id, lfp_hdf_path, imem_hdf_path, electrode,
                                save_path=None, lfp_group='lfp', cell_group='cells'):
@@ -123,36 +125,48 @@ def export_all_cells_lfp_plots(lfp_hdf_path, imem_hdf_path, electrode, out_dir,
         print(f"\t \t l02: LFP component plotted: {percent:.1f}%")
 
 
-def plot_net_lfp(lfp_hdf_path, offset, save_path=None, stim_paradigm=None):
+
+def plot_net_lfp(lfp_hdf_path, offset,
+                 el_variant, el_z_offset, crossspecies_corr,
+                 save_path=None, stim_paradigm=None):
     """
     Plot net LFP (summed over all cortical cells) with offset traces per site.
-
-    Args:
-        lfp_hdf_path (str): Path to reconstructed LFP HDF5 file
-        offset (float): Vertical offset between traces
-        save_path (str or None): If provided, save figure instead of showing
-        stim_paradigm (dict or None): Optional, e.g., {'phase1': ('wk', 50), 'phase2': ('str', 100)}
+    Shallowest electrodes (e.g. c_0) are plotted at the TOP, deepest at the BOTTOM.
+    Each trace label includes its site depth (µm).
     """
+
+    # --- Instantiate electrode topology ---
+    electrode = Electrode(z_offset=el_z_offset, topo_variant=el_variant, cross_species_scale=crossspecies_corr)
+    topo = electrode.site_topology  # dict: site_id -> (x, y, z)
+
     STIM_COLORS = {
         'r': 'white',
-        'wk': '#fff7a0',  # yellowish
-        'str': '#ff9999'  # reddish
+        'wk': '#fff7a0',
+        'str': '#ff9999'
     }
 
     with h5py.File(lfp_hdf_path, "r") as f:
         time = f["net_lfp/time"][:]
-        lfp = f["net_lfp/lfp"][:]  # shape (n_sites, n_time)
+        lfp = f["net_lfp/lfp"][:]      # shape (n_sites, n_time)
         site_ids = f["net_lfp/site_ids"][:]
 
-    # --- Drop first 10 samples ---
+    # Drop first 10 samples
     time = time[10:]
     lfp = lfp[:, 10:]
 
-    n_sites = lfp.shape[0]
+    # Decode site names
+    site_ids = [sid.decode() if isinstance(sid, bytes) else str(sid) for sid in site_ids]
+
+    # Sort sites by depth (z) ascending: most superficial first
+    sorted_sites = sorted(site_ids, key=lambda sid: topo.get(sid, (0, 0, 0))[2], reverse=True)
+    lfp = lfp[[site_ids.index(s) for s in sorted_sites], :]
+
+    n_sites = len(sorted_sites)
+    cmap = cm.get_cmap("viridis", n_sites)
 
     plt.figure(figsize=(12, 7))
 
-    # --- Plot stimulus windows ---
+    # --- Stimulus windows ---
     if stim_paradigm:
         x_start = time[0]
         for phase, (phase_type, duration) in stim_paradigm.items():
@@ -162,15 +176,12 @@ def plot_net_lfp(lfp_hdf_path, offset, save_path=None, stim_paradigm=None):
             plt.axvspan(x_start, x_end, color=STIM_COLORS.get(phase_type, 'gray'), alpha=0.3)
             x_start = x_end
 
-    # --- Colormap for traces ---
-    cmap = plt.get_cmap("tab20")
-
-    # --- Plot LFP traces with offset and colors ---
-    for i in range(n_sites):
-        trace = lfp[i, :] + i * offset
-        sid = site_ids[i].decode() if isinstance(site_ids[i], bytes) else str(site_ids[i])
-        color = cmap(i % cmap.N)
-        plt.plot(time, trace, color=color, label=sid)
+    # --- Plot LFP traces (flipped order) ---
+    for i, sid in enumerate(sorted_sites):
+        trace = lfp[i, :] + (n_sites - i - 1) * offset  # flip order vertically
+        depth = topo.get(sid, (0, 0, float('nan')))[2]
+        label = f"{sid}  ({depth:.0f} µm)"
+        plt.plot(time, trace, color=cmap(i), label=label, linewidth=0.9)
 
     # --- Vertical dashed lines every 100 ms ---
     t_min, t_max = time[0], time[-1]
@@ -183,10 +194,9 @@ def plot_net_lfp(lfp_hdf_path, offset, save_path=None, stim_paradigm=None):
     plt.title("Net LFP at electrode sites")
     plt.ylim(-0.005, n_sites * offset + 0.002)
     plt.yticks([])
-    plt.legend(loc="upper right", fontsize=8, title="Electrodes")
+    plt.legend(loc="upper right", fontsize=8, title="Electrodes", ncol=1)
     plt.tight_layout()
 
-    # --- Save or show ---
     if save_path:
         plt.savefig(save_path, dpi=300)
         plt.close()

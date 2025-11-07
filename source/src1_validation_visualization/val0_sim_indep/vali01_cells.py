@@ -136,8 +136,7 @@ def run_iclamp_tc(save_dir, tc_cell, tstop=1500, delay=500, dur=500, amp=1.5, v_
     ax1.set_ylabel("Somata membrane potential [mV]", fontsize=11)
     ax1.set_ylim(-130, 90)
     ax1.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
-    ax1.set_xticklabels([])  # hide x-ticks for top plot
-    ax1.tick_params(axis='x', length=0)
+    ax1.tick_params(axis='x', labelbottom=False)
     ax1.set_title("Thalamic relay cell (VPM) response to injected current at the somata",
                   fontsize=13, pad=15)
 
@@ -149,6 +148,8 @@ def run_iclamp_tc(save_dir, tc_cell, tstop=1500, delay=500, dur=500, amp=1.5, v_
     ax2.plot(t, i, color='red', linewidth=1)
     ax2.set_xlabel("Time [ms]", fontsize=11)
     ax2.set_ylabel("Current injected [nA]", fontsize=11)
+    xticks = np.arange(0, tstop + 100, 100)
+    ax2.set_xticks(xticks)
     ax2.set_ylim(-0.5, 3.5)
     ax2.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
 

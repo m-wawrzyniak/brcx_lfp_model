@@ -3,8 +3,9 @@ import pandas as pd
 from scipy.signal import butter, sosfiltfilt
 import h5py
 import matplotlib.pyplot as plt
-import re
+from matplotlib import cm
 
+from source.src0_core.cr2_lfp_reconstruction.l01_electrode_setup.Electrode import Electrode
 from source.src2_utils.ut0_random_manager import np
 
 def export_net_lfp_to_csv(lfp_hdf_path, csv_path):
@@ -35,36 +36,6 @@ def export_net_lfp_to_csv(lfp_hdf_path, csv_path):
     df.to_csv(csv_path, index=False, encoding='utf-8-sig')
     print(f"\t \t l01: Net LFP exported to {csv_path}")
 
-def plot_single_lfp(lfp_signals_csv, save_path, *args):
-    """
-    Reads LFP data from CSV and plots all electrode sites vs. time on a single plot.
-
-    Args:
-        lfp_signals_csv: Path to CSV file with LFP data.
-        save_path : Directory in which plot should be saved.
-    """
-    # Load CSV
-    df = pd.read_csv(lfp_signals_csv)
-
-    # Ensure the first column is time
-    time = df.iloc[:, 0]
-    site_columns = df.columns[1:]
-
-    # Plot
-    plt.figure(figsize=(10, 6))
-    for col in site_columns:
-        plt.plot(time, df[col], label=col)
-
-    # Labels and legend
-    plt.xlabel("Time (ms)")
-    plt.ylabel("LFP (mV)")
-    plt.title("Local Field Potentials over Time")
-    plt.legend(loc="best")
-    plt.tight_layout()
-
-    # Save figure
-    plt.savefig(save_path, dpi=300)
-    plt.close()
 
 def get_model_markers(paradigms, paradigm_type, paradigm_subtype):
     # Get the sequence for the given type and subtype
@@ -239,7 +210,7 @@ def manual_lfp_signal_processing(
     lp_cutoff: float,
     hp_cutoff: float | None,
     order: int,
-    fs: float
+    fs: float,
 ) -> pd.DataFrame:
     """
     Trim, baseline-correct, and bandpass filter an LFP CSV signal.
@@ -248,33 +219,42 @@ def manual_lfp_signal_processing(
         lfp_csv: Path to input CSV with 'time' column.
         save_path: Path to save processed CSV.
         trim_range: Tuple of (start_time, end_time) in ms.
-        baseline_window: Time window to compute baseline mean (before trimming if desired).
+        baseline_window: Time window (in ms) to compute baseline mean.
         lp_cutoff: Low-pass cutoff frequency (Hz).
         hp_cutoff: High-pass cutoff frequency (Hz). None = low-pass only.
         order: Filter order.
         fs: Sampling frequency (Hz).
+
     Returns:
-        Processed DataFrame.
+        Processed DataFrame with same columns as input.
     """
     # --- Load CSV ---
     df = pd.read_csv(lfp_csv)
+
     if 'time' not in df.columns:
         raise ValueError("CSV must contain a 'time' column.")
+
+    # Remove duplicate or all-NaN columns early
+    df = df.loc[:, ~df.columns.duplicated()]
+    df = df.dropna(axis=1, how='all')
 
     # --- Trim signal ---
     t_start, t_end = trim_range
     mask = (df['time'] >= t_start) & (df['time'] <= t_end)
     df_trimmed = df.loc[mask].copy()
-    df_trimmed['time'] = df_trimmed['time'] - t_start
+    df_trimmed['time'] -= t_start
 
     # --- Baseline correction ---
     baseline_mask = (df_trimmed['time'] >= baseline_window[0]) & (df_trimmed['time'] <= baseline_window[1])
     baseline_data = df_trimmed.loc[baseline_mask]
-    baseline_means = baseline_data.drop(columns='time').mean()
-    for col in baseline_means.index:
-        df_trimmed[col] = df_trimmed[col] - baseline_means[col]
 
-    # --- Bandpass / low-pass filter ---
+    if baseline_data.empty:
+        print("⚠️ Warning: baseline window is outside the trimmed range — skipping baseline correction.")
+    else:
+        baseline_means = baseline_data.drop(columns='time').mean()
+        df_trimmed[baseline_means.index] = df_trimmed[baseline_means.index] - baseline_means
+
+    # --- Design filter ---
     nyq = 0.5 * fs
     if hp_cutoff is None:
         high = min(lp_cutoff / nyq, 0.99)
@@ -284,6 +264,7 @@ def manual_lfp_signal_processing(
         high = min(lp_cutoff / nyq, 0.99)
         sos = butter(order, [low, high], btype='band', output='sos')
 
+    # --- Filter all signal channels ---
     signal_cols = [c for c in df_trimmed.columns if c != 'time']
     for col in signal_cols:
         x = df_trimmed[col].to_numpy(dtype=float)
@@ -293,24 +274,41 @@ def manual_lfp_signal_processing(
             x[nans] = np.interp(np.flatnonzero(nans), np.flatnonzero(not_nans), x[not_nans])
         df_trimmed[col] = sosfiltfilt(sos, x)
 
-    # --- Save processed CSV ---
+    # --- Final cleanup before save ---
+    df_trimmed = df_trimmed.loc[:, ~df_trimmed.columns.duplicated()]
+    df_trimmed = df_trimmed.dropna(axis=1, how='all')
+
+    # --- Save ---
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     df_trimmed.to_csv(save_path, index=False)
-    print(f"Processed LFP saved to: {save_path}")
+    print(f"✅ Processed LFP saved to: {save_path}")
 
     return df_trimmed
 
-def plot_comparison_lfp(lfp_signals_csv, title, offset=0.010, save_path=None, make_dashed=True):
+def plot_comparison_lfp(lfp_signals_csv, title,
+                        el_variant, el_z_offset, cross_corr,
+                        offset=0.010, save_path=None, make_dashed=True):
     """
     Plots LFP traces from CSV with vertical offsets and inverted site order
     (earlier sites appear at the top). Adds vertical dashed lines every 100 ms
     and a solid red line at 0 ms.
+    Each trace label includes its site depth (µm).
 
     Args:
         lfp_signals_csv: Path to CSV file with LFP data (columns: time, site_0, site_1, ...).
+        el_variant (str): Electrode variant (e.g. 'center_col_sparse' or 'full').
+        el_z_offset (float): Z-offset for electrode depth.
+        cross_corr (float): Scaling correction factor for species.
         offset (float): Vertical offset between traces.
-        save_path: If provided, save figure instead of showing.
+        save_path (str): If provided, save figure instead of showing.
+        make_dashed (bool): Whether to add dashed vertical lines.
     """
+    # --- Instantiate electrode topology ---
+    electrode = Electrode(z_offset=el_z_offset,
+                          topo_variant=el_variant,
+                          cross_species_scale=cross_corr)
+    topo = electrode.site_topology  # dict: site_id -> (x, y, z)
+
     # Load CSV
     df = pd.read_csv(lfp_signals_csv)
 
@@ -318,37 +316,40 @@ def plot_comparison_lfp(lfp_signals_csv, title, offset=0.010, save_path=None, ma
     time = df.iloc[:, 0]
     site_columns = df.columns[1:]
 
-    # Sort site IDs numerically if possible (e.g. c_1, c_2, ..., c_10)
-    def site_sort_key(s):
-        m = re.search(r'(\d+)$', s)
-        return int(m.group(1)) if m else s
+    # Sort site IDs based on their actual z-depth (shallowest first)
+    site_columns = sorted(
+        site_columns,
+        key=lambda sid: topo.get(sid, (0, 0, 0))[2],
+        reverse=True
+    )
 
-    site_columns = sorted(site_columns, key=site_sort_key, reverse=True)  # reverse: smallest on top
+    n_sites = len(site_columns)
+    cmap = cm.get_cmap("viridis", n_sites)
 
-    # Plot
+    # --- Plot ---
     plt.figure(figsize=(12, 7))
     for i, col in enumerate(site_columns):
-        trace = df[col] + i * offset
-        plt.plot(time, trace, label=col)
+        trace = df[col] + (n_sites - i - 1) * offset  # flip vertically
+        depth = topo.get(col, (0, 0, float('nan')))[2]
+        label = f"{col}  ({depth:.0f} µm)"
+        plt.plot(time, trace, color=cmap(i), label=label, linewidth=0.9)
 
     # --- Vertical dashed lines every 100 ms ---
     if make_dashed:
         t_min, t_max = time.iloc[0], time.iloc[-1]
         for tline in range(int(t_min // 100) * 100, int(t_max) + 100, 100):
             plt.axvline(tline, linestyle='--', color='gray', linewidth=0.5)
-
-        # --- Solid reddish line at 0 ms ---
         plt.axvline(0, linestyle='-', color='#ff5555', linewidth=1.5)
 
-    # Formatting
+    # --- Formatting ---
     plt.xlabel("Time [ms]")
     plt.ylabel("LFP (offset traces)")
     plt.title(title)
-    plt.legend(loc="upper right", fontsize=8)
+    plt.legend(loc="upper right", fontsize=8, title="Electrodes")
     plt.yticks([])  # hide y-axis ticks
     plt.tight_layout()
 
-    # Save or show
+    # --- Save or show ---
     if save_path:
         plt.savefig(save_path, dpi=300)
         plt.close()

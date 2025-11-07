@@ -303,8 +303,8 @@ def plot_rasterplot(
 
     # --- Prepare plot ---
     total_cells = len(cx_ids) + len(vpm_ids) + len(prv_ids)
-    fig_height = max(8, total_cells * 0.05)
-    fig, ax = plt.subplots(figsize=(12, fig_height))
+    fig_height = max(8, total_cells * 0.04)
+    fig, ax = plt.subplots(figsize=(20, fig_height))
 
     # --- Background for stimulation phases ---
     x_start = 0
@@ -336,7 +336,7 @@ def plot_rasterplot(
     # --- VPM spikes ---
     start_y = y_pos
     for desc, spikes in zip(vpm_ids, vpm_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="red", linewidth=1.2)
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="red", linewidth=1.6)
         y_pos += 1
     end_y = y_pos
     pop_boundaries.append(end_y)
@@ -345,7 +345,7 @@ def plot_rasterplot(
     # --- PRV spikes ---
     start_y = y_pos
     for desc, spikes in zip(prv_ids, prv_spikes):
-        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="green", linewidth=1.2)
+        ax.vlines(spikes, y_pos + 0.5, y_pos + 0.5 + spike_height, color="green", linewidth=1.6)
         y_pos += 1
     end_y = y_pos
     pop_boundaries.append(end_y)
@@ -353,7 +353,7 @@ def plot_rasterplot(
 
     # --- Draw horizontal separators ---
     for boundary in pop_boundaries[:-1]:
-        ax.axhline(boundary + 0.5, color='black', linewidth=0.5, alpha=0.6)
+        ax.axhline(boundary + 0.5, color='black', linewidth=0.3, alpha=0.3)
 
     # --- Right-aligned population labels ---
     x_max = max([max(spikes) if spikes else 0 for spikes_list in [cx_spikes_raw, vpm_spikes, prv_spikes] for spikes in spikes_list]) * 1.02
@@ -370,7 +370,7 @@ def plot_rasterplot(
 
     # --- Legend for cortical ME-types only ---
     handles = [plt.Line2D([0], [0], color=color_map[desc], lw=4, label=desc) for desc in all_desc_sorted]
-    ax.legend(handles=handles, title="Cortical cell types", bbox_to_anchor=(1.05, 1), loc='upper left')
+    #ax.legend(handles=handles, title="Cortical cell types", bbox_to_anchor=(1.05, 1), loc='upper left')
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=600, format="pdf")

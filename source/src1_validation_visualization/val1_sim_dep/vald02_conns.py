@@ -9,7 +9,7 @@ from itertools import product
 
 from source.src2_utils.ut0_random_manager import np
 
-def conn_matrix_mean_syn(csv_file, save_path, layer_comp_params):
+def conn_matrix_mean_syn(csv_file, save_path):
     """
     Plot cortico-cortical connectivity matrix showing the MEAN number of synapses per connection type,
     aggregated by layer + m-type (ignoring e-type).
@@ -17,7 +17,6 @@ def conn_matrix_mean_syn(csv_file, save_path, layer_comp_params):
     Args:
         csv_file (str): Path to CSV file with columns ['pre_id', 'post_id', 'pre_me_type', 'post_me_type'].
         save_path: Path to save figure; if None, display interactively.
-        layer_comp_params (dict): e.g. {"L23": {"exc": ..., "inh": ...}, "L5": {...}}
     """
     # Load CSV
     df = pd.read_csv(csv_file)
@@ -259,7 +258,7 @@ def interbouton_int_histogram(cx_pop_csv: Path, bins: int = 20, save_path=None):
     plot_title = title_map.get(file_name, file_name)
     color = color_map.get(file_name, "gray")
 
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(5, 5))
     bin_edges = np.linspace(0, 100, bins + 1)  # 20 bins between 0 and 100 µm
     plt.hist(
         data,
@@ -273,6 +272,8 @@ def interbouton_int_histogram(cx_pop_csv: Path, bins: int = 20, save_path=None):
     # Axis settings
     plt.xlim(0, 100)
     plt.xticks(np.arange(0, 101, 10))
+    plt.ylim(0, 0.09)
+    plt.yticks(np.arange(0, 0.091, 0.01))
     plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
     plt.xlabel("Interbouton interval (µm)")
     plt.ylabel("P")
@@ -307,7 +308,7 @@ def syn_per_conn_histogram(synapses_json: Path, savepath):
 
     # Determine title and color
     file_name = synapses_json.name
-    main_title = f"Corticocortical synapses per connection distribution ({title_map.get(file_name, file_name)})"
+    main_title = f"Synapses per connection dist. ({title_map.get(file_name, file_name)})"
     color = color_map.get(file_name, "gray")
 
     # Load JSON
@@ -326,7 +327,7 @@ def syn_per_conn_histogram(synapses_json: Path, savepath):
     synapse_nums = list(pair_counts.values())
 
     # Plot histogram
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(5, 5))
     bins = np.arange(0, 21, 1)  # 1-synapse bins (0–20)
     plt.hist(
         synapse_nums,
@@ -443,7 +444,7 @@ def plot_conn_prob_with_distance(cx_cells_csv, cxcx_synapses_json, savepath,
     color = color_map.get(savepath.name, "gray")
 
     # --- Plot ---
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(5, 5))
     plt.bar(
         bins, probs, width=bin_size,
         edgecolor='black', align='edge',
@@ -451,7 +452,7 @@ def plot_conn_prob_with_distance(cx_cells_csv, cxcx_synapses_json, savepath,
     )
     plt.xlabel("Distance between somata (µm)")
     plt.ylabel("Connection probability")
-    plt.title(f"Cortical cell connection probability vs. distance ({plot_title})")
+    plt.title(f"Connection probability vs. distance ({plot_title})")
 
     # Axis styling
     plt.xlim(0, max_dist)

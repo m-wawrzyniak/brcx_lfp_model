@@ -26,7 +26,6 @@ def run(model_name):
     # env02 - nrn params setup
     h = env02.set_simulation_params(h)
 
-
     # vali01 - cell, simulation config independent val/vis
     # cx_iclamp
     CX_ICLAMP_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["cx"], "cx_iclamp.jpg")
@@ -41,6 +40,7 @@ def run(model_name):
         tc_cell=tc_cell,
         save_dir=TC_ICLAMP_SAVEDIR,
     )
+    print('done')
     # cx morpho distribution along z-axis
     CX_Z_DIST_SAVEDIR = os.path.join(paths["visualizations"]["sim_indep"]["cells"]["cx"], "cx_morpho_distribution")
     vali01.plot_dend_axon_z_dist(
